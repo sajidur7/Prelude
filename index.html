@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Prelude: learn only the JavaScript you need for React, with a live editor, instant output, predictions, bug fixes and a readiness score.">
+<meta name="description" content="Prelude: learn the JavaScript you need for React, then practical DSA with JavaScript. Live editor, instant output, predictions, bug fixes and readiness scores.">
 <meta name="theme-color" content="#161616">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232a2a2a'/%3E%3Cpath d='M12 8c-2.2 0-3.3 1.1-3.3 3.2v2.4c0 1.2-.7 2-2.2 2.4 1.5.4 2.2 1.2 2.2 2.4v2.4c0 2.1 1.1 3.2 3.3 3.2M20 8c2.2 0 3.3 1.1 3.3 3.2v2.4c0 1.2.7 2 2.2 2.4-1.5.4-2.2 1.2-2.2 2.4v2.4c0 2.1-1.1 3.2-3.3 3.2' stroke='%23fff' stroke-width='2.2' fill='none' stroke-linecap='round'/%3E%3Ccircle cx='16' cy='16' r='2' fill='%2316c89e'/%3E%3C/svg%3E">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -2747,6 +2747,1947 @@ function cityOf(user) {
   return user?.profile?.address?.city ?? "Unknown";
 }
 </script>
+<script type="text/plain" id="content-dsa">
+=== lesson d8-loops | Loops: for, for...of, while | 7
+--- name
+Total the cart
+--- understand
+<p>Array methods like <code>map</code> hide the loop for you. In DSA you'll write loops yourself, because you need control: stop early, jump ahead, or walk two positions at once.</p>
+<ul>
+<li><code>for (let i = 0; i &lt; n; i++)</code>: when you need the <strong>index</strong>.</li>
+<li><code>for (const item of list)</code>: when you only need each <strong>value</strong>.</li>
+<li><code>while (condition)</code>: when you don't know how many steps it will take.</li>
+<li><code>break</code> stops the loop. <code>continue</code> skips to the next round.</li>
+</ul>
+--- code
+const prices = [12, 30, 8, 45];
+
+for (let i = 0; i < prices.length; i++) {
+  console.log(`index ${i}: $${prices[i]}`);
+}
+
+let total = 0;
+for (const price of prices) {
+  total += price;
+}
+console.log("Total:", total);
+
+let n = 100;
+let steps = 0;
+while (n > 1) {
+  n = Math.floor(n / 2);
+  steps++;
+}
+console.log("Halved", steps, "times");
+
+for (const price of prices) {
+  if (price > 40) {
+    console.log("Found an expensive item:", price);
+    break;
+  }
+}
+--- notes
+3 | Start at 0, keep going while i is less than the length, add 1 after each round.
+4 | prices[i] reads the item at the current index.
+8 | for...of gives you each value directly. No index to manage.
+9 | total += price is short for total = total + price.
+15 | while repeats until the condition becomes false. Here it halves 100 until it reaches 1.
+24 | break exits the loop immediately, even if items are left.
+--- try
+Change the first loop to count backwards: let i = prices.length - 1; i >= 0; i--
+Replace break with continue. What changes?
+Change n to 1000. How many more halving steps does it take?
+--- predict
+let count = 0;
+for (let i = 0; i < 5; i++) {
+  if (i === 3) continue;
+  count++;
+}
+console.log(count);
+--- options
+3
+4 *
+5
+2
+--- why
+The loop runs for i = 0 to 4 (five rounds). continue skips count++ only when i is 3, so count goes up four times.
+--- task
+<p>Write <code>cartTotal(items)</code> using a <strong>loop</strong>, not reduce. Each item is <code>{ price, qty }</code>. Return the total of <code>price × qty</code>.</p>
+--- starter
+function cartTotal(items) {
+  // use a for...of loop
+}
+
+console.log(cartTotal([{ price: 10, qty: 2 }, { price: 5, qty: 3 }]));  // 35
+--- tests
+Two items total 35 :: cartTotal([{ price: 10, qty: 2 }, { price: 5, qty: 3 }]) === 35
+Empty cart is 0 :: cartTotal([]) === 0
+Uses a loop :: /\bfor\b|\bwhile\b/.test(__code)
+--- hint
+let total = 0; for (const item of items) { total += item.price * item.qty; } return total;
+--- solution
+function cartTotal(items) {
+  let total = 0;
+  for (const item of items) {
+    total += item.price * item.qty;
+  }
+  return total;
+}
+--- react
+<p>Loops are the raw material of every algorithm in this track. In everyday code you'll still prefer <code>map</code> and <code>filter</code> for simple transforms, and reach for a loop when you need to stop early or track more than one position.</p>
+--- jsx
+// Stop as soon as you find what you need
+function firstOutOfStock(products) {
+  for (const p of products) {
+    if (p.stock === 0) return p;
+  }
+  return null;
+}
+
+=== lesson d8-bigo | Big O: how code scales | 8
+--- name
+Sum without a loop
+--- understand
+<p><strong>Big O</strong> describes how the work grows as the input grows. It ignores small details and asks one question: if the list gets 10× bigger, how much slower does this get?</p>
+<ul>
+<li><strong>O(1)</strong> constant: same work for any size. Reading <code>arr[5]</code>.</li>
+<li><strong>O(log n)</strong>: halves the problem each step. Binary search.</li>
+<li><strong>O(n)</strong> linear: one pass over the data.</li>
+<li><strong>O(n log n)</strong>: good sorting algorithms.</li>
+<li><strong>O(n²)</strong> quadratic: a loop inside a loop over the same data.</li>
+</ul>
+<p>The point isn't maths. It's knowing which code will freeze the screen when 50 rows become 50,000.</p>
+--- code
+function countSteps(n) {
+  let constant = 1;
+  let logarithmic = 0;
+  for (let i = n; i > 1; i = Math.floor(i / 2)) logarithmic++;
+  let linear = 0;
+  for (let i = 0; i < n; i++) linear++;
+  let quadratic = 0;
+  for (let i = 0; i < n; i++) {
+    for (let j = 0; j < n; j++) quadratic++;
+  }
+  return { n, constant, logarithmic, linear, quadratic };
+}
+
+console.log(countSteps(10));
+console.log(countSteps(100));
+console.log(countSteps(1000));
+--- notes
+2 | O(1): one step, whatever n is.
+4 | O(log n): i is halved each round, so 1000 needs only about 10 steps.
+6 | O(n): one step per item.
+8 | O(n²): for every i, loop over every j. That's n × n steps.
+14 | Compare the rows: when n grows 10×, linear grows 10× but quadratic grows 100×.
+--- try
+Add console.log(countSteps(5000)) and look at the quadratic count.
+Add a cubic count with three nested loops and try n = 100.
+Use the growth visual below to compare much larger sizes.
+--- predict
+let ops = 0;
+for (let i = 0; i < 4; i++) {
+  for (let j = 0; j < 4; j++) {
+    ops++;
+  }
+}
+console.log(ops);
+--- options
+8
+16 *
+4
+10
+--- why
+The inner loop runs 4 times for each of the 4 outer rounds: 4 × 4 = 16. That's the O(n²) pattern.
+--- task
+<p><code>sumTo(n)</code> adds 1 + 2 + … + n. A loop would be O(n). Write it in <strong>O(1)</strong> with the formula <code>n × (n + 1) / 2</code>, using no loop at all.</p>
+--- starter
+function sumTo(n) {
+  // no loops: use the formula
+}
+
+console.log(sumTo(100));  // 5050
+--- tests
+sumTo(100) is 5050 :: sumTo(100) === 5050
+sumTo(1) is 1 :: sumTo(1) === 1
+sumTo(10000000) is 50000005000000 :: sumTo(10000000) === 50000005000000
+No loops :: !/\b(for|while)\b/.test(__code) && sumTo(5) === 15
+--- hint
+return (n * (n + 1)) / 2;
+--- solution
+function sumTo(n) {
+  return (n * (n + 1)) / 2;
+}
+--- react
+<p>Big O decides whether a feature survives real data. A search that's O(n²) feels instant with 100 rows and freezes the tab with 20,000. When a code review says "this is quadratic", this is what it means.</p>
+--- jsx
+// O(n × m): for every user, scan all orders
+users.map((u) => orders.filter((o) => o.userId === u.id));
+
+// O(n + m): group orders once, then each lookup is O(1)
+const byUser = Object.groupBy(orders, (o) => o.userId);
+users.map((u) => byUser[u.id] ?? []);
+
+=== lesson d8-nested | Nested loops and O(n²) | 7
+--- name
+Count pairs (brute force)
+--- understand
+<p>The most common slow pattern is a <strong>loop inside a loop</strong> over the same list: compare every item with every other item.</p>
+<p>To avoid comparing a pair twice, or an item with itself, start the inner loop one position after the outer: <code>for (let j = i + 1; …)</code>.</p>
+<p>Brute force is a fine start. Write the simple version, check it's correct, then make it faster. You'll speed this exact problem up in the Hash Maps module.</p>
+--- code
+const names = ["Ava", "Ben", "Cal", "Dee"];
+
+let comparisons = 0;
+for (let i = 0; i < names.length; i++) {
+  for (let j = i + 1; j < names.length; j++) {
+    comparisons++;
+    console.log(`${names[i]} vs ${names[j]}`);
+  }
+}
+console.log("Comparisons:", comparisons);
+--- notes
+4 | The outer loop picks the first item of each pair.
+5 | The inner loop starts after i, so each pair appears once and nobody is compared with themselves.
+6 | 4 items give 6 pairs. n items give n × (n − 1) / 2 pairs, which is still O(n²).
+--- try
+Start j at 0 instead of i + 1. How many lines print now, and what's wrong with them?
+Add a fifth name. How many comparisons now?
+--- predict
+const a = [1, 2, 3];
+let pairs = 0;
+for (let i = 0; i < a.length; i++) {
+  for (let j = i + 1; j < a.length; j++) {
+    pairs++;
+  }
+}
+console.log(pairs);
+--- options
+3 *
+6
+9
+2
+--- why
+The pairs are (1,2), (1,3) and (2,3). Starting j at i + 1 skips self-pairs and repeats.
+--- task
+<p>Write <code>countPairs(nums, target)</code>: how many pairs of <strong>different positions</strong> add up to <code>target</code>? Use two nested loops.</p>
+--- starter
+function countPairs(nums, target) {
+  // nested loops, j starts at i + 1
+}
+
+console.log(countPairs([1, 2, 3, 4], 5));  // 2: (1,4) and (2,3)
+--- tests
+[1, 2, 3, 4] target 5 gives 2 :: countPairs([1, 2, 3, 4], 5) === 2
+[2, 2, 2] target 4 gives 3 :: countPairs([2, 2, 2], 4) === 3
+No pairs gives 0 :: countPairs([1, 1], 10) === 0
+Never pairs an item with itself :: countPairs([3], 6) === 0
+--- hint
+let count = 0; loop i, then j from i + 1: if (nums[i] + nums[j] === target) count++;
+--- solution
+function countPairs(nums, target) {
+  let count = 0;
+  for (let i = 0; i < nums.length; i++) {
+    for (let j = i + 1; j < nums.length; j++) {
+      if (nums[i] + nums[j] === target) count++;
+    }
+  }
+  return count;
+}
+--- react
+<p>Nested loops hide in plain sight: a <code>.find()</code> inside a <code>.map()</code> is a loop inside a loop. Fine for small lists, and the first thing to fix when a page gets slow.</p>
+--- jsx
+// Looks innocent, but it's O(n × m)
+const rows = orders.map((order) => ({
+  ...order,
+  customer: customers.find((c) => c.id === order.customerId),
+}));
+
+=== lesson d9-twopointers | Two pointers | 8
+--- name
+Palindrome checker
+--- understand
+<p>The <strong>two pointers</strong> pattern keeps two indexes and moves them toward each other, or in the same direction. It turns many O(n²) problems into a single O(n) pass.</p>
+<p>Classic uses: reversing in place, checking palindromes, and finding a pair in a <strong>sorted</strong> array.</p>
+<p>In a sorted array, if the pair sum is too small, move the left pointer right. If it's too big, move the right pointer left.</p>
+--- code
+function pairWithSum(sorted, target) {
+  let left = 0;
+  let right = sorted.length - 1;
+
+  while (left < right) {
+    const sum = sorted[left] + sorted[right];
+    console.log(`left=${left} right=${right} sum=${sum}`);
+    if (sum === target) return [sorted[left], sorted[right]];
+    if (sum < target) left++;
+    else right--;
+  }
+  return null;
+}
+
+console.log(pairWithSum([1, 3, 4, 6, 8, 11], 10));
+--- notes
+2 | One pointer starts at the beginning.
+3 | The other starts at the end.
+5 | Stop when the pointers meet: every useful pair has been checked.
+9 | Sum too small? Only a bigger left value can help, so move left forward.
+10 | Sum too big? Move right backward to get a smaller value.
+--- try
+Change the target to 19. Which pair is found?
+Try a target with no answer, like 2.
+--- predict
+const s = [2, 5, 7, 9];
+let l = 0, r = s.length - 1;
+while (s[l] + s[r] !== 12) {
+  if (s[l] + s[r] < 12) l++;
+  else r--;
+}
+console.log(s[l], s[r]);
+--- options
+5 7 *
+2 9
+7 5
+2 7
+--- why
+2 + 9 = 11 is too small, so l moves to 5. 5 + 9 = 14 is too big, so r moves to 7. 5 + 7 = 12.
+--- task
+<p>Write <code>isPalindrome(text)</code> using two pointers. Ignore upper and lower case, and any character that isn't a letter or digit. <code>"Race car!"</code> is a palindrome.</p>
+<p>Clean the string first with <code>text.toLowerCase().replace(/[^a-z0-9]/g, "")</code>. Don't use <code>reverse()</code>.</p>
+--- starter
+function isPalindrome(text) {
+  // clean the text, then compare from both ends
+}
+
+console.log(isPalindrome("Race car!"));  // true
+--- tests
+"Race car!" is a palindrome :: isPalindrome("Race car!") === true
+"level" is a palindrome :: isPalindrome("level") === true
+"design" is not :: isPalindrome("design") === false
+Empty text is a palindrome :: isPalindrome("") === true
+Uses two pointers, not reverse() :: /\b(while|for)\b/.test(__code) && !/\.reverse\(/.test(__code)
+--- hint
+let left = 0, right = s.length - 1; while (left < right) { if (s[left] !== s[right]) return false; left++; right--; } return true;
+--- solution
+function isPalindrome(text) {
+  const s = text.toLowerCase().replace(/[^a-z0-9]/g, "");
+  let left = 0;
+  let right = s.length - 1;
+  while (left < right) {
+    if (s[left] !== s[right]) return false;
+    left++;
+    right--;
+  }
+  return true;
+}
+--- react
+<p>Two pointers show up when merging two sorted lists (timelines, paginated results), removing duplicates from sorted data, and comparing text from both ends.</p>
+--- jsx
+// Merge two already-sorted message lists in one pass
+function mergeByTime(a, b) {
+  const out = [];
+  let i = 0, j = 0;
+  while (i < a.length && j < b.length) {
+    out.push(a[i].time <= b[j].time ? a[i++] : b[j++]);
+  }
+  return out.concat(a.slice(i), b.slice(j));
+}
+
+=== lesson d9-sliding | Sliding window | 8
+--- name
+Best 3-day revenue
+--- understand
+<p>A <strong>sliding window</strong> looks at a run of consecutive items, like 7 days of data, and slides it forward one step at a time.</p>
+<p>The slow way re-adds every item in each window: O(n × k). The fast way keeps a running sum: <strong>add the item entering</strong> the window and <strong>subtract the item leaving</strong>. One pass, O(n).</p>
+--- code
+const visits = [3, 8, 2, 9, 4, 7, 1];
+const k = 3;
+
+let windowSum = 0;
+for (let i = 0; i < k; i++) windowSum += visits[i];
+console.log(`days 0-2: ${windowSum}`);
+
+let best = windowSum;
+for (let i = k; i < visits.length; i++) {
+  windowSum += visits[i] - visits[i - k];
+  console.log(`days ${i - k + 1}-${i}: ${windowSum}`);
+  best = Math.max(best, windowSum);
+}
+console.log("Best 3-day total:", best);
+--- notes
+5 | Build the first window by adding the first k items.
+9 | Each round, the window moves one step to the right.
+10 | Add the new day (visits[i]) and remove the day that fell out (visits[i - k]).
+12 | Keep the best total seen so far.
+--- try
+Change k to 2, then to 5.
+Track which day the best window starts on, not just its total.
+Use the window visual below to step through it.
+--- predict
+const a = [1, 2, 3, 4];
+let sum = a[0] + a[1];
+sum += a[2] - a[0];
+console.log(sum);
+--- options
+5 *
+6
+3
+9
+--- why
+The first window is 1 + 2 = 3. Sliding right adds 3 and removes 1: 3 + 3 − 1 = 5, which is 2 + 3.
+--- task
+<p>Write <code>maxWindowSum(nums, k)</code> that returns the largest sum of any <code>k</code> consecutive numbers, using a sliding window. Return <code>null</code> if there are fewer than <code>k</code> numbers.</p>
+--- starter
+function maxWindowSum(nums, k) {
+  // first window, then slide
+}
+
+console.log(maxWindowSum([3, 8, 2, 9, 4, 7, 1], 3));  // 20
+--- tests
+Best 3-day window is 20 :: maxWindowSum([3, 8, 2, 9, 4, 7, 1], 3) === 20
+Works with negatives :: maxWindowSum([-5, -2, -8, -1], 2) === -7
+Window as long as the list :: maxWindowSum([1, 2, 3], 3) === 6
+Too few numbers gives null :: maxWindowSum([1, 2], 3) === null
+Fast on 200,000 items :: (() => { const big = Array.from({ length: 200000 }, (_, i) => i % 100); const t = Date.now(); const r = maxWindowSum(big, 5000); return r === 247500 && Date.now() - t < 800; })()
+--- hint
+if (nums.length < k) return null; build the first sum, then for i from k: sum += nums[i] - nums[i - k]; best = Math.max(best, sum).
+--- solution
+function maxWindowSum(nums, k) {
+  if (nums.length < k) return null;
+  let sum = 0;
+  for (let i = 0; i < k; i++) sum += nums[i];
+  let best = sum;
+  for (let i = k; i < nums.length; i++) {
+    sum += nums[i] - nums[i - k];
+    best = Math.max(best, sum);
+  }
+  return best;
+}
+--- react
+<p>Sliding windows power rolling metrics: 7-day active users, moving averages on charts, rate limits like "5 requests per minute", and finding the longest run without repeats in text.</p>
+--- jsx
+// 7-day moving average for a chart
+function movingAverage(values, days = 7) {
+  const out = [];
+  let sum = 0;
+  values.forEach((v, i) => {
+    sum += v;
+    if (i >= days) sum -= values[i - days];
+    if (i >= days - 1) out.push(sum / days);
+  });
+  return out;
+}
+
+=== lesson d9-prefix | Prefix sums | 7
+--- name
+Range totals
+--- understand
+<p>If you'll ask "what's the total between position A and B?" many times, don't re-add every time. Build a <strong>prefix sum</strong> array once: each slot holds the total of everything before it.</p>
+<p>Then any range total is one subtraction: <code>prefix[end + 1] - prefix[start]</code>. Building is O(n). Every question after that is O(1).</p>
+--- code
+const sales = [5, 3, 8, 6, 2];
+
+const prefix = [0];
+for (let i = 0; i < sales.length; i++) {
+  prefix.push(prefix[i] + sales[i]);
+}
+console.log(prefix);
+
+// total from index 1 to 3 (3 + 8 + 6)
+console.log(prefix[4] - prefix[1]);
+
+// total from index 0 to 4 (everything)
+console.log(prefix[5] - prefix[0]);
+--- notes
+3 | Start with 0 so ranges that begin at index 0 work too.
+5 | Each new slot is the previous running total plus the next sale.
+7 | prefix has one more slot than sales: [0, 5, 8, 16, 22, 24].
+10 | Sum of indexes 1 to 3 = prefix[3 + 1] − prefix[1] = 22 − 5 = 17.
+--- try
+Find the total of indexes 2 to 4 with one subtraction.
+Change a value in sales and run. Every later prefix value shifts.
+--- predict
+const p = [0, 2, 5, 9];
+console.log(p[3] - p[1]);
+--- options
+7 *
+9
+4
+5
+--- why
+9 − 2 = 7. These prefix totals come from [2, 3, 4], and 3 + 4 = 7.
+--- task
+<p>Write <code>makeRangeSum(nums)</code>. It builds a prefix sum array once and <strong>returns a function</strong> <code>(start, end)</code> that gives the total from <code>start</code> to <code>end</code>, inclusive.</p>
+--- starter
+function makeRangeSum(nums) {
+  // build prefix once
+  // return (start, end) => ...
+}
+
+const total = makeRangeSum([5, 3, 8, 6, 2]);
+console.log(total?.(1, 3));  // 17
+--- tests
+Range 1 to 3 is 17 :: makeRangeSum([5, 3, 8, 6, 2])(1, 3) === 17
+Range 0 to 0 is 5 :: makeRangeSum([5, 3, 8, 6, 2])(0, 0) === 5
+Whole range is 24 :: makeRangeSum([5, 3, 8, 6, 2])(0, 4) === 24
+Returns a function :: typeof makeRangeSum([1]) === "function"
+--- hint
+const prefix = [0]; for (...) prefix.push(prefix[i] + nums[i]); return (start, end) => prefix[end + 1] - prefix[start];
+--- solution
+function makeRangeSum(nums) {
+  const prefix = [0];
+  for (let i = 0; i < nums.length; i++) {
+    prefix.push(prefix[i] + nums[i]);
+  }
+  return (start, end) => prefix[end + 1] - prefix[start];
+}
+--- react
+<p>Prefix sums sit behind running balances, cumulative charts like "revenue to date", and date-range totals in analytics dashboards, where people drag a range and expect instant numbers.</p>
+--- jsx
+// Running balance column for a transactions table
+let balance = 0;
+const rows = transactions.map((t) => {
+  balance += t.amount;
+  return { ...t, balance };
+});
+
+=== lesson d9-strings | String algorithms | 7
+--- name
+Compress a string
+--- understand
+<p>Strings behave a lot like arrays of characters: <code>str[i]</code>, <code>str.length</code> and loops all work. But strings can't be changed in place, so you build a new one.</p>
+<ul>
+<li><code>split("")</code> turns a string into an array of characters. <code>join("")</code> turns it back.</li>
+<li><code>split(" ")</code> splits into words.</li>
+<li>For long results, collect pieces in an array and <code>join</code> once at the end.</li>
+</ul>
+--- code
+const word = "design";
+console.log(word.split(""));
+console.log(word.split("").reverse().join(""));
+
+const sentence = "learn data structures";
+const words = sentence.split(" ");
+console.log(words.length, "words");
+console.log(words.map((w) => w[0].toUpperCase() + w.slice(1)).join(" "));
+
+let vowels = 0;
+for (const ch of word) {
+  if ("aeiou".includes(ch)) vowels++;
+}
+console.log("Vowels:", vowels);
+--- notes
+2 | Each character becomes its own array item.
+3 | Arrays have reverse() and strings don't. So: split, reverse, join.
+6 | Splitting on a space gives an array of words.
+8 | Capitalize each word, then glue them back together with spaces.
+11 | for...of walks a string one character at a time.
+--- try
+Count the vowels in sentence instead of word.
+Reverse the order of the words, not the letters.
+--- predict
+console.log("a-b-c".split("-").join(""));
+--- options
+abc *
+a-b-c
+["a", "b", "c"]
+a b c
+--- why
+split("-") gives ["a", "b", "c"], and join("") glues them with nothing in between.
+--- task
+<p>Write <code>compress(text)</code> that replaces each run of the same character with the character and its count: <code>"aaabbc"</code> → <code>"a3b2c1"</code>.</p>
+--- starter
+function compress(text) {
+  // walk the string, count each run
+}
+
+console.log(compress("aaabbc"));  // "a3b2c1"
+--- tests
+"aaabbc" becomes "a3b2c1" :: compress("aaabbc") === "a3b2c1"
+"abc" becomes "a1b1c1" :: compress("abc") === "a1b1c1"
+Runs can repeat later :: compress("aabaa") === "a2b1a2"
+Empty text stays empty :: compress("") === ""
+--- hint
+Keep a count. When the next character is different (or you've reached the end), push char + count and reset the count to 1.
+--- solution
+function compress(text) {
+  const parts = [];
+  let count = 1;
+  for (let i = 0; i < text.length; i++) {
+    if (text[i] === text[i + 1]) {
+      count++;
+    } else {
+      parts.push(text[i] + count);
+      count = 1;
+    }
+  }
+  return parts.join("");
+}
+--- react
+<p>String walking is everywhere in product code: building slugs and initials, highlighting search matches, truncating labels, parsing simple formats like <code>"2h 30m"</code>, and validating input as people type.</p>
+--- jsx
+// Split a label so the matched part can be highlighted
+function splitMatch(label, query) {
+  const i = label.toLowerCase().indexOf(query.toLowerCase());
+  if (i === -1 || !query) return [label, "", ""];
+  return [label.slice(0, i), label.slice(i, i + query.length), label.slice(i + query.length)];
+}
+
+=== lesson d10-set | Sets: unique values | 7
+--- name
+Has duplicates?
+--- understand
+<p>A <strong>Set</strong> stores unique values. Adding something twice keeps one copy.</p>
+<p>The big win is speed: <code>set.has(x)</code> is O(1), while <code>array.includes(x)</code> scans the whole array, O(n). Inside a loop, that's the difference between O(n) and O(n²).</p>
+<ul>
+<li><code>new Set(array)</code>, <code>.add()</code>, <code>.has()</code>, <code>.delete()</code>, <code>.size</code></li>
+<li><code>[...set]</code> turns it back into an array.</li>
+</ul>
+--- code
+const tags = ["ui", "ux", "ui", "figma", "ux"];
+
+const unique = new Set(tags);
+console.log(unique.size);
+console.log([...unique]);
+
+unique.add("code");
+console.log(unique.has("code"), unique.has("css"));
+
+const a = new Set(["ui", "ux", "code"]);
+const b = new Set(["code", "figma"]);
+const both = [...a].filter((x) => b.has(x));
+console.log("In both:", both);
+--- notes
+3 | Duplicates disappear as the Set is built.
+4 | Sets use .size, not .length.
+5 | Spread a Set to get a normal array back.
+8 | has() is a constant-time lookup.
+12 | Intersection: keep the items of a that b also has.
+--- try
+Find the tags in a but not in b.
+Try new Set([{ id: 1 }, { id: 1 }]).size. Why isn't it 1?
+--- predict
+console.log(new Set([1, 1, 2, "2"]).size);
+--- options
+3 *
+2
+4
+1
+--- why
+1 appears twice, so one copy stays. 2 and "2" are different types, so both stay: 1, 2 and "2".
+--- task
+<p>Write <code>hasDuplicate(items)</code> that returns <code>true</code> if any value appears more than once. Use a Set, and return as soon as you find a repeat.</p>
+--- starter
+function hasDuplicate(items) {
+  // use a Set
+}
+
+console.log(hasDuplicate(["a", "b", "a"]));  // true
+--- tests
+Finds a repeat :: hasDuplicate(["a", "b", "a"]) === true
+No repeats gives false :: hasDuplicate([1, 2, 3]) === false
+Empty list gives false :: hasDuplicate([]) === false
+Fast on 100,000 items :: (() => { const big = Array.from({ length: 100000 }, (_, i) => i); const t = Date.now(); const r = hasDuplicate(big); return r === false && Date.now() - t < 500; })()
+Uses a Set :: __code.includes("new Set")
+--- hint
+const seen = new Set(); for (const x of items) { if (seen.has(x)) return true; seen.add(x); } return false;
+--- solution
+function hasDuplicate(items) {
+  const seen = new Set();
+  for (const x of items) {
+    if (seen.has(x)) return true;
+    seen.add(x);
+  }
+  return false;
+}
+--- react
+<p>Sets handle selected rows in a table, unique tags, "already seen" tracking for notifications, and fast permission checks like <code>roles.has("admin")</code>.</p>
+--- jsx
+// Selected rows as a Set: O(1) checks while rendering 1,000 rows
+const [selected, setSelected] = useState(new Set());
+
+function toggle(id) {
+  setSelected((prev) => {
+    const next = new Set(prev);
+    next.has(id) ? next.delete(id) : next.add(id);
+    return next;
+  });
+}
+
+=== lesson d10-map | Maps and frequency counting | 8
+--- name
+Anagram check
+--- understand
+<p>A <strong>hash map</strong> stores key → value pairs with O(1) lookups. In JavaScript you can use a plain object or a <code>Map</code>.</p>
+<p>The most useful pattern is the <strong>frequency counter</strong>: walk the data once and count how often each value appears. It replaces a nested loop with a single pass.</p>
+<ul>
+<li><code>map.get(key)</code>, <code>map.set(key, value)</code>, <code>map.has(key)</code></li>
+<li>Count with a fallback: <code>map.set(x, (map.get(x) ?? 0) + 1)</code></li>
+</ul>
+--- code
+const votes = ["dark", "light", "dark", "system", "dark", "light"];
+
+const counts = new Map();
+for (const v of votes) {
+  counts.set(v, (counts.get(v) ?? 0) + 1);
+}
+console.log(counts);
+
+let winner = null;
+let best = 0;
+for (const [option, n] of counts) {
+  if (n > best) {
+    best = n;
+    winner = option;
+  }
+}
+console.log(`${winner} wins with ${best} votes`);
+
+const asObject = {};
+for (const v of votes) asObject[v] = (asObject[v] || 0) + 1;
+console.log(asObject);
+--- notes
+3 | An empty Map to hold option → count.
+5 | Read the current count (or 0 if it's new), add 1, store it back.
+11 | Looping over a Map gives [key, value] pairs. Destructuring unpacks them.
+19 | The same counter with a plain object. Both are O(n).
+--- try
+Count the letters in "mississippi".
+Find the least popular option instead of the most popular.
+--- predict
+const m = new Map();
+for (const c of "abca") m.set(c, (m.get(c) ?? 0) + 1);
+console.log(m.get("a"), m.size);
+--- options
+2 3 *
+1 4
+2 4
+3 2
+--- why
+"a" appears twice. The keys are a, b and c, so the Map has 3 entries.
+--- task
+<p>Write <code>isAnagram(a, b)</code>: do the two words use exactly the same letters, the same number of times? <code>"listen"</code> and <code>"silent"</code> do. Use a frequency counter, not sorting.</p>
+--- starter
+function isAnagram(a, b) {
+  // count the letters in a, then use them up with b
+}
+
+console.log(isAnagram("listen", "silent"));  // true
+--- tests
+listen and silent :: isAnagram("listen", "silent") === true
+rat and car :: isAnagram("rat", "car") === false
+Counts matter: aab and abb :: isAnagram("aab", "abb") === false
+Different lengths :: isAnagram("abc", "abcd") === false
+Uses counting, not sort() :: !/\.sort\(/.test(__code) && isAnagram("ab", "ba") === true
+--- hint
+If the lengths differ, return false. Count each letter of a. For each letter of b, subtract one. If a count is missing or already zero, return false.
+--- solution
+function isAnagram(a, b) {
+  if (a.length !== b.length) return false;
+  const counts = new Map();
+  for (const ch of a) counts.set(ch, (counts.get(ch) ?? 0) + 1);
+  for (const ch of b) {
+    const n = counts.get(ch);
+    if (!n) return false;
+    counts.set(ch, n - 1);
+  }
+  return true;
+}
+--- react
+<p>Frequency counts drive real UI: tag clouds, "most used" lists, unread counts per channel, filter chips with numbers like <em>Open (12)</em>, and analytics breakdowns.</p>
+--- jsx
+// Counts for filter chips: "All 40 · Open 12 · Closed 28"
+const counts = tickets.reduce((acc, t) => {
+  acc[t.status] = (acc[t.status] ?? 0) + 1;
+  return acc;
+}, {});
+
+=== lesson d10-twosum | Two Sum with a hash map | 8
+--- name
+Two Sum
+--- understand
+<p>Two Sum is the most famous interview question, and a perfect example of trading a little memory for a lot of speed.</p>
+<p>The question: which two positions add up to the target? The nested-loop answer is O(n²). The hash map answer remembers each number's index as it goes. For each number it asks: <strong>have I already seen the number that completes this pair?</strong> One pass, O(n).</p>
+--- code
+function twoSum(nums, target) {
+  const seen = new Map();
+  for (let i = 0; i < nums.length; i++) {
+    const need = target - nums[i];
+    console.log(`i=${i} value=${nums[i]} need=${need} seen=${JSON.stringify([...seen])}`);
+    if (seen.has(need)) return [seen.get(need), i];
+    seen.set(nums[i], i);
+  }
+  return null;
+}
+
+console.log(twoSum([2, 7, 11, 15], 9));
+console.log(twoSum([3, 2, 4], 6));
+--- notes
+2 | The map remembers value → index for everything seen so far.
+4 | The partner this number needs to reach the target.
+6 | Use has(), not a truthy check: index 0 is falsy but still a real answer.
+7 | Store the current number after checking, so an item never pairs with itself.
+--- try
+Try twoSum([3, 3], 6). Why does storing after checking matter here?
+Find a target with no answer.
+--- predict
+const seen = new Map([[4, 0]]);
+console.log(seen.get(4) ? "found" : "missing");
+--- options
+missing *
+found
+0
+undefined
+--- why
+The value stored for 4 is the index 0, and 0 is falsy, so the ternary says "missing". That's why Two Sum must use has().
+--- task
+<p>Write <code>twoSum(nums, target)</code> that returns the two <strong>indexes</strong> <code>[i, j]</code> (with <code>i &lt; j</code>) whose values add up to target, or <code>null</code>. Solve it in one pass with a Map.</p>
+--- starter
+function twoSum(nums, target) {
+  // one pass with a Map
+}
+
+console.log(twoSum([2, 7, 11, 15], 9));  // [0, 1]
+--- tests
+[2, 7, 11, 15] target 9 :: JSON.stringify(twoSum([2, 7, 11, 15], 9)) === "[0,1]"
+[3, 2, 4] target 6 :: JSON.stringify(twoSum([3, 2, 4], 6)) === "[1,2]"
+[3, 3] target 6 :: JSON.stringify(twoSum([3, 3], 6)) === "[0,1]"
+No answer gives null :: twoSum([1, 2], 10) === null
+Fast on 100,000 items :: (() => { const big = Array.from({ length: 100000 }, (_, i) => i); const t = Date.now(); const r = twoSum(big, 199997); return JSON.stringify(r) === "[99998,99999]" && Date.now() - t < 500; })()
+--- hint
+const seen = new Map(); for each i: const need = target - nums[i]; if (seen.has(need)) return [seen.get(need), i]; seen.set(nums[i], i); after the loop, return null.
+--- solution
+function twoSum(nums, target) {
+  const seen = new Map();
+  for (let i = 0; i < nums.length; i++) {
+    const need = target - nums[i];
+    if (seen.has(need)) return [seen.get(need), i];
+    seen.set(nums[i], i);
+  }
+  return null;
+}
+--- react
+<p>"Have I seen this before?" with a map is how you join data from two API calls: index one list by id, then look items up while walking the other. That turns O(n × m) into O(n + m).</p>
+--- jsx
+// Index customers once, then each lookup is O(1)
+const customerById = new Map(customers.map((c) => [c.id, c]));
+
+const rows = orders.map((order) => ({
+  ...order,
+  customer: customerById.get(order.customerId),
+}));
+
+=== lesson d10-group | Grouping data | 7
+--- name
+Group by key
+--- understand
+<p>Grouping turns a flat list into buckets: tasks by status, orders by customer, messages by day. It's a hash map where each value is an <strong>array</strong>.</p>
+<p>The pattern: for each item, work out its key, create an empty bucket the first time, then push the item into it. One pass, O(n).</p>
+--- code
+const tasks = [
+  { title: "Wireframes", status: "done" },
+  { title: "API spec", status: "todo" },
+  { title: "Prototype", status: "doing" },
+  { title: "Copy review", status: "todo" },
+];
+
+const byStatus = {};
+for (const task of tasks) {
+  const key = task.status;
+  if (!byStatus[key]) byStatus[key] = [];
+  byStatus[key].push(task.title);
+}
+console.log(byStatus);
+
+const columns = ["todo", "doing", "done"];
+render(columns.map((c) => `${c.toUpperCase()} (${byStatus[c]?.length ?? 0}): ${(byStatus[c] ?? []).join(", ")}`));
+--- notes
+8 | One object, one bucket per status.
+10 | The key decides which bucket the item goes in.
+11 | Create the bucket the first time a status appears.
+12 | Push the item into its bucket.
+17 | Render a simple board, one row per column, like a Kanban view.
+--- try
+Group by the first letter of the title instead.
+Add a task with a new status, "blocked". What happens to the board?
+--- predict
+const g = {};
+for (const n of [1, 2, 3, 4, 5]) {
+  const k = n % 2 === 0 ? "even" : "odd";
+  (g[k] ??= []).push(n);
+}
+console.log(g.odd);
+--- options
+[1, 3, 5] *
+[2, 4]
+3
+[1, 2, 3, 4, 5]
+--- why
+Odd numbers go into the "odd" bucket. ??= creates the empty array only when the bucket doesn't exist yet.
+--- task
+<p>Write <code>groupBy(items, key)</code> that returns an object of arrays, grouping the <strong>whole items</strong> by the value of <code>item[key]</code>. Don't change the input.</p>
+--- starter
+function groupBy(items, key) {
+  // one pass: a bucket per value
+}
+
+const orders = [
+  { id: 1, customer: "Ava" },
+  { id: 2, customer: "Ben" },
+  { id: 3, customer: "Ava" },
+];
+console.log(groupBy(orders, "customer"));
+--- tests
+Groups by the key :: (() => { const g = groupBy([{ id: 1, c: "A" }, { id: 2, c: "B" }, { id: 3, c: "A" }], "c"); return g.A.length === 2 && g.A[1].id === 3 && g.B[0].id === 2; })()
+Keeps whole items :: (() => { const item = { id: 1, c: "A" }; return groupBy([item], "c").A[0] === item; })()
+Empty list gives {} :: JSON.stringify(groupBy([], "c")) === "{}"
+Works with any key :: Object.keys(groupBy([{ t: "x" }, { t: "y" }], "t")).length === 2
+--- hint
+const groups = {}; for (const item of items) { const k = item[key]; if (!groups[k]) groups[k] = []; groups[k].push(item); } return groups;
+--- solution
+function groupBy(items, key) {
+  const groups = {};
+  for (const item of items) {
+    const k = item[key];
+    if (!groups[k]) groups[k] = [];
+    groups[k].push(item);
+  }
+  return groups;
+}
+--- react
+<p>Grouping is behind Kanban boards, inbox sections like Today and Yesterday, grouped tables, and charts by category. Modern JavaScript even has a built-in version: <code>Object.groupBy</code>.</p>
+--- jsx
+// Sections for a message list
+const sections = Object.groupBy(messages, (m) => formatDay(m.sentAt));
+
+Object.entries(sections).map(([day, items]) => (
+  <Section key={day} title={day} items={items} />
+));
+
+=== lesson d11-stack | Stacks | 8
+--- name
+Balanced brackets
+--- understand
+<p>A <strong>stack</strong> is last in, first out (LIFO), like a pile of plates. You only touch the top.</p>
+<p>In JavaScript, an array is a stack: <code>push()</code> adds to the top and <code>pop()</code> removes from the top. Both are O(1). <code>stack[stack.length - 1]</code> peeks without removing.</p>
+<p>Reach for a stack whenever the <strong>most recent</strong> thing matters most: undo, back buttons, nested brackets.</p>
+--- code
+const history = [];
+
+function visit(page) {
+  history.push(page);
+  console.log("Visit", page, "→", history);
+}
+
+function back() {
+  const left = history.pop();
+  console.log("Back from", left, "→", history);
+}
+
+visit("Home");
+visit("Lessons");
+visit("Stacks");
+back();
+console.log("Now on:", history[history.length - 1]);
+--- notes
+1 | An empty array acting as a stack.
+4 | push adds the newest page on top.
+9 | pop removes and returns the newest page: last in, first out.
+17 | Peek at the top without removing it.
+--- try
+Call back() three more times. What does pop return on an empty stack?
+Add a forward() using a second stack.
+Use the stack visual below.
+--- predict
+const s = [];
+s.push(1);
+s.push(2);
+s.push(3);
+s.pop();
+console.log(s[s.length - 1]);
+--- options
+2 *
+3
+1
+[1, 2]
+--- why
+3 was pushed last, so pop removes it. The top is now 2.
+--- task
+<p>Write <code>isBalanced(text)</code> that checks every <code>( [ {</code> is closed by the matching <code>) ] }</code> in the right order. Ignore all other characters.</p>
+--- starter
+function isBalanced(text) {
+  const pairs = { ")": "(", "]": "[", "}": "{" };
+  // push openers, pop on closers
+}
+
+console.log(isBalanced("{ items: [1, (2 + 3)] }"));  // true
+--- tests
+Nested brackets :: isBalanced("{ items: [1, (2 + 3)] }") === true
+Wrong order :: isBalanced("([)]") === false
+Unclosed opener :: isBalanced("((") === false
+Closer with nothing open :: isBalanced(")(") === false
+No brackets is balanced :: isBalanced("hello") === true
+--- hint
+For an opener, push it. For a closer, pop and compare with pairs[ch]. At the end, the stack must be empty.
+--- solution
+function isBalanced(text) {
+  const pairs = { ")": "(", "]": "[", "}": "{" };
+  const stack = [];
+  for (const ch of text) {
+    if ("([{".includes(ch)) {
+      stack.push(ch);
+    } else if (pairs[ch]) {
+      if (stack.pop() !== pairs[ch]) return false;
+    }
+  }
+  return stack.length === 0;
+}
+--- react
+<p>Stacks run undo and redo in editors (your Figma history is one), layered modals where Escape closes the top one, breadcrumb navigation, and the JavaScript call stack you see in every error trace.</p>
+--- jsx
+// Undo: push snapshots, pop to go back
+const [past, setPast] = useState([]);
+
+function update(next) {
+  setPast((p) => [...p, doc]);
+  setDoc(next);
+}
+
+function undo() {
+  setDoc(past[past.length - 1]);
+  setPast((p) => p.slice(0, -1));
+}
+
+=== lesson d11-queue | Queues | 8
+--- name
+A fast queue
+--- understand
+<p>A <strong>queue</strong> is first in, first out (FIFO), like a line at a counter. Add at the back, remove from the front.</p>
+<p>The easy version uses <code>push()</code> and <code>shift()</code>. But <code>shift()</code> is O(n): every remaining item moves one slot forward. For big queues, keep a <strong>head index</strong> instead, so nothing ever moves.</p>
+--- code
+const line = [];
+line.push("Ava");
+line.push("Ben");
+line.push("Cal");
+
+console.log("Serving", line.shift());
+console.log("Waiting:", line);
+
+// Faster: never shift, just move a head index
+const items = ["Ava", "Ben", "Cal"];
+let head = 0;
+console.log("Serving", items[head++]);
+console.log("Serving", items[head++]);
+console.log("Still waiting:", items.length - head);
+--- notes
+2 | push adds to the back of the line.
+6 | shift removes from the front, then moves every other item forward. O(n).
+11 | head points at the front of the queue.
+12 | items[head++] reads the front, then moves head forward. O(1), nothing shifts.
+--- try
+Serve everyone with the head-index version. What does items[head] give when the queue is empty?
+Add three more people and serve them in order.
+--- predict
+const q = ["a", "b", "c"];
+q.push("d");
+q.shift();
+q.shift();
+console.log(q[0]);
+--- options
+c *
+a
+d
+b
+--- why
+shift removes from the front: first "a", then "b". The front is now "c".
+--- task
+<p>Write <code>createQueue()</code> that returns an object with <code>enqueue(x)</code>, <code>dequeue()</code>, <code>peek()</code> and <code>size()</code>. Use a head index so <code>dequeue</code> never calls <code>shift()</code>. On an empty queue, <code>dequeue</code> and <code>peek</code> return <code>undefined</code>.</p>
+--- starter
+function createQueue() {
+  const items = [];
+  let head = 0;
+  // return { enqueue, dequeue, peek, size }
+}
+
+const q = createQueue();
+q?.enqueue?.("Ava");
+q?.enqueue?.("Ben");
+console.log(q?.dequeue?.(), q?.size?.());  // Ava 1
+--- tests
+First in, first out :: (() => { const q = createQueue(); q.enqueue(1); q.enqueue(2); q.enqueue(3); return q.dequeue() === 1 && q.dequeue() === 2; })()
+size counts waiting items :: (() => { const q = createQueue(); q.enqueue("a"); q.enqueue("b"); q.dequeue(); return q.size() === 1; })()
+peek doesn't remove :: (() => { const q = createQueue(); q.enqueue("x"); return q.peek() === "x" && q.size() === 1; })()
+Empty queue gives undefined :: (() => { const q = createQueue(); return q.dequeue() === undefined && q.peek() === undefined && q.size() === 0; })()
+Never uses shift() :: !/\.shift\(/.test(__code) && typeof createQueue().enqueue === "function"
+--- hint
+enqueue: items.push(x). dequeue: head < items.length ? items[head++] : undefined. peek: items[head]. size: items.length - head.
+--- solution
+function createQueue() {
+  const items = [];
+  let head = 0;
+  return {
+    enqueue: (x) => items.push(x),
+    dequeue: () => (head < items.length ? items[head++] : undefined),
+    peek: () => items[head],
+    size: () => items.length - head,
+  };
+}
+--- react
+<p>Queues handle work that must happen in order: upload queues, toasts shown one after another, chat messages waiting to send while offline, and background jobs on servers. Breadth-first search, later in this track, is built on a queue.</p>
+--- jsx
+// Show toasts one at a time, in order
+const [queue, setQueue] = useState([]);
+const current = queue[0];
+
+function notify(message) {
+  setQueue((q) => [...q, message]);
+}
+
+function dismiss() {
+  setQueue((q) => q.slice(1));
+}
+
+=== lesson d12-recursion | Recursion | 9
+--- name
+Flatten nested lists
+--- understand
+<p>A <strong>recursive</strong> function calls itself on a smaller piece of the problem. Every recursive function needs two parts:</p>
+<ul>
+<li>A <strong>base case</strong> that stops: the smallest version you can answer directly.</li>
+<li>A <strong>recursive case</strong> that shrinks the problem and calls itself.</li>
+</ul>
+<p>Forget the base case and the function calls itself forever, until JavaScript stops it with "Maximum call stack size exceeded". Recursion shines on <strong>nested</strong> data: folders, comment threads, menus.</p>
+--- code
+function countdown(n) {
+  if (n === 0) {
+    console.log("Liftoff!");
+    return;
+  }
+  console.log(n);
+  countdown(n - 1);
+}
+countdown(3);
+
+function factorial(n) {
+  if (n <= 1) return 1;
+  return n * factorial(n - 1);
+}
+console.log(factorial(5));
+
+const folder = { name: "src", files: 2, children: [
+  { name: "ui", files: 5, children: [] },
+  { name: "lib", files: 1, children: [{ name: "utils", files: 3, children: [] }] },
+] };
+
+function totalFiles(node) {
+  let total = node.files;
+  for (const child of node.children) total += totalFiles(child);
+  return total;
+}
+console.log("Files:", totalFiles(folder));
+--- notes
+2 | Base case: at 0, stop calling.
+7 | Recursive case: the same job with a smaller n.
+13 | factorial(5) = 5 × factorial(4) = 5 × 4 × 3 × 2 × 1.
+17 | A folder tree: each folder has children that are folders too.
+24 | Each folder adds its own files plus whatever its children report. An empty children list ends the recursion.
+--- try
+Remove the base case from countdown and run. Read the error.
+Add a deeper folder and check the new total.
+--- predict
+function f(n) {
+  if (n === 0) return 0;
+  return n + f(n - 1);
+}
+console.log(f(4));
+--- options
+10 *
+4
+24
+0
+--- why
+f(4) = 4 + f(3) = 4 + 3 + f(2) = 4 + 3 + 2 + 1 + 0 = 10.
+--- task
+<p>Write <code>flatten(list)</code> that turns any depth of nested arrays into one flat array, using recursion. <code>[1, [2, [3, [4]]], 5]</code> → <code>[1, 2, 3, 4, 5]</code>. Don't use the built-in <code>.flat()</code>.</p>
+--- starter
+function flatten(list) {
+  // for each item: if it's an array, flatten it too
+}
+
+console.log(flatten([1, [2, [3, [4]]], 5]));
+--- tests
+Deep nesting :: JSON.stringify(flatten([1, [2, [3, [4]]], 5])) === "[1,2,3,4,5]"
+Already flat :: JSON.stringify(flatten([1, 2])) === "[1,2]"
+Empty arrays vanish :: JSON.stringify(flatten([[], [[]], 1])) === "[1]"
+Doesn't use .flat() :: !/\.flat\(/.test(__code) && Array.isArray(flatten([]))
+--- hint
+const out = []; for (const item of list) { if (Array.isArray(item)) out.push(...flatten(item)); else out.push(item); } return out;
+--- solution
+function flatten(list) {
+  const out = [];
+  for (const item of list) {
+    if (Array.isArray(item)) out.push(...flatten(item));
+    else out.push(item);
+  }
+  return out;
+}
+--- react
+<p>Recursion is how you render trees: nested comments, file explorers, multi-level menus, org charts. A React component can even render itself for its children.</p>
+--- jsx
+function Comment({ comment }) {
+  return (
+    <li>
+      <p>{comment.text}</p>
+      <ul>
+        {comment.replies.map((r) => (
+          <Comment key={r.id} comment={r} />
+        ))}
+      </ul>
+    </li>
+  );
+}
+
+=== lesson d12-binary | Binary search | 8
+--- name
+Find in a sorted list
+--- understand
+<p>In a <strong>sorted</strong> list you don't need to check every item. Look at the middle: if your target is bigger, throw away the left half. If it's smaller, throw away the right half. Repeat.</p>
+<p>Each step halves what's left, so a million items take about 20 checks. That's <strong>O(log n)</strong>, compared with O(n) for <code>indexOf</code>.</p>
+<p>The one rule: it only works on sorted data.</p>
+--- code
+function binarySearch(sorted, target) {
+  let low = 0;
+  let high = sorted.length - 1;
+  let steps = 0;
+
+  while (low <= high) {
+    const mid = Math.floor((low + high) / 2);
+    steps++;
+    console.log(`step ${steps}: low=${low} mid=${mid} high=${high} value=${sorted[mid]}`);
+    if (sorted[mid] === target) return mid;
+    if (sorted[mid] < target) low = mid + 1;
+    else high = mid - 1;
+  }
+  return -1;
+}
+
+const ids = [3, 8, 15, 21, 34, 42, 57, 66, 79, 91];
+console.log("Index:", binarySearch(ids, 66));
+--- notes
+2 | low and high mark the part of the list that could still hold the target.
+6 | <= matters: when low equals high, one item is still left to check.
+7 | The middle index of the remaining range.
+11 | Target is bigger, so everything up to mid is ruled out.
+12 | Target is smaller, so everything from mid up is ruled out.
+14 | The range is empty: the target isn't there.
+--- try
+Search for 3, then for 91. How many steps does each take?
+Search for 50, which isn't in the list.
+Use the step-through visual below.
+--- predict
+const a = [10, 20, 30, 40, 50];
+const mid = Math.floor((0 + a.length - 1) / 2);
+console.log(a[mid]);
+--- options
+30 *
+20
+40
+25
+--- why
+low is 0 and high is 4, so mid is Math.floor(4 / 2) = 2, and a[2] is 30.
+--- task
+<p>Write <code>binarySearch(sorted, target)</code> that returns the index of target, or <code>-1</code>. It must be O(log n): one test counts how many items you read.</p>
+--- starter
+function binarySearch(sorted, target) {
+  // low, high, mid: halve the range each step
+}
+
+console.log(binarySearch([3, 8, 15, 21, 34, 42], 21));  // 3
+--- tests
+Finds 21 at index 3 :: binarySearch([3, 8, 15, 21, 34, 42], 21) === 3
+Finds the first and last items :: binarySearch([3, 8, 15], 3) === 0 && binarySearch([3, 8, 15], 15) === 2
+Missing value gives -1 :: binarySearch([3, 8, 15], 9) === -1
+Empty list gives -1 :: binarySearch([], 5) === -1
+Reads under 60 items out of 100,000 :: (() => { let reads = 0; const base = Array.from({ length: 100000 }, (_, i) => i * 2); const arr = new Proxy(base, { get(t, p) { if (typeof p === "string" && /^\d+$/.test(p)) reads++; return t[p]; } }); return binarySearch(arr, 123456) === 61728 && reads < 60; })()
+--- hint
+let low = 0, high = sorted.length - 1; while (low <= high) { const mid = Math.floor((low + high) / 2); compare sorted[mid] with target and move low or high; } return -1;
+--- solution
+function binarySearch(sorted, target) {
+  let low = 0;
+  let high = sorted.length - 1;
+  while (low <= high) {
+    const mid = Math.floor((low + high) / 2);
+    if (sorted[mid] === target) return mid;
+    if (sorted[mid] < target) low = mid + 1;
+    else high = mid - 1;
+  }
+  return -1;
+}
+--- react
+<p>Binary search finds where to insert into a sorted list (keeping a feed in order), jumps to a timestamp in a long log, powers autocomplete over sorted word lists, and is how git bisect finds the commit that broke your build.</p>
+--- jsx
+// Where should a new message go in a time-sorted list?
+function insertIndex(messages, time) {
+  let low = 0, high = messages.length;
+  while (low < high) {
+    const mid = Math.floor((low + high) / 2);
+    if (messages[mid].time < time) low = mid + 1;
+    else high = mid;
+  }
+  return low;
+}
+
+=== lesson d12-sorting | Sorting with comparators | 8
+--- name
+Sort a product list
+--- understand
+<p>You'll rarely write a sorting algorithm by hand: <code>sort()</code> is built in and runs in O(n log n). What you <strong>must</strong> know is how to control it.</p>
+<ul>
+<li>Without a comparator, <code>sort()</code> compares items as <strong>text</strong>: <code>[10, 9, 1]</code> becomes <code>[1, 10, 9]</code>.</li>
+<li>A comparator <code>(a, b) =&gt; …</code> returns a negative number if a goes first, positive if b goes first, and 0 to keep their order.</li>
+<li>Numbers ascending: <code>(a, b) =&gt; a - b</code>. Text: <code>a.localeCompare(b)</code>.</li>
+<li><code>sort()</code> changes the original array. Sort a copy: <code>[...arr].sort()</code>.</li>
+</ul>
+--- code
+console.log([10, 9, 1, 100].sort());
+console.log([10, 9, 1, 100].sort((a, b) => a - b));
+console.log([10, 9, 1, 100].sort((a, b) => b - a));
+
+const people = [
+  { name: "Mira", age: 31 },
+  { name: "ava", age: 24 },
+  { name: "Ben", age: 31 },
+];
+
+const byAge = [...people].sort((a, b) => a.age - b.age);
+console.log(byAge.map((p) => p.name));
+
+const byName = [...people].sort((a, b) => a.name.localeCompare(b.name));
+console.log(byName.map((p) => p.name));
+
+const byAgeThenName = [...people].sort((a, b) => b.age - a.age || a.name.localeCompare(b.name));
+console.log(byAgeThenName.map((p) => p.name));
+--- notes
+1 | No comparator: compared as text, so "100" comes before "9".
+2 | a - b is negative when a is smaller, so smaller numbers go first.
+11 | Copy first with spread, so people keeps its original order.
+14 | localeCompare sorts text the way people expect.
+17 | Tie-breaker: when ages are equal the difference is 0, so || moves on to compare names.
+--- try
+Sort people by name length.
+Remove the spread on line 11 and log people afterwards.
+--- predict
+console.log([3, 20, 100].sort());
+--- options
+[100, 20, 3] *
+[3, 20, 100]
+[100, 3, 20]
+[20, 3, 100]
+--- why
+Without a comparator, the numbers are compared as text: "100" < "20" < "3", because "1" < "2" < "3".
+--- task
+<p>Write <code>sortProducts(products, by)</code> that returns a <strong>new</strong> sorted array. <code>by</code> is <code>"price-asc"</code>, <code>"price-desc"</code> or <code>"name"</code> (A–Z, ignoring case). Don't change the original.</p>
+--- starter
+function sortProducts(products, by) {
+  // copy, then sort with the right comparator
+}
+
+const products = [
+  { name: "mouse", price: 40 },
+  { name: "Laptop", price: 1200 },
+  { name: "Desk", price: 300 },
+];
+console.log(sortProducts(products, "price-asc"));
+--- tests
+price-asc :: JSON.stringify(sortProducts([{ name: "mouse", price: 40 }, { name: "Laptop", price: 1200 }, { name: "Desk", price: 300 }], "price-asc").map((p) => p.price)) === "[40,300,1200]"
+price-desc :: JSON.stringify(sortProducts([{ name: "mouse", price: 40 }, { name: "Laptop", price: 1200 }, { name: "Desk", price: 300 }], "price-desc").map((p) => p.price)) === "[1200,300,40]"
+name, ignoring case :: JSON.stringify(sortProducts([{ name: "mouse", price: 40 }, { name: "Laptop", price: 1200 }, { name: "Desk", price: 300 }], "name").map((p) => p.name)) === '["Desk","Laptop","mouse"]'
+Original order untouched :: (() => { const list = [{ name: "b", price: 2 }, { name: "a", price: 1 }]; const r = sortProducts(list, "price-asc"); return list[0].name === "b" && r[0].name === "a"; })()
+--- hint
+const copy = [...products]; if (by === "price-asc") return copy.sort((a, b) => a.price - b.price); and so on for the other two.
+--- solution
+function sortProducts(products, by) {
+  const copy = [...products];
+  if (by === "price-asc") return copy.sort((a, b) => a.price - b.price);
+  if (by === "price-desc") return copy.sort((a, b) => b.price - a.price);
+  return copy.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
+}
+--- react
+<p>Every sortable table column, "Sort by" dropdown and leaderboard is a comparator. Sort a copy of state, never the state array itself.</p>
+--- jsx
+const visible = useMemo(
+  () => [...rows].sort(comparators[sortKey]),
+  [rows, sortKey]
+);
+
+<th onClick={() => setSortKey("price-asc")}>Price</th>
+
+=== lesson d12-memo | Memoization | 9
+--- name
+Climbing stairs
+--- understand
+<p>Some recursive functions solve the same small problem again and again. Fibonacci is the classic: <code>fib(40)</code> recomputes <code>fib(2)</code> tens of millions of times.</p>
+<p><strong>Memoization</strong> means: save each answer the first time, and return the saved answer next time. It's a cache keyed by the input. This one idea turns exponential time into O(n), and it's your first step into <strong>dynamic programming</strong>.</p>
+--- code
+let slowCalls = 0;
+function slowFib(n) {
+  slowCalls++;
+  if (n <= 1) return n;
+  return slowFib(n - 1) + slowFib(n - 2);
+}
+console.log(slowFib(25), "calls:", slowCalls);
+
+let fastCalls = 0;
+const memo = new Map();
+function fastFib(n) {
+  fastCalls++;
+  if (n <= 1) return n;
+  if (memo.has(n)) return memo.get(n);
+  const result = fastFib(n - 1) + fastFib(n - 2);
+  memo.set(n, result);
+  return result;
+}
+console.log(fastFib(25), "calls:", fastCalls);
+console.log(fastFib(70));
+--- notes
+5 | Two recursive calls per call: the work roughly doubles at every level.
+7 | 242,785 calls just for fib(25).
+10 | The cache: n → answer.
+14 | Already solved? Return it instantly.
+16 | Save the answer before returning it.
+19 | Only 49 calls for the same answer.
+--- try
+Try slowFib(32) and watch the call count, and the delay.
+Run fastFib(70). The slow version would take hours.
+--- predict
+const cache = {};
+function sq(n) {
+  if (n in cache) return "cached";
+  cache[n] = n * n;
+  return cache[n];
+}
+sq(4);
+console.log(sq(4));
+--- options
+cached *
+16
+undefined
+4
+--- why
+The first call saves 16 under the key 4. The second call finds the key 4 in the cache and returns "cached" straight away.
+--- task
+<p>You can climb 1 or 2 steps at a time. Write <code>climbStairs(n)</code>: how many different ways can you reach step <code>n</code>? The ways to reach step n are the ways to reach n − 1 plus the ways to reach n − 2. Make it fast with memoization.</p>
+--- starter
+function climbStairs(n) {
+  // ways(n) = ways(n - 1) + ways(n - 2)
+  // ways(1) = 1, ways(2) = 2
+}
+
+console.log(climbStairs(5));  // 8
+--- tests
+1 step: 1 way :: climbStairs(1) === 1
+2 steps: 2 ways :: climbStairs(2) === 2
+5 steps: 8 ways :: climbStairs(5) === 8
+50 steps, fast :: (() => { const t = Date.now(); return climbStairs(50) === 20365011074 && Date.now() - t < 500; })()
+--- hint
+Inside, write a helper ways(k): if (k <= 2) return k; check the memo; otherwise compute ways(k - 1) + ways(k - 2), save it, return it.
+--- solution
+function climbStairs(n) {
+  const memo = new Map();
+  function ways(k) {
+    if (k <= 2) return k;
+    if (memo.has(k)) return memo.get(k);
+    const result = ways(k - 1) + ways(k - 2);
+    memo.set(k, result);
+    return result;
+  }
+  return ways(n);
+}
+--- react
+<p>Memoization is everywhere in front-end work: React's <code>useMemo</code> caches expensive calculations, data libraries cache API responses by URL, and selectors cache derived state so lists don't recompute on every keystroke.</p>
+--- jsx
+// Recompute the filtered list only when its inputs change
+const visible = useMemo(
+  () => products.filter((p) => p.name.includes(query)),
+  [products, query]
+);
+
+=== lesson d13-trees | Trees and depth-first search | 9
+--- name
+Deepest level
+--- understand
+<p>A <strong>tree</strong> is nested data with one root: each node has children, and those children have children. Menus, folders, the DOM and comment threads are all trees.</p>
+<p><strong>Depth-first search (DFS)</strong> goes as deep as possible down one branch before moving to the next. It's naturally recursive: visit the node, then run DFS on each child.</p>
+--- code
+const menu = {
+  label: "Settings",
+  children: [
+    { label: "Account", children: [
+      { label: "Profile", children: [] },
+      { label: "Security", children: [
+        { label: "Two-factor", children: [] },
+      ] },
+    ] },
+    { label: "Billing", children: [] },
+  ],
+};
+
+function printTree(node, depth = 0) {
+  console.log("  ".repeat(depth) + node.label);
+  for (const child of node.children) {
+    printTree(child, depth + 1);
+  }
+}
+printTree(menu);
+
+function findPath(node, target, path = []) {
+  const here = [...path, node.label];
+  if (node.label === target) return here;
+  for (const child of node.children) {
+    const found = findPath(child, target, here);
+    if (found) return found;
+  }
+  return null;
+}
+console.log(findPath(menu, "Two-factor").join(" › "));
+--- notes
+1 | The root node. Every node has the same shape: a label and children.
+15 | Visit the node first, indented by its depth.
+16 | Then go deep into each child before moving on to the next sibling.
+23 | Carry the path so far, adding this node.
+25 | Search each child. The first branch that finds the target returns the whole path.
+31 | Breadcrumbs from a tree: exactly what a settings page needs.
+--- try
+Search for "Billing", then for something that doesn't exist.
+Write a recursive function that counts every node in the menu.
+--- predict
+const t = { v: 1, children: [{ v: 2, children: [{ v: 4, children: [] }] }, { v: 3, children: [] }] };
+const out = [];
+function dfs(n) { out.push(n.v); n.children.forEach((c) => dfs(c)); }
+dfs(t);
+console.log(out.join(" "));
+--- options
+1 2 4 3 *
+1 2 3 4
+4 2 3 1
+1 3 2 4
+--- why
+DFS finishes the whole branch under 2 (including 4) before it visits 3.
+--- task
+<p>Write <code>maxDepth(node)</code> that returns how many levels deep a tree goes. A node with no children has depth 1.</p>
+--- starter
+function maxDepth(node) {
+  // 1 + the depth of the deepest child
+}
+
+const tree = { label: "root", children: [
+  { label: "a", children: [{ label: "a1", children: [] }] },
+  { label: "b", children: [] },
+] };
+console.log(maxDepth(tree));  // 3
+--- tests
+Single node is 1 :: maxDepth({ label: "x", children: [] }) === 1
+Three levels :: maxDepth({ label: "r", children: [{ label: "a", children: [{ label: "a1", children: [] }] }, { label: "b", children: [] }] }) === 3
+Picks the deepest branch :: maxDepth({ label: "r", children: [{ label: "a", children: [] }, { label: "b", children: [{ label: "c", children: [{ label: "d", children: [] }] }] }] }) === 4
+--- hint
+let deepest = 0; for (const child of node.children) deepest = Math.max(deepest, maxDepth(child)); return 1 + deepest;
+--- solution
+function maxDepth(node) {
+  let deepest = 0;
+  for (const child of node.children) {
+    deepest = Math.max(deepest, maxDepth(child));
+  }
+  return 1 + deepest;
+}
+--- react
+<p>Trees are the shape of most UI: nested navigation, folder pickers, threaded comments, and the component tree React renders. DFS powers "expand all", search inside a tree, and breadcrumbs.</p>
+--- jsx
+function MenuItem({ item, depth = 0 }) {
+  return (
+    <>
+      <a style={{ paddingLeft: depth * 16 }}>{item.label}</a>
+      {item.children.map((child) => (
+        <MenuItem key={child.label} item={child} depth={depth + 1} />
+      ))}
+    </>
+  );
+}
+
+=== lesson d13-graphs | Graphs and breadth-first search | 10
+--- name
+Degrees of connection
+--- understand
+<p>A <strong>graph</strong> is a set of things plus the connections between them: people and friendships, pages and links, cities and roads. Unlike a tree, there's no single root, and connections can form loops.</p>
+<p>Store it as an <strong>adjacency list</strong>: an object mapping each node to its neighbours.</p>
+<p><strong>Breadth-first search (BFS)</strong> explores level by level with a <strong>queue</strong>: first all direct neighbours, then their neighbours. That's why BFS finds the <strong>shortest path</strong> in a graph where every step costs the same. Keep a record of visited nodes so loops can't trap you.</p>
+--- code
+const friends = {
+  you: ["ava", "ben"],
+  ava: ["you", "cal"],
+  ben: ["you", "cal", "dee"],
+  cal: ["ava", "ben", "eli"],
+  dee: ["ben"],
+  eli: ["cal"],
+};
+
+function bfsLevels(graph, start) {
+  const distance = { [start]: 0 };
+  const queue = [start];
+  let head = 0;
+  while (head < queue.length) {
+    const person = queue[head++];
+    for (const next of graph[person]) {
+      if (!(next in distance)) {
+        distance[next] = distance[person] + 1;
+        queue.push(next);
+      }
+    }
+  }
+  return distance;
+}
+
+console.log(bfsLevels(friends, "you"));
+--- notes
+1 | Adjacency list: each person maps to the people they're connected to.
+11 | distance doubles as the visited record: anyone in it has been reached.
+12 | The queue holds people waiting to be explored, in the order they were found.
+15 | Take the next person from the front, using the head-index queue from earlier.
+17 | Only queue people we haven't reached yet. This stops infinite loops.
+18 | A neighbour is one step further away than the person who found them.
+--- try
+Start from "eli" instead. Who is furthest away?
+Connect "dee" and "eli". How do the distances change?
+--- predict
+const g = { a: ["b", "c"], b: ["d"], c: ["d"], d: [] };
+const seen = new Set(["a"]);
+const q = ["a"];
+const order = [];
+while (q.length) {
+  const n = q.shift();
+  order.push(n);
+  for (const m of g[n]) if (!seen.has(m)) { seen.add(m); q.push(m); }
+}
+console.log(order.join(" "));
+--- options
+a b c d *
+a b d c
+a c d b
+a b c d d
+--- why
+BFS visits all of a's neighbours (b and c) before going a level deeper to d. The seen Set stops d from being visited twice.
+--- task
+<p>Write <code>shortestPath(graph, start, end)</code> that returns the <strong>number of steps</strong> on the shortest route: <code>0</code> if start is end, or <code>-1</code> if there's no route. Use BFS.</p>
+--- starter
+const network = {
+  you: ["ava", "ben"],
+  ava: ["you", "cal"],
+  ben: ["you", "cal", "dee"],
+  cal: ["ava", "ben", "eli"],
+  dee: ["ben"],
+  eli: ["cal"],
+  zed: [],
+};
+
+function shortestPath(graph, start, end) {
+  // BFS with a queue and a distance record
+}
+
+console.log(shortestPath(network, "you", "eli"));  // 3
+--- tests
+you to eli is 3 steps :: shortestPath({ you: ["ava", "ben"], ava: ["you", "cal"], ben: ["you", "cal", "dee"], cal: ["ava", "ben", "eli"], dee: ["ben"], eli: ["cal"] }, "you", "eli") === 3
+Direct friend is 1 step :: shortestPath({ a: ["b"], b: ["a"] }, "a", "b") === 1
+Same person is 0 :: shortestPath({ a: ["b"], b: ["a"] }, "a", "a") === 0
+Unreachable is -1 :: shortestPath({ a: ["b"], b: ["a"], z: [] }, "a", "z") === -1
+Handles loops :: shortestPath({ a: ["b"], b: ["c"], c: ["a", "d"], d: [] }, "a", "d") === 3
+--- hint
+Start from bfsLevels in the example. Return distance[next] as soon as next === end. After the loop, return -1.
+--- solution
+function shortestPath(graph, start, end) {
+  if (start === end) return 0;
+  const distance = { [start]: 0 };
+  const queue = [start];
+  let head = 0;
+  while (head < queue.length) {
+    const node = queue[head++];
+    for (const next of graph[node] ?? []) {
+      if (next in distance) continue;
+      distance[next] = distance[node] + 1;
+      if (next === end) return distance[next];
+      queue.push(next);
+    }
+  }
+  return -1;
+}
+--- react
+<p>Graphs model social features like "2nd-degree connection", recommendations like "people also viewed", route planning, package dependencies, and workflow builders where steps link to other steps.</p>
+--- jsx
+// Which steps can a workflow reach from "start"?
+function reachable(flow, start) {
+  const seen = new Set([start]);
+  const queue = [start];
+  for (let i = 0; i < queue.length; i++) {
+    for (const next of flow[queue[i]]) {
+      if (!seen.has(next)) { seen.add(next); queue.push(next); }
+    }
+  }
+  return seen;
+}
+
+=== lesson d13-final | DSA readiness challenge | 15
+--- name
+Trending tags
+--- understand
+<p>The final check for this track combines the core patterns: a <strong>hash map</strong> to count, <strong>sorting</strong> with a tie-breaker, and careful handling of edge cases.</p>
+<p>"Top K most frequent" shows up in interviews and in real products: trending hashtags, most-used features, top search terms.</p>
+<p>Plan before you code: count, turn the counts into entries, sort, slice. Then think about the cost: counting is O(n), and sorting the unique tags is O(u log u).</p>
+--- code
+// The plan, as code you can run step by step
+const posts = [
+  ["design", "figma"],
+  ["react", "design"],
+  ["design", "ux"],
+  ["react", "javascript"],
+  ["ux"],
+];
+
+// 1. One list of every tag used
+const allTags = posts.flat();
+console.log(allTags.length, "tag uses");
+
+// 2. Count with a Map
+const counts = new Map();
+for (const t of allTags) counts.set(t, (counts.get(t) ?? 0) + 1);
+
+// 3. Entries → sort by count, then by name
+const ranked = [...counts].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+console.log(ranked);
+
+// 4. The top 3
+render(ranked.slice(0, 3).map(([tag, n]) => `#${tag} · ${n} posts`));
+--- notes
+11 | flat() is fine here. You built your own flatten in the Recursion lesson.
+16 | The frequency counter from the Maps lesson.
+19 | Sort entries by count, highest first, and alphabetically when counts tie.
+23 | slice keeps the first k results.
+--- try
+Change the top 3 to the top 2.
+Add more posts and watch the ranking change.
+--- predict
+const e = [["b", 2], ["a", 2], ["c", 3]];
+e.sort((x, y) => y[1] - x[1] || x[0].localeCompare(y[0]));
+console.log(e.map((p) => p[0]).join(""));
+--- options
+cab *
+cba
+abc
+bac
+--- why
+c has the highest count. a and b tie at 2, so the tie-breaker puts them in alphabetical order: a, then b.
+--- task
+<p>Write <code>topTags(posts, k)</code>. Each post is an array of tags. Return the <code>k</code> most used tags as an array of strings, most used first, with ties in alphabetical order.</p>
+<ul>
+<li>Tags ignore case: <code>"React"</code> and <code>"react"</code> are the same tag, returned in lower case.</li>
+<li>A tag repeated <strong>within one post</strong> counts once for that post.</li>
+</ul>
+--- starter
+function topTags(posts, k) {
+  // 1. count each tag once per post (lower case)
+  // 2. sort by count, then alphabetically
+  // 3. return the first k tag names
+}
+
+const posts = [
+  ["design", "Figma"],
+  ["React", "design", "design"],
+  ["design", "ux"],
+  ["react", "javascript"],
+  ["UX"],
+];
+render(topTags(posts, 3) || []);
+--- tests
+Top 3 tags :: JSON.stringify(topTags([["design", "Figma"], ["React", "design", "design"], ["design", "ux"], ["react", "javascript"], ["UX"]], 3)) === '["design","react","ux"]'
+Ties are alphabetical :: JSON.stringify(topTags([["b"], ["a"], ["c"]], 2)) === '["a","b"]'
+Ignores case :: JSON.stringify(topTags([["JS"], ["js"], ["css"]], 1)) === '["js"]'
+Counts once per post :: JSON.stringify(topTags([["x", "x", "x"], ["y"], ["y"]], 1)) === '["y"]'
+k bigger than the number of tags :: topTags([["a"]], 5).length === 1
+No posts gives [] :: Array.isArray(topTags([], 3)) && topTags([], 3).length === 0
+Fast on 50,000 posts :: (() => { const big = Array.from({ length: 50000 }, (_, i) => ["t" + (i % 500), "t" + (i % 7)]); const t = Date.now(); const r = topTags(big, 2); return r.length === 2 && Date.now() - t < 1500; })()
+--- hint
+For each post: for (const tag of new Set(post.map((t) => t.toLowerCase()))) count it. Then [...counts].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).slice(0, k).map(([tag]) => tag).
+--- solution
+function topTags(posts, k) {
+  const counts = new Map();
+  for (const post of posts) {
+    const unique = new Set(post.map((t) => t.toLowerCase()));
+    for (const tag of unique) counts.set(tag, (counts.get(tag) ?? 0) + 1);
+  }
+  return [...counts]
+    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+    .slice(0, k)
+    .map(([tag]) => tag);
+}
+
+const posts = [
+  ["design", "Figma"],
+  ["React", "design", "design"],
+  ["design", "ux"],
+  ["react", "javascript"],
+  ["UX"],
+];
+render(topTags(posts, 3));
+--- react
+<p>You now have the toolkit most real code needs: Big O to spot slow code, two pointers and sliding windows for sequences, Sets and Maps for fast lookups and counting, stacks and queues for order, recursion and DFS for nested data, BFS for connections, and memoization to skip repeated work.</p>
+<p>Next step: practise on LeetCode's "Top Interview 150" list. Start with the Easy and Medium problems tagged with the topics you covered here.</p>
+--- jsx
+// The same pattern as a real feature
+function TrendingTags({ posts }) {
+  const tags = useMemo(() => topTags(posts, 5), [posts]);
+  return (
+    <ul>
+      {tags.map((t) => <li key={t}>#{t}</li>)}
+    </ul>
+  );
+}
+
+=== bug sort-strings | Prices sort in the wrong order | d12-sorting
+--- task
+<p>The price filter shows <code>[100, 25, 8]</code> as "lowest first". Fix <code>lowestFirst</code> so it sorts numbers properly, without changing the original array.</p>
+--- starter
+function lowestFirst(prices) {
+  return prices.sort();
+}
+
+console.log(lowestFirst([25, 100, 8]));
+--- tests
+Sorts numbers lowest first :: JSON.stringify(lowestFirst([25, 100, 8])) === "[8,25,100]"
+Original untouched :: (() => { const p = [3, 1, 2]; lowestFirst(p); return p[0] === 3; })()
+--- hint
+Without a comparator, sort() compares text. Add (a, b) => a - b, and sort a copy made with spread.
+--- solution
+function lowestFirst(prices) {
+  return [...prices].sort((a, b) => a - b);
+}
+
+=== bug no-base-case | Countdown crashes the page | d12-recursion
+--- task
+<p>This should return <code>[3, 2, 1]</code>, but it crashes with "Maximum call stack size exceeded". Add the missing base case.</p>
+--- starter
+function countdown(n) {
+  return [n, ...countdown(n - 1)];
+}
+
+console.log(countdown(3));
+--- tests
+countdown(3) is [3, 2, 1] :: JSON.stringify(countdown(3)) === "[3,2,1]"
+countdown(0) is [] :: JSON.stringify(countdown(0)) === "[]"
+--- hint
+What should countdown(0) return? Check for it before the recursive call.
+--- solution
+function countdown(n) {
+  if (n <= 0) return [];
+  return [n, ...countdown(n - 1)];
+}
+
+console.log(countdown(3));
+
+=== bug twosum-zero | Two Sum misses the first item | d10-twosum
+--- task
+<p><code>twoSum([2, 7, 11, 15], 9)</code> should return <code>[0, 1]</code>, but it returns <code>null</code>. Other inputs work. Find out why.</p>
+--- starter
+function twoSum(nums, target) {
+  const seen = {};
+  for (let i = 0; i < nums.length; i++) {
+    const need = target - nums[i];
+    if (seen[need]) return [seen[need], i];
+    seen[nums[i]] = i;
+  }
+  return null;
+}
+
+console.log(twoSum([2, 7, 11, 15], 9));
+--- tests
+[2, 7, 11, 15] target 9 :: JSON.stringify(twoSum([2, 7, 11, 15], 9)) === "[0,1]"
+[3, 2, 4] target 6 :: JSON.stringify(twoSum([3, 2, 4], 6)) === "[1,2]"
+--- hint
+The index stored for 2 is 0. What does if (0) do? Check whether the key exists instead.
+--- solution
+function twoSum(nums, target) {
+  const seen = {};
+  for (let i = 0; i < nums.length; i++) {
+    const need = target - nums[i];
+    if (need in seen) return [seen[need], i];
+    seen[nums[i]] = i;
+  }
+  return null;
+}
+
+=== bug window-edge | The last window is skipped | d9-sliding
+--- task
+<p><code>maxSum([1, 2, 3, 4], 2)</code> should be <code>7</code> (3 + 4), but it returns <code>5</code>. The loop stops one window too early.</p>
+--- starter
+function maxSum(nums, k) {
+  let best = -Infinity;
+  for (let i = 0; i < nums.length - k; i++) {
+    let sum = 0;
+    for (let j = i; j < i + k; j++) sum += nums[j];
+    best = Math.max(best, sum);
+  }
+  return best;
+}
+
+console.log(maxSum([1, 2, 3, 4], 2));
+--- tests
+maxSum([1, 2, 3, 4], 2) is 7 :: maxSum([1, 2, 3, 4], 2) === 7
+Window as long as the list :: maxSum([1, 9], 2) === 10
+--- hint
+With 4 items and k = 2, the last window starts at index 2. Does the loop ever reach i = 2?
+--- solution
+function maxSum(nums, k) {
+  let best = -Infinity;
+  for (let i = 0; i <= nums.length - k; i++) {
+    let sum = 0;
+    for (let j = i; j < i + k; j++) sum += nums[j];
+    best = Math.max(best, sum);
+  }
+  return best;
+}
+
+=== bug stack-shift | Bracket checker accepts "([)]" | d11-stack
+--- task
+<p>This checker says <code>"([])"</code> is broken and <code>"([)]"</code> is fine, which is backwards. One method call is wrong.</p>
+--- starter
+function isBalanced(text) {
+  const pairs = { ")": "(", "]": "[", "}": "{" };
+  const stack = [];
+  for (const ch of text) {
+    if ("([{".includes(ch)) {
+      stack.push(ch);
+    } else if (pairs[ch]) {
+      if (stack.shift() !== pairs[ch]) return false;
+    }
+  }
+  return stack.length === 0;
+}
+
+console.log(isBalanced("([])"), isBalanced("([)]"));
+--- tests
+"([])" is balanced :: isBalanced("([])") === true
+"([)]" is not :: isBalanced("([)]") === false
+--- hint
+A stack takes from the top. Which method removes the last item instead of the first?
+--- solution
+function isBalanced(text) {
+  const pairs = { ")": "(", "]": "[", "}": "{" };
+  const stack = [];
+  for (const ch of text) {
+    if ("([{".includes(ch)) {
+      stack.push(ch);
+    } else if (pairs[ch]) {
+      if (stack.pop() !== pairs[ch]) return false;
+    }
+  }
+  return stack.length === 0;
+}
+</script>
 <script type="text/plain" id="worker-src">
 const AsyncFunction = Object.getPrototypeOf(async function () {}).constructor;
 const realTimeout = self.setTimeout.bind(self);
@@ -2767,6 +4708,13 @@ function fmt(v, nested, seen, depth) {
   if (v instanceof Error) return v.name + ": " + v.message;
   if (v instanceof Promise) return "Promise { <pending> }";
   if (v instanceof Date) return v.toISOString();
+  if (v instanceof Map || v instanceof Set) {
+    if (seen.has(v)) return "[Circular]";
+    seen.add(v);
+    const parts = v instanceof Map ? [...v].map(([k, x]) => fmt(k, true, seen, depth + 1) + " => " + fmt(x, true, seen, depth + 1)) : [...v].map((x) => fmt(x, true, seen, depth + 1));
+    seen.delete(v);
+    return (v instanceof Map ? "Map" : "Set") + "(" + v.size + ") {" + (parts.length ? " " + parts.join(", ") + " " : "") + "}";
+  }
   if (seen.has(v)) return "[Circular]";
   if (depth > 4) return Array.isArray(v) ? "[…]" : "{…}";
   seen.add(v);
@@ -2960,14 +4908,25 @@ const LOGO = '<svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-h
 
 /* ---------- content ---------- */
 const MODULES = [
-  { n: 1, name: "JavaScript Fundamentals", dot: "#fde68a", tags: [["let · const", "t-yellow"], ["types", ""], ["strings", "t-green"]], why: "Every line of a React component stores, combines or prints values. Variables, types and template literals are the vocabulary for all of it." },
-  { n: 2, name: "Logic & Decisions", dot: "#eeb390", tags: [["if · else", "t-orange"], ["&& ||", ""], ["ternary", "t-purple"]], why: "Components show different UI depending on conditions: logged in or not, loading or loaded, empty or full. That's all logic." },
-  { n: 3, name: "Functions", dot: "#b7aee9", tags: [["arrow fns", "t-purple"], ["return", ""], ["callbacks", "t-blue"]], why: "Components are functions, handlers are functions, and you pass functions around constantly. This module is the core of React thinking." },
-  { n: 4, name: "Arrays & Objects", dot: "#bfdbfe", tags: [["map", "t-blue"], ["filter", "t-green"], ["spread", "t-amber"]], why: "Your app's data is arrays of objects. map renders lists, filter powers search, and spread updates state without mutation." },
-  { n: 5, name: "Modern JavaScript", dot: "#b1ebc5", tags: [["?.", "t-green"], ["??", ""], ["import", "t-orange"]], why: "Real data is often missing pieces, and real apps are many files. These operators and modules are in every React project." },
-  { n: 6, name: "Working With Data", dot: "#febfc6", tags: [["JSON", "t-red"], ["fetch", "t-blue"], ["async", "t-purple"]], why: "Apps load data from APIs. You need to parse it, wait for it, handle failures, and shape it for the screen." },
-  { n: 7, name: "JavaScript for React", dot: "#f9fbff", tags: [["lists", "t-purple"], ["events", "t-orange"], ["state", "t-green"]], why: "The exact patterns React uses: rendering lists, conditional UI, event handlers and immutable state updates. It ends with a readiness challenge." },
+  { track: "react", n: 1, name: "JavaScript Fundamentals", dot: "#fde68a", tags: [["let · const", "t-yellow"], ["types", ""], ["strings", "t-green"]], why: "Every line of a React component stores, combines or prints values. Variables, types and template literals are the vocabulary for all of it." },
+  { track: "react", n: 2, name: "Logic & Decisions", dot: "#eeb390", tags: [["if · else", "t-orange"], ["&& ||", ""], ["ternary", "t-purple"]], why: "Components show different UI depending on conditions: logged in or not, loading or loaded, empty or full. That's all logic." },
+  { track: "react", n: 3, name: "Functions", dot: "#b7aee9", tags: [["arrow fns", "t-purple"], ["return", ""], ["callbacks", "t-blue"]], why: "Components are functions, handlers are functions, and you pass functions around constantly. This module is the core of React thinking." },
+  { track: "react", n: 4, name: "Arrays & Objects", dot: "#bfdbfe", tags: [["map", "t-blue"], ["filter", "t-green"], ["spread", "t-amber"]], why: "Your app's data is arrays of objects. map renders lists, filter powers search, and spread updates state without mutation." },
+  { track: "react", n: 5, name: "Modern JavaScript", dot: "#b1ebc5", tags: [["?.", "t-green"], ["??", ""], ["import", "t-orange"]], why: "Real data is often missing pieces, and real apps are many files. These operators and modules are in every React project." },
+  { track: "react", n: 6, name: "Working With Data", dot: "#febfc6", tags: [["JSON", "t-red"], ["fetch", "t-blue"], ["async", "t-purple"]], why: "Apps load data from APIs. You need to parse it, wait for it, handle failures, and shape it for the screen." },
+  { track: "react", n: 7, name: "JavaScript for React", dot: "#f9fbff", tags: [["lists", "t-purple"], ["events", "t-orange"], ["state", "t-green"]], why: "The exact patterns React uses: rendering lists, conditional UI, event handlers and immutable state updates. It ends with a readiness challenge." },
+  { track: "dsa", n: 8, name: "Loops & Big O", dot: "#fde68a", tags: [["loops", "t-yellow"], ["Big O", ""], ["O(n²)", "t-red"]], why: "Before choosing a data structure you need to know what makes code slow. Loops give you control, and Big O tells you how code behaves when 100 rows become 100,000." },
+  { track: "dsa", n: 9, name: "Array & String Patterns", dot: "#eeb390", tags: [["two pointers", "t-orange"], ["sliding window", "t-blue"], ["prefix sums", ""]], why: "Most real data is a sequence: transactions, events, text. These patterns solve a huge share of sequence problems in one pass instead of nested loops." },
+  { track: "dsa", n: 10, name: "Hash Maps & Sets", dot: "#bfdbfe", tags: [["Set", "t-blue"], ["Map", "t-green"], ["counting", ""]], why: "The single most useful idea in practical DSA: trade a little memory for O(1) lookups. It turns slow nested searches into one pass." },
+  { track: "dsa", n: 11, name: "Stacks & Queues", dot: "#b1ebc5", tags: [["stack", "t-green"], ["queue", "t-blue"], ["LIFO · FIFO", ""]], why: "Whenever order matters, such as undo history, brackets or task queues, a stack or queue is the right shape. They also power DFS and BFS." },
+  { track: "dsa", n: 12, name: "Recursion, Search & Sort", dot: "#febfc6", tags: [["recursion", "t-red"], ["binary search", "t-purple"], ["memo", "t-amber"]], why: "Recursion handles nested data, binary search finds things in O(log n), comparators control every sortable table, and memoization stops repeated work." },
+  { track: "dsa", n: 13, name: "Trees & Graphs", dot: "#b7aee9", tags: [["DFS", "t-purple"], ["BFS", "t-blue"], ["top-k", "t-green"]], why: "Menus, folders and comments are trees. Networks and workflows are graphs. DFS and BFS are the two ways to walk them. The module ends with the DSA readiness challenge." },
 ];
+const TRACKS = [
+  { id: "react", name: "JavaScript for React", short: "React foundations", label: "React", final: "m7-final" },
+  { id: "dsa", name: "DSA with JavaScript", short: "DSA with JS", label: "DSA", final: "d13-final" },
+];
+const TRACK = Object.fromEntries(TRACKS.map((t) => [t.id, t]));
 const SNIPPETS = {
   1: ["console.log()", "`${ }`", "const ", "let "],
   2: ["if () {\n  \n}", "? :", "&&", "||", "==="],
@@ -2976,7 +4935,14 @@ const SNIPPETS = {
   5: ["?.", "??", "export ", "import { } from \"./\";"],
   6: ["await fetch(\"/api/products\")", "await res.json()", "try {\n  \n} catch (error) {\n  \n}", "JSON.parse()"],
   7: [".map((item) => )", ".filter((item) => )", "{ ...t, done: true }", "render()", "() => "],
+  8: ["for (let i = 0; i < arr.length; i++) {\n  \n}", "for (const x of arr) {\n  \n}", "while () {\n  \n}", "break;"],
+  9: ["let left = 0, right = arr.length - 1;", "while (left < right) {\n  \n}", "Math.max()", ".split(\"\")", ".join(\"\")"],
+  10: ["new Set()", "new Map()", ".has()", "(map.get(x) ?? 0) + 1", "for (const [key, value] of map) {\n  \n}"],
+  11: [".push()", ".pop()", "stack[stack.length - 1]", "items[head++]"],
+  12: ["if (n <= 1) return ;", "Math.floor((low + high) / 2)", ".sort((a, b) => a - b)", "a.localeCompare(b)", "const memo = new Map();"],
+  13: ["for (const child of node.children) {\n  \n}", "const queue = [start];", "const seen = new Set();", "Math.max()"],
 };
+const stepLabel = (s, L) => (s.id === "react" && L.track === "dsa" ? "Real-world use" : s.label);
 const STEPS = [
   { id: "understand", label: "Understand", file: "example" },
   { id: "see", label: "See", file: "example" },
@@ -2992,6 +4958,22 @@ const CATS = [
   { id: "debug", label: "Debugging", tone: "t-red" },
   { id: "realworld", label: "Real-world", tone: "t-green" },
   { id: "react", label: "React prep", tone: "t-purple" },
+  { id: "dsa", label: "DSA", tone: "t-amber" },
+];
+const DSA_CHECKLIST = [
+  ["Loops and early exit", "d8-loops"],
+  ["Spot O(n²) code", "d8-nested"],
+  ["Two pointers", "d9-twopointers"],
+  ["Sliding window", "d9-sliding"],
+  ["Fast lookups with Set", "d10-set"],
+  ["Frequency counting with Map", "d10-map"],
+  ["Two Sum in one pass", "d10-twosum"],
+  ["Stack-based matching", "d11-stack"],
+  ["Recursion with a base case", "d12-recursion"],
+  ["Binary search", "d12-binary"],
+  ["Memoization", "d12-memo"],
+  ["DFS on a tree", "d13-trees"],
+  ["BFS shortest path", "d13-graphs"],
 ];
 const CHECKLIST = [
   ["Variables with let and const", "m1-variables"],
@@ -3031,7 +5013,7 @@ function parseContent(src) {
     if (it.kind === "lesson") {
       const opts = lines(it.s.options);
       lessons.push({
-        id: it.id, title: it.title, minutes: Number(it.extra) || 6, module: Number(it.id[1]),
+        id: it.id, title: it.title, minutes: Number(it.extra) || 6, module: Number((it.id.match(/^[a-z](\d+)-/) || [0, 1])[1]),
         name: g("name"), understand: g("understand"), code: g("code"),
         notes: lines(it.s.notes).map((l) => { const i = l.indexOf("|"); return { line: Number(l.slice(0, i)), text: l.slice(i + 1).trim() }; }),
         tries: lines(it.s.try),
@@ -3045,14 +5027,17 @@ function parseContent(src) {
   });
   return { lessons, bugs };
 }
-const { lessons: LESSONS, bugs: BUGS } = parseContent($("#content").textContent);
+const { lessons: LESSONS, bugs: BUGS } = parseContent($("#content").textContent + "\n" + ($("#content-dsa")?.textContent || ""));
 const LESSON = Object.fromEntries(LESSONS.map((l) => [l.id, l]));
-LESSONS.forEach((l, i) => { l.index = i; });
+LESSONS.forEach((l, i) => { l.index = i; l.track = MODULES[l.module - 1].track; });
+TRACKS.forEach((t) => LESSONS.filter((l) => l.track === t.id).forEach((l, i) => { l.tIndex = i; }));
+const trackLessons = (t) => LESSONS.filter((l) => !t || l.track === t);
+const trackModules = (t) => MODULES.filter((m) => m.track === t);
 const modLessons = (n) => LESSONS.filter((l) => l.module === n);
 
 const CHALLENGES = [];
 LESSONS.forEach((l) => {
-  CHALLENGES.push({ id: "p-" + l.id, type: "practice", cat: l.module <= 3 ? "beginner" : l.module <= 6 ? "realworld" : "react", title: l.practice && l.name ? l.name : l.title, lesson: l.id, module: l.module, task: l.practice.task, starter: l.practice.starter, tests: l.practice.tests, hint: l.practice.hint, solution: l.practice.solution });
+  CHALLENGES.push({ id: "p-" + l.id, type: "practice", cat: l.track === "dsa" ? "dsa" : l.module <= 3 ? "beginner" : l.module <= 6 ? "realworld" : "react", title: l.practice && l.name ? l.name : l.title, lesson: l.id, module: l.module, task: l.practice.task, starter: l.practice.starter, tests: l.practice.tests, hint: l.practice.hint, solution: l.practice.solution });
 });
 LESSONS.forEach((l) => {
   CHALLENGES.push({ id: "q-" + l.id, type: "predict", cat: "predict", title: `Predict: ${l.title.split(":")[0]}`, lesson: l.id, module: l.module, predict: l.predict });
@@ -3082,20 +5067,28 @@ function streak() {
   return count;
 }
 function lastDays(n) { const out = []; const d = new Date(); d.setDate(d.getDate() - (n - 1)); for (let i = 0; i < n; i++) { out.push(store.activity[todayKey(d)] || 0); d.setDate(d.getDate() + 1); } return out; }
-function stats() {
-  const lessonsDone = LESSONS.filter((l) => lessonDone(l.id)).length;
-  const weight = (l) => (l.module === 7 ? 2 : 1);
-  const totalW = LESSONS.reduce((s, l) => s + weight(l), 0);
-  const doneW = LESSONS.filter((l) => lessonDone(l.id)).reduce((s, l) => s + weight(l), 0);
-  const preds = Object.values(store.predictions);
+function stats(track) {
+  const ls = trackLessons(track);
+  const lessonsDone = ls.filter((l) => lessonDone(l.id)).length;
+  const lastMod = Math.max(...ls.map((l) => l.module));
+  const weight = (l) => (l.module === lastMod ? 2 : 1);
+  const totalW = ls.reduce((s, l) => s + weight(l), 0);
+  const doneW = ls.filter((l) => lessonDone(l.id)).reduce((s, l) => s + weight(l), 0);
+  const preds = ls.map((l) => store.predictions["q-" + l.id]).filter(Boolean);
   const predCorrect = preds.filter((p) => p.correct).length;
-  const readiness = Math.round((doneW / totalW) * 80 + (predCorrect / LESSONS.length) * 20);
-  const attempted = CHALLENGES.filter((c) => c.type !== "predict" && store.attempts[c.id]).length;
-  const passedCount = CHALLENGES.filter((c) => c.type !== "predict" && store.passed[c.id]).length;
-  const bugsFixed = BUGS.filter((b) => store.passed["b-" + b.id]).length;
+  const readiness = Math.round((doneW / totalW) * 80 + (predCorrect / ls.length) * 20);
+  const inTrack = (c) => !track || LESSON[c.lesson]?.track === track;
+  const attempted = CHALLENGES.filter((c) => c.type !== "predict" && inTrack(c) && store.attempts[c.id]).length;
+  const passedCount = CHALLENGES.filter((c) => c.type !== "predict" && inTrack(c) && store.passed[c.id]).length;
+  const bugsFixed = BUGS.filter((b) => (!track || LESSON[b.lesson]?.track === track) && store.passed["b-" + b.id]).length;
   return { lessonsDone, readiness: Math.min(100, readiness), predAnswered: preds.length, predCorrect, attempted, passedCount, bugsFixed, successRate: attempted ? Math.round((passedCount / attempted) * 100) : 0 };
 }
-function nextLesson() { return LESSONS.find((l) => !lessonDone(l.id)) || LESSONS[LESSONS.length - 1]; }
+function activeTrack() {
+  if (currentRoute.startsWith("lesson-") && LESSON[currentRoute.slice(7)]) return LESSON[currentRoute.slice(7)].track;
+  if (currentRoute.startsWith("ch-") && CH[currentRoute.slice(3)]) return LESSON[CH[currentRoute.slice(3)].lesson]?.track || "react";
+  return LESSON[store.lastLesson]?.track || "react";
+}
+function nextLesson(track = activeTrack()) { const ls = trackLessons(track); return ls.find((l) => !lessonDone(l.id)) || ls[ls.length - 1]; }
 function weakAreas() {
   return MODULES.map((m) => {
     let score = 0; const reasons = [];
@@ -3129,7 +5122,7 @@ function modStatus(n) {
   const p = modProgress(n);
   if (p.done === p.total) return ["Completed", "t-green"];
   if (p.done > 0 || modLessons(n).some((l) => store.attempts["p-" + l.id] || store.predictions["q-" + l.id])) return ["In progress", "t-blue"];
-  const nl = nextLesson(); if (nl.module === n) return ["Up next", "t-purple"];
+  const nl = nextLesson(MODULES[n - 1].track); if (nl.module === n) return ["Up next", "t-purple"];
   return ["Not started", ""];
 }
 function toast(msg, ms = 2600) {
@@ -3172,21 +5165,22 @@ function renderSidebar() {
   const activeMod = currentRoute.startsWith("lesson-") ? LESSON[currentRoute.slice(7)]?.module : null;
   const st = streak();
   sidebar.innerHTML = `
-    <div class="sb-brand"><span class="logo">${LOGO}</span><div style="min-width:0"><b>Prelude</b><span>JavaScript for React</span></div></div>
+    <div class="sb-brand"><span class="logo">${LOGO}</span><div style="min-width:0"><b>Prelude</b><span>JavaScript, React & DSA</span></div></div>
     <div class="sb-scroll"><nav aria-label="Primary">
       <div class="sb-section"><ul>
         ${nav("home", "home", "Dashboard")}
         ${nav("lessons", "book", "Lessons", `${s.lessonsDone}/${LESSONS.length}`)}
         ${nav("practice", "target", "Practice Arena", CHALLENGES.length)}
-        ${nav("progress", "chart", "Progress", s.readiness + "%")}
+        ${nav("progress", "chart", "Progress", Math.round((s.lessonsDone / LESSONS.length) * 100) + "%")}
       </ul></div>
-      <div class="sb-section"><span class="eyebrow">Modules</span><ul>
-        ${MODULES.map((m) => { const p = modProgress(m.n); const first = modLessons(m.n).find((l) => !lessonDone(l.id)) || modLessons(m.n)[0]; return `<li><button class="nav-item" data-go="lesson-${first.id}" ${activeMod === m.n ? 'aria-current="page"' : ""}><span class="mdot" style="background:${m.dot}"></span><span class="lbl">${esc(m.name)}</span><span class="count-badge">${p.done}/${p.total}</span></button></li>`; }).join("")}
-      </ul></div>
+      ${TRACKS.map((t) => `<div class="sb-section"><span class="eyebrow">${t.short}</span><ul>
+        ${trackModules(t.id).map((m) => { const p = modProgress(m.n); const first = modLessons(m.n).find((l) => !lessonDone(l.id)) || modLessons(m.n)[0]; return `<li><button class="nav-item" data-go="lesson-${first.id}" ${activeMod === m.n ? 'aria-current="page"' : ""}><span class="mdot" style="background:${m.dot}"></span><span class="lbl">${esc(m.name)}</span><span class="count-badge">${p.done}/${p.total}</span></button></li>`; }).join("")}
+      </ul></div>`).join("")}
       <div class="sb-section"><span class="eyebrow">Practice</span><ul>
         <li><button class="nav-item" data-go="practice" data-cat="predict">${ic("eye")}<span class="lbl">Output prediction</span></button></li>
         <li><button class="nav-item" data-go="practice" data-cat="debug">${ic("bug")}<span class="lbl">Fix the bug</span><span class="count-badge">${BUGS.length}</span></button></li>
-        <li><button class="nav-item" data-go="lesson-m7-final">${ic("bolt")}<span class="lbl">Readiness challenge</span></button></li>
+        <li><button class="nav-item" data-go="lesson-m7-final" data-step="practice">${ic("bolt")}<span class="lbl">React readiness</span></button></li>
+        <li><button class="nav-item" data-go="lesson-d13-final" data-step="practice">${ic("bolt")}<span class="lbl">DSA challenge</span></button></li>
       </ul></div>
     </nav></div>
     <div class="sb-section" style="border-top:1px solid var(--border)"><ul>
@@ -3196,7 +5190,7 @@ function renderSidebar() {
     <div class="sb-foot"><div><b>${st} ${st === 1 ? "Day" : "Days"}</b><span>Learning streak</span></div><button class="btn btn-muted md" data-go="lesson-${nextLesson().id}">${ic("play", 12)}Continue</button></div>`;
   sidebar.onclick = (e) => {
     const b = e.target.closest("[data-go]");
-    if (b) { if (b.dataset.cat) practiceCat = b.dataset.cat; go(b.dataset.go); closeSidebar(); }
+    if (b) { if (b.dataset.cat) practiceCat = b.dataset.cat; if (b.dataset.step) { store.steps[b.dataset.go.slice(7)] = b.dataset.step; save(); } go(b.dataset.go); closeSidebar(); }
     if (e.target.closest("#sb-search")) { closeSidebar(); openCommand(); }
   };
 }
@@ -3222,7 +5216,7 @@ function frame({ title, crumb, pill, tabs, active, onTab }) {
 const pillHtml = (text, dot = "") => `<span class="pill"><i class="${dot}"></i>${esc(text)}</span>`;
 
 /* ---------- router ---------- */
-let practiceCat = "all", homeTab = "roadmap", progressTab = "overview", lessonFilter = "all", homeFilter = "all", practiceStatus = "all";
+let lessonTrack = null, practiceCat = "all", homeTab = null, progressTab = "overview", lessonFilter = "all", homeFilter = "all", practiceStatus = "all";
 let activeWs = null;
 function go(route) { if (location.hash.slice(1) === route) route_(); else location.hash = route; }
 function route_() {
@@ -3294,25 +5288,32 @@ function closeCommand() { $("#cmd")?.remove(); $("#cmd-ov")?.remove(); }
 
 /* ---------- Dashboard ---------- */
 function viewHome() {
-  const s = stats();
+  if (!homeTab) homeTab = activeTrack();
+  const track = homeTab === "activity" ? activeTrack() : homeTab;
+  const T = TRACK[track];
+  const s = stats(track);
+  const all = stats();
   const st = streak();
-  const view = frame({ title: "Dashboard", pill: pillHtml(st ? `${st}-day streak` : "Ready to start", st ? "" : "idle"), tabs: [{ id: "roadmap", label: "Roadmap" }, { id: "activity", label: "Activity", n: store.recent.length || undefined }], active: homeTab, onTab: (t) => { homeTab = t; viewHome(); } });
-  const nl = nextLesson();
-  const tb = el(`<div class="toolbar"><div class="welcome"><h2>${store.recent.length || s.lessonsDone ? "Welcome back" : "Welcome"}, ${esc(store.name)}</h2><span class="caption">${s.lessonsDone === LESSONS.length ? "Every lesson complete. Review weak spots or retake the readiness challenge." : `Next up: ${esc(nl.title)} · ${esc(MODULES[nl.module - 1].name)}`}</span></div><div class="grp"><button class="btn btn-secondary" data-go="practice">${ic("target", 12)}Practice Arena</button><button class="btn btn-primary" data-go="lesson-${nl.id}">${ic("play", 12)}${s.lessonsDone ? "Continue learning" : "Start lesson 1"}</button></div></div>`);
+  const tl = trackLessons(track);
+  const view = frame({ title: "Dashboard", pill: pillHtml(st ? `${st}-day streak` : "Ready to start", st ? "" : "idle"), tabs: [...TRACKS.map((t) => ({ id: t.id, label: t.short, n: `${stats(t.id).lessonsDone}/${trackLessons(t.id).length}` })), { id: "activity", label: "Activity", n: store.recent.length || undefined }], active: homeTab, onTab: (t) => { homeTab = t; viewHome(); } });
+  const nl = nextLesson(track);
+  const caption = s.lessonsDone === tl.length ? `${T.name} complete. Review weak spots or retake the final challenge.` : `${T.name} · Next up: ${esc(nl.title)}`;
+  const tb = el(`<div class="toolbar"><div class="welcome"><h2>${store.recent.length || all.lessonsDone ? "Welcome back" : "Welcome"}, ${esc(store.name)}</h2><span class="caption">${caption}</span></div><div class="grp"><button class="btn btn-secondary" data-go="practice">${ic("target", 12)}Practice Arena</button><button class="btn btn-primary" data-go="lesson-${nl.id}">${ic("play", 12)}${s.lessonsDone ? "Continue" : track === "dsa" ? "Start DSA track" : "Start lesson 1"}</button></div></div>`);
   tb.onclick = (e) => { const b = e.target.closest("[data-go]"); if (b) go(b.dataset.go); };
   view.appendChild(tb);
-  view.appendChild(el(`<div class="stat-grid" style="border-top:1px solid var(--border)"><div><b>${s.lessonsDone}/${LESSONS.length}</b>Lessons complete</div><div><b>${s.readiness}%</b>React readiness</div><div><b>${s.passedCount}</b>Challenges passed</div><div><b>${s.predAnswered ? Math.round((s.predCorrect / s.predAnswered) * 100) + "%" : "–"}</b>Prediction accuracy</div></div>`));
+  view.appendChild(el(`<div class="stat-grid" style="border-top:1px solid var(--border)"><div><b>${s.lessonsDone}/${tl.length}</b>Lessons complete</div><div><b>${s.readiness}%</b>${T.label} readiness</div><div><b>${s.passedCount}</b>Challenges passed</div><div><b>${s.predAnswered ? Math.round((s.predCorrect / s.predAnswered) * 100) + "%" : "–"}</b>Prediction accuracy</div></div>`));
   if (homeTab === "activity") return homeActivity(view);
 
-  const filt = el(`<div class="toolbar" style="padding-bottom:12px"><div class="grp"></div><span class="caption subtle">${MODULES.length} modules · ${LESSONS.length} lessons · about ${Math.round(LESSONS.reduce((t, l) => t + l.minutes, 0) / 60)} hours</span></div>`);
+  const mods = trackModules(track);
+  const filt = el(`<div class="toolbar" style="padding-bottom:12px"><div class="grp"></div><span class="caption subtle">${mods.length} modules · ${tl.length} lessons · about ${Math.round(tl.reduce((t, l) => t + l.minutes, 0) / 60)} hours</span></div>`);
   filt.querySelector(".grp").appendChild(filterMenu({ label: "Show", value: homeFilter, options: [{ value: "all", label: "All modules" }, { value: "progress", label: "In progress" }, { value: "todo", label: "Not started" }, { value: "done", label: "Completed" }], onChange: (v) => { homeFilter = v; viewHome(); } }));
   view.appendChild(filt);
-  const rows = MODULES.filter((m) => { const [st] = modStatus(m.n); return homeFilter === "all" || (homeFilter === "done" && st === "Completed") || (homeFilter === "progress" && st === "In progress") || (homeFilter === "todo" && (st === "Not started" || st === "Up next")); });
+  const rows = mods.filter((m) => { const [st] = modStatus(m.n); return homeFilter === "all" || (homeFilter === "done" && st === "Completed") || (homeFilter === "progress" && st === "In progress") || (homeFilter === "todo" && (st === "Not started" || st === "Up next")); });
   const wrap = el(`<div class="tbl-wrap scroll"><table class="tbl tbl-home"><thead><tr><th>Module</th><th>Key concepts</th><th class="r">Lessons</th><th class="r">Progress</th><th>Lesson map</th><th>Status</th><th class="c">Action</th></tr></thead><tbody></tbody></table></div>`);
   const tb2 = wrap.querySelector("tbody");
   rows.forEach((m) => {
     const p = modProgress(m.n); const [stt, tone] = modStatus(m.n);
-    const tr = el(`<tr class="click" data-m="${m.n}"><td><span class="cell"><span class="mdot" style="background:${m.dot};margin:0"></span><span class="subtle tnum" style="font-size:12px">0${m.n}</span>${esc(m.name)}</span></td><td><span class="tags">${m.tags.map(([t, c]) => tag(t, c)).join("")}</span></td><td class="r tnum">${p.done}<span class="muted-fg"> / ${p.total}</span></td><td class="r"><span class="cell" style="justify-content:flex-end">${seg(p.pct, 17, "s")}<span class="tnum" style="width:4ch;text-align:right">${p.pct}%</span></span></td><td>${spark(modLessons(m.n).map((l) => (lessonDone(l.id) ? 14 : store.attempts["p-" + l.id] || store.predictions["q-" + l.id] ? 9 : 4)), (v) => v === 14)}</td><td>${tag(stt, tone)}</td><td class="c"><button class="btn btn-ghost icon-sm" style="color:var(--foreground)" aria-label="Open ${esc(m.name)}">${ic("dots", 12)}</button></td></tr>`);
+    const tr = el(`<tr class="click" data-m="${m.n}"><td><span class="cell"><span class="mdot" style="background:${m.dot};margin:0"></span><span class="subtle tnum" style="font-size:12px">${String(m.n).padStart(2, "0")}</span>${esc(m.name)}</span></td><td><span class="tags">${m.tags.map(([t, c]) => tag(t, c)).join("")}</span></td><td class="r tnum">${p.done}<span class="muted-fg"> / ${p.total}</span></td><td class="r"><span class="cell" style="justify-content:flex-end">${seg(p.pct, 17, "s")}<span class="tnum" style="width:4ch;text-align:right">${p.pct}%</span></span></td><td>${spark(modLessons(m.n).map((l) => (lessonDone(l.id) ? 14 : store.attempts["p-" + l.id] || store.predictions["q-" + l.id] ? 9 : 4)), (v) => v === 14)}</td><td>${tag(stt, tone)}</td><td class="c"><button class="btn btn-ghost icon-sm" style="color:var(--foreground)" aria-label="Open ${esc(m.name)}">${ic("dots", 12)}</button></td></tr>`);
     tr.onclick = () => moduleSheet(m.n);
     tb2.appendChild(tr);
   });
@@ -3339,31 +5340,35 @@ function moduleSheet(n) {
   const m = MODULES[n - 1]; const p = modProgress(n); const ls = modLessons(n);
   const nextIn = ls.find((l) => !lessonDone(l.id)) || ls[0];
   const body = el(`<div>
-    <div style="display:flex;gap:12px;align-items:flex-start;padding:20px;box-shadow:inset 0 -1px 0 var(--line-strong)"><span class="mono-tile">0${n}</span><div style="display:flex;flex-direction:column;gap:12px;min-width:0"><h2>${esc(m.name)}</h2><div class="tags" style="flex-wrap:wrap">${m.tags.map(([t, c]) => tag(t, c, true)).join("")}</div></div></div>
+    <div style="display:flex;gap:12px;align-items:flex-start;padding:20px;box-shadow:inset 0 -1px 0 var(--line-strong)"><span class="mono-tile">${String(n).padStart(2, "0")}</span><div style="display:flex;flex-direction:column;gap:12px;min-width:0"><h2>${esc(m.name)}</h2><div class="tags" style="flex-wrap:wrap">${m.tags.map(([t, c]) => tag(t, c, true)).join("")}</div></div></div>
     <section class="section"><span class="eyebrow">Module progress</span><div style="display:flex;flex-direction:column;gap:6px"><span class="big">${p.pct}%</span><span class="caption soft">${p.done} of ${p.total} lessons complete · ${ls.reduce((t, l) => t + l.minutes, 0)} min total</span></div>${seg(p.pct, 63, "s", true)}</section>
     <section class="section"><span class="eyebrow">Lessons</span><div class="lesson-list">${ls.map((l) => `<button class="lesson-item" data-go="lesson-${l.id}"><span class="status-ic ${lessonDone(l.id) ? "done" : l.id === nextIn.id ? "cur" : ""}">${lessonDone(l.id) ? ic("check", 10) : ""}</span><span class="li-t"><b>${esc(l.title)}</b><span>${l.minutes} min · Practice: ${esc(l.name)}</span></span>${ic("chevr", 14, 'class="chev"')}</button>`).join("")}</div></section>
-    <section class="section" style="box-shadow:none"><span class="eyebrow">Why it matters in React</span><p class="soft">${esc(m.why)}</p></section></div>`);
+    <section class="section" style="box-shadow:none"><span class="eyebrow">Why it matters${m.track === "react" ? " in React" : ""}</span><p class="soft">${esc(m.why)}</p></section></div>`);
   body.onclick = (e) => { const b = e.target.closest("[data-go]"); if (b) { closeSheet(); go(b.dataset.go); } };
   const foot = el(`<div style="display:contents"><button class="btn-link" data-a="practice">Practice this module</button><div style="display:flex;gap:8px"><button class="btn btn-subtle" data-a="close">Close</button><button class="btn btn-primary" data-a="start">${p.done ? (p.done === p.total ? "Review module" : "Continue module") : "Start module"}</button></div></div>`);
   foot.onclick = (e) => { const a = e.target.closest("[data-a]")?.dataset.a; if (a === "close") closeSheet(); if (a === "start") { closeSheet(); go("lesson-" + nextIn.id); } if (a === "practice") { closeSheet(); practiceCat = "all"; practiceModule = n; go("practice"); } };
-  openSheet({ icon: "book", title: `Module 0${n}`, body, foot });
+  openSheet({ icon: "book", title: `Module ${String(n).padStart(2, "0")} · ${TRACK[m.track].short}`, body, foot });
 }
 
 /* ---------- Lessons list ---------- */
 function viewLessons() {
-  const s = stats();
-  const view = frame({ title: "Lessons", pill: pillHtml(`${s.lessonsDone} of ${LESSONS.length} done`, s.lessonsDone ? "" : "idle") });
-  const tb = el(`<div class="toolbar"><div class="grp"></div><div class="grp"><button class="btn btn-primary" data-go="lesson-${nextLesson().id}">${ic("play", 12)}Next lesson</button></div></div>`);
-  tb.querySelector(".grp").appendChild(filterMenu({ label: "Module", value: lessonFilter, options: [{ value: "all", label: "All modules" }, ...MODULES.map((m) => ({ value: String(m.n), label: m.name }))], onChange: (v) => { lessonFilter = v; viewLessons(); } }));
+  if (!lessonTrack) lessonTrack = activeTrack();
+  const track = lessonTrack;
+  const tl = trackLessons(track);
+  const s = stats(track);
+  const view = frame({ title: "Lessons", pill: pillHtml(`${s.lessonsDone} of ${tl.length} done`, s.lessonsDone ? "" : "idle"), tabs: TRACKS.map((t) => ({ id: t.id, label: t.short, n: trackLessons(t.id).length })), active: track, onTab: (t) => { lessonTrack = t; lessonFilter = "all"; viewLessons(); } });
+  const nl = nextLesson(track);
+  const tb = el(`<div class="toolbar"><div class="grp"></div><div class="grp"><button class="btn btn-primary" data-go="lesson-${nl.id}">${ic("play", 12)}Next lesson</button></div></div>`);
+  tb.querySelector(".grp").appendChild(filterMenu({ label: "Module", value: lessonFilter, options: [{ value: "all", label: "All modules" }, ...trackModules(track).map((m) => ({ value: String(m.n), label: m.name }))], onChange: (v) => { lessonFilter = v; viewLessons(); } }));
   tb.onclick = (e) => { const b = e.target.closest("[data-go]"); if (b) go(b.dataset.go); };
   view.appendChild(tb);
-  const ls = LESSONS.filter((l) => lessonFilter === "all" || String(l.module) === lessonFilter);
+  const ls = tl.filter((l) => lessonFilter === "all" || String(l.module) === lessonFilter);
   const wrap = el(`<div class="tbl-wrap scroll"><table class="tbl tbl-les"><thead><tr><th class="r" style="width:1%">#</th><th>Lesson</th><th>Module</th><th>Practice</th><th class="r">Time</th><th>Prediction</th><th>Status</th><th class="c">Open</th></tr></thead><tbody></tbody></table></div>`);
   const body = wrap.querySelector("tbody");
   ls.forEach((l) => {
     const m = MODULES[l.module - 1]; const pr = store.predictions["q-" + l.id];
-    const status = lessonDone(l.id) ? tag("Completed", "t-green", true) : store.attempts["p-" + l.id] || pr ? tag("In progress", "t-blue", true) : l.id === nextLesson().id ? tag("Up next", "t-purple", true) : tag("Not started", "", true);
-    const tr = el(`<tr class="click"><td class="r subtle tnum caption">${l.index + 1}</td><td>${esc(l.title)}</td><td><span class="cell"><span class="mdot" style="background:${m.dot};margin:0"></span><span class="soft">${esc(m.name)}</span></span></td><td class="soft">${esc(l.name)}</td><td class="r tnum soft"><span class="cell" style="justify-content:flex-end;gap:4px">${ic("clock", 12)}${l.minutes} min</span></td><td>${pr ? tag(pr.correct ? "Correct" : "Missed", pr.correct ? "t-green" : "t-red", true) : '<span class="faint">–</span>'}</td><td>${status}</td><td class="c"><button class="btn btn-ghost icon-sm" style="color:var(--foreground)" aria-label="Open lesson">${ic("chevr", 12)}</button></td></tr>`);
+    const status = lessonDone(l.id) ? tag("Completed", "t-green", true) : store.attempts["p-" + l.id] || pr ? tag("In progress", "t-blue", true) : l.id === nl.id ? tag("Up next", "t-purple", true) : tag("Not started", "", true);
+    const tr = el(`<tr class="click"><td class="r subtle tnum caption">${l.tIndex + 1}</td><td>${esc(l.title)}</td><td><span class="cell"><span class="mdot" style="background:${m.dot};margin:0"></span><span class="soft">${esc(m.name)}</span></span></td><td class="soft">${esc(l.name)}</td><td class="r tnum soft"><span class="cell" style="justify-content:flex-end;gap:4px">${ic("clock", 12)}${l.minutes} min</span></td><td>${pr ? tag(pr.correct ? "Correct" : "Missed", pr.correct ? "t-green" : "t-red", true) : '<span class="faint">–</span>'}</td><td>${status}</td><td class="c"><button class="btn btn-ghost icon-sm" style="color:var(--foreground)" aria-label="Open lesson">${ic("chevr", 12)}</button></td></tr>`);
     tr.onclick = () => go("lesson-" + l.id);
     body.appendChild(tr);
   });
@@ -3407,21 +5412,25 @@ function openChallenge(c) { if (c.type === "practice") { store.steps[c.lesson] =
 
 /* ---------- Progress ---------- */
 function viewProgress() {
-  const s = stats();
-  const label = s.readiness >= 85 ? "Ready for React" : s.readiness >= 50 ? "Getting close" : s.readiness > 0 ? "Building foundations" : "Not started";
-  const view = frame({ title: "Progress", pill: pillHtml(`React readiness ${s.readiness}%`, s.readiness >= 85 ? "" : s.readiness >= 50 ? "warn" : "idle"), tabs: [{ id: "overview", label: "Overview" }, { id: "history", label: "Learning history" }], active: progressTab, onTab: (t) => { progressTab = t; viewProgress(); } });
+  const r = stats("react"), d = stats("dsa"), s = stats();
+  const level = (x, goal) => (x >= 85 ? [`Ready for ${goal}`, "t-green"] : x >= 50 ? ["Getting close", "t-amber"] : x > 0 ? ["Building foundations", ""] : ["Not started", ""]);
+  const view = frame({ title: "Progress", pill: pillHtml(`React ${r.readiness}% · DSA ${d.readiness}%`, r.readiness + d.readiness ? "" : "idle"), tabs: [{ id: "overview", label: "Overview" }, { id: "history", label: "Learning history" }], active: progressTab, onTab: (t) => { progressTab = t; viewProgress(); } });
   if (progressTab === "history") return progressHistory(view);
   const weak = weakAreas();
+  const meter = (T, x, goal, note) => { const [lb, tn] = level(x.readiness, goal); return `<section class="section"><div class="sh"><span class="eyebrow">${T.label} readiness</span>${tag(lb, tn, true)}</div><div style="display:flex;flex-direction:column;gap:6px"><span class="big">${x.readiness}%</span><span class="caption soft">${x.lessonsDone} of ${trackLessons(T.id).length} lessons · ${note}</span></div>${seg(x.readiness, 63, "auto", true)}</section>`; };
+  const mastery = TRACKS.map((T) => `<div style="display:flex;flex-direction:column;gap:14px"><span class="caption subtle">${T.name}</span>${trackModules(T.id).map((m) => { const p = modProgress(m.n); return `<div class="mrow"><div class="top"><span><span class="mdot" style="background:${m.dot};margin:0"></span>${esc(m.name)}</span><span class="tnum soft">${p.done}/${p.total} · ${p.pct}%</span></div>${seg(p.pct, 63, "s", true)}</div>`; }).join("")}</div>`).join("");
+  const checklist = (title, list, final) => `<section class="section"><div class="sh"><span class="eyebrow">${title}</span><span class="caption soft tnum">${list.filter(([, id]) => lessonDone(id)).length}/${list.length}</span></div><div class="check-list">${list.map(([t, id]) => `<button class="check-item ${lessonDone(id) ? "on" : ""}" data-go="lesson-${id}"><span class="cc">${ic("check", 10)}</span>${esc(t)}<span class="lnk">${lessonDone(id) ? "Done" : "Open lesson"}</span></button>`).join("")}</div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-primary" data-go="lesson-${final}" data-step="practice">${ic("bolt", 12)}${store.passed["p-" + final] ? "Retake the final challenge" : "Take the final challenge"}</button></div></section>`;
   const box = el(`<div class="scroll"><div class="two-col"><div>
-    <section class="section"><div class="sh"><span class="eyebrow">React readiness</span>${tag(label, s.readiness >= 85 ? "t-green" : s.readiness >= 50 ? "t-amber" : "", true)}</div><div style="display:flex;flex-direction:column;gap:6px"><span class="big">${s.readiness}%</span><span class="caption soft">Weighted by lessons completed (Module 7 counts double) and predictions you got right</span></div>${seg(s.readiness, 63, "auto", true)}</section>
-    <section class="section"><span class="eyebrow">Concept mastery</span><div style="display:flex;flex-direction:column;gap:14px">${MODULES.map((m) => { const p = modProgress(m.n); return `<div class="mrow"><div class="top"><span><span class="mdot" style="background:${m.dot};margin:0"></span>${esc(m.name)}</span><span class="tnum soft">${p.done}/${p.total} · ${p.pct}%</span></div>${seg(p.pct, 63, "s", true)}</div>`; }).join("")}</div></section>
+    ${meter(TRACK.react, r, "React", "Module 7 counts double")}
+    ${meter(TRACK.dsa, d, "DSA", "Module 13 counts double")}
+    <section class="section"><span class="eyebrow">Concept mastery</span>${mastery}</section>
   </div><div>
     <section class="section"><span class="eyebrow">Challenge performance</span><div class="mini-stats"><div><span class="caption soft">Success rate</span><b>${s.attempted ? s.successRate + "%" : "–"}</b><span class="caption subtle">${s.passedCount} of ${s.attempted} attempted</span></div><div><span class="caption soft">Predictions</span><b>${s.predCorrect}/${s.predAnswered}</b><span class="caption subtle">correct of answered</span></div><div><span class="caption soft">Bugs fixed</span><b>${s.bugsFixed}/${BUGS.length}</b><span class="caption subtle">debugging tasks</span></div></div></section>
     <section class="section"><div class="sh"><span class="eyebrow">Weak areas</span><span class="caption subtle">${weak.length ? "Based on missed predictions and repeated tries" : ""}</span></div><div style="display:flex;flex-direction:column;gap:8px">${weak.length ? weak.map((w) => `<article class="score-card"><div style="display:flex;flex-direction:column;gap:8px"><h3>${esc(w.m.name)}</h3><p class="soft" style="font-size:13px">${esc(w.reasons.slice(0, 2).join(". "))}.</p></div><div class="meta"><span class="cell soft" style="gap:4px">${ic("bulb", 12)}Review: ${esc(w.target.title)}</span><button class="btn btn-subtle" data-go="lesson-${w.target.id}">Review lesson</button></div></article>`).join("") : `<div class="callout">${ic("bulb")}<span>No weak spots yet. They appear here when a prediction misses or a challenge takes a few tries.</span></div>`}</div></section>
-    <section class="section" style="box-shadow:none"><div class="sh"><span class="eyebrow">React readiness checklist</span><span class="caption soft tnum">${CHECKLIST.filter(([, id]) => lessonDone(id)).length}/${CHECKLIST.length}</span></div><div class="check-list">${CHECKLIST.map(([t, id]) => `<button class="check-item ${lessonDone(id) ? "on" : ""}" data-go="lesson-${id}"><span class="cc">${ic("check", 10)}</span>${esc(t)}<span class="lnk">${lessonDone(id) ? "Done" : "Open lesson"}</span></button>`).join("")}</div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-primary" data-go="lesson-m7-final">${ic("bolt", 12)}${store.passed["p-m7-final"] ? "Retake readiness challenge" : "Take the readiness challenge"}</button></div></section>
+    ${checklist("React readiness checklist", CHECKLIST, "m7-final")}
+    ${checklist("DSA patterns checklist", DSA_CHECKLIST, "d13-final").replace('class="section"', 'class="section" style="box-shadow:none"')}
   </div></div></div>`);
-  box.onclick = (e) => { const b = e.target.closest("[data-go]"); if (b) { if (b.dataset.go === "lesson-m7-final") { store.steps["m7-final"] = "practice"; save(); } go(b.dataset.go); } };
+  box.onclick = (e) => { const b = e.target.closest("[data-go]"); if (b) { if (b.dataset.step) { store.steps[b.dataset.go.slice(7)] = b.dataset.step; save(); } go(b.dataset.go); } };
   view.appendChild(box);
 }
 function progressHistory(view) {
@@ -3730,6 +5739,75 @@ const VIZ = {
     v.onclick = (e) => { if (!e.target.closest("[data-v]")) return; on = !on; $("#vs-after", v).innerHTML = `<span class="vlabel" style="width:auto">toggled (after)</span><span class="vchip">#A  Wireframe ✓</span><span class="vchip out">#C  Prototype ${on ? "✓" : ""}</span>`; $("#vs-cap", v).innerHTML = `#A is the <b>same object</b> (reused). #C is a <b>new copy</b> made with { ...t, done: ${on} }. The array itself is new, so React re-renders.`; };
     return v;
   },
+  "d8-bigo"() {
+    const rows = [["O(1)", () => 1, "var(--success)"], ["O(log n)", (n) => Math.max(1, Math.ceil(Math.log2(n))), "var(--success)"], ["O(n)", (n) => n, "var(--soft)"], ["O(n log n)", (n) => Math.round(n * Math.max(1, Math.log2(n))), "var(--warning)"], ["O(n²)", (n) => n * n, "var(--danger)"]];
+    const v = el(`<div class="viz"><div class="viz-h"><span class="eyebrow">Visual · work as n grows</span><span class="vcap mono" id="bo-n"></span></div><input type="range" id="bo-r" min="0" max="5" step="0.05" value="2" aria-label="Input size n" style="width:100%;accent-color:var(--foreground)"><div id="bo-rows" style="display:flex;flex-direction:column;gap:8px"></div><span class="vcap" id="bo-cap"></span></div>`);
+    const fmtN = (x) => (x >= 1e9 ? (x / 1e9).toFixed(1) + "B" : x >= 1e6 ? (x / 1e6).toFixed(1) + "M" : x >= 1e4 ? Math.round(x / 1e3) + "K" : x.toLocaleString());
+    const draw = () => {
+      const n = Math.max(1, Math.round(10 ** +$("#bo-r", v).value));
+      $("#bo-n", v).textContent = `n = ${n.toLocaleString()}`;
+      $("#bo-rows", v).innerHTML = rows.map(([lb, f, col]) => { const ops = f(n); const w = Math.max(1, (Math.log10(ops + 1) / 10) * 100); return `<div style="display:grid;grid-template-columns:72px minmax(0,1fr) 56px;gap:8px;align-items:center"><span class="vlabel" style="width:auto">${lb}</span><span style="height:8px;border-radius:2px;background:rgba(255,255,255,.06);overflow:hidden"><span style="display:block;height:100%;width:${w}%;background:${col};border-radius:2px;transition:width .2s"></span></span><span class="mono tnum" style="font-size:11.5px;text-align:right;color:var(--soft)">${fmtN(ops)}</span></div>`; }).join("");
+      $("#bo-cap", v).textContent = n > 1 ? `At this size, O(n²) does ${fmtN(n)}× more work than O(n). Bars use a log scale.` : "Drag to grow n. Bars use a log scale.";
+    };
+    $("#bo-r", v).oninput = draw;
+    draw();
+    return v;
+  },
+  "d9-sliding"() {
+    const data = [3, 8, 2, 9, 4, 7, 1], k = 3;
+    const v = el(`<div class="viz"><div class="viz-h"><span class="eyebrow">Visual · a window of 3 days</span><div style="display:flex;gap:6px"><button class="btn btn-secondary" data-v="next">Slide →</button><button class="btn btn-ghost" data-v="reset">Reset</button></div></div><div class="vrow" id="sw-row"></div><span class="vcap" id="sw-cap"></span></div>`);
+    let start = 0, sum = data.slice(0, k).reduce((a, b) => a + b, 0), best = sum, note = "First window: add the first 3 days.";
+    const draw = () => {
+      $("#sw-row", v).innerHTML = `<span class="vlabel">visits</span>` + data.map((x, i) => `<span class="vchip ${i >= start && i < start + k ? "kept" : ""}">${x}</span>`).join("");
+      $("#sw-cap", v).innerHTML = `${note} Sum <b style="color:var(--foreground)">${sum}</b> · best so far <b style="color:var(--foreground)">${best}</b>`;
+    };
+    v.onclick = (e) => {
+      const a = e.target.closest("[data-v]")?.dataset.v; if (!a) return;
+      if (a === "reset") { start = 0; sum = data.slice(0, k).reduce((x, y) => x + y, 0); best = sum; note = "First window: add the first 3 days."; }
+      else if (start + k < data.length) { const out = data[start], inn = data[start + k]; start++; sum += inn - out; best = Math.max(best, sum); note = `+${inn} entering, −${out} leaving.`; }
+      else note = "The window reached the end.";
+      draw();
+    };
+    draw();
+    return v;
+  },
+  "d11-stack"() {
+    const pages = ["Home", "Lessons", "Stacks", "Queues", "Graphs"];
+    const v = el(`<div class="viz"><div class="viz-h"><span class="eyebrow">Visual · push and pop from the top</span><div style="display:flex;gap:6px"><button class="btn btn-secondary" data-v="push">push()</button><button class="btn btn-secondary" data-v="pop">pop()</button></div></div><div id="st-col" style="display:flex;flex-direction:column;gap:6px;align-items:flex-start;min-height:40px"></div><span class="vcap" id="st-cap">The newest item sits on top. pop() always takes it first.</span></div>`);
+    const stack = ["Home"];
+    const draw = (fresh) => { $("#st-col", v).innerHTML = stack.length ? [...stack].reverse().map((p, i) => `<span class="vchip ${i === 0 ? "out" : ""}" ${i === 0 && fresh ? "" : 'style="animation:none"'}>${i === 0 ? "top → " : ""}"${esc(p)}"</span>`).join("") : `<span class="faint caption">Empty stack</span>`; };
+    v.onclick = (e) => {
+      const a = e.target.closest("[data-v]")?.dataset.v; if (!a) return;
+      if (a === "push") { if (stack.length < pages.length) { const p = pages[stack.length]; stack.push(p); $("#st-cap", v).textContent = `push("${p}") put it on top.`; } else $("#st-cap", v).textContent = "That's every page in this demo. Try pop()."; }
+      else { const p = stack.pop(); $("#st-cap", v).textContent = p ? `pop() removed "${p}": last in, first out.` : "pop() on an empty stack returns undefined."; }
+      draw(a === "push");
+    };
+    draw(false);
+    return v;
+  },
+  "d12-binary"() {
+    const ids = [3, 8, 15, 21, 34, 42, 57, 66, 79, 91];
+    const v = el(`<div class="viz"><div class="viz-h"><span class="eyebrow">Visual · halve the range each step</span><div style="display:flex;gap:6px;flex-wrap:wrap"><select class="vsel" aria-label="Target">${[66, 3, 91, 50].map((t) => `<option value="${t}">target ${t}</option>`).join("")}</select><button class="btn btn-secondary" data-v="step">Next step</button></div></div><div class="vrow" id="bs-row"></div><span class="vcap" id="bs-cap"></span></div>`);
+    let target = 66, low, high, mid, steps, done;
+    const reset = () => { low = 0; high = ids.length - 1; mid = -1; steps = 0; done = false; draw("low and high cover the whole list. Press Next step."); };
+    const draw = (msg) => {
+      $("#bs-row", v).innerHTML = ids.map((x, i) => { const out = i < low || i > high; const isMid = i === mid; return `<span class="vchip ${out ? "gone" : ""} ${isMid && done && x === target ? "kept" : ""}" style="${isMid && !(done && x === target) ? "box-shadow:inset 0 0 0 1px var(--foreground)" : ""}">${x}</span>`; }).join("");
+      $("#bs-cap", v).innerHTML = msg;
+    };
+    v.querySelector("select").onchange = (e) => { target = +e.target.value; reset(); };
+    v.onclick = (e) => {
+      if (e.target.closest("[data-v]")?.dataset.v !== "step") return;
+      if (done) return reset();
+      if (low > high) { done = true; return draw(`The range is empty after ${steps} steps, so ${target} isn't in the list: return -1. Press again to restart.`); }
+      mid = Math.floor((low + high) / 2); steps++;
+      const val = ids[mid];
+      if (val === target) { done = true; return draw(`Step ${steps}: middle is ${val}. Found at index ${mid} in ${steps} steps instead of ${mid + 1}. Press again to restart.`); }
+      if (val < target) { low = mid + 1; draw(`Step ${steps}: middle is ${val}, smaller than ${target}. Everything up to it is ruled out.`); }
+      else { high = mid - 1; draw(`Step ${steps}: middle is ${val}, bigger than ${target}. Everything from it up is ruled out.`); }
+    };
+    reset();
+    return v;
+  },
 };
 
 /* ---------- Lesson view ---------- */
@@ -3739,9 +5817,9 @@ function viewLesson(id) {
   let step = store.steps[id] || "understand";
   const done = () => lessonDone(id);
   const view = frame({
-    title: L.title, crumb: `${String(L.index + 1).padStart(2, "0")} · ${M.name}`,
+    title: L.title, crumb: `${String(L.tIndex + 1).padStart(2, "0")} · ${M.name}`,
     pill: done() ? pillHtml("Completed") : store.attempts["p-" + id] || store.predictions["q-" + id] ? pillHtml("In progress", "prim") : pillHtml(`${L.minutes} min`, "idle"),
-    tabs: STEPS.map((s) => ({ id: s.id, label: s.label })), active: step, onTab: (t) => setStep(t),
+    tabs: STEPS.map((s) => ({ id: s.id, label: stepLabel(s, L) })), active: step, onTab: (t) => setStep(t),
   });
   const files = { example: L.code + "\n", predict: L.predict.code + "\n", challenge: L.practice.starter };
   const firstFile = STEPS.find((s) => s.id === step).file || "example";
@@ -3779,8 +5857,8 @@ function viewLesson(id) {
   function foot() {
     const i = STEPS.findIndex((s) => s.id === step);
     const prev = STEPS[i - 1], next = STEPS[i + 1];
-    const nl = LESSONS[L.index + 1];
-    ws.foot.innerHTML = `<span class="step-meta tnum">Step ${i + 1} of ${STEPS.length}</span><div class="grp">${prev ? `<button class="btn btn-subtle" data-n="${prev.id}">${ic("chevl", 12)}Back</button>` : `<button class="btn btn-subtle" data-go="lessons">All lessons</button>`}${next ? `<button class="btn btn-primary" data-n="${next.id}">Next: ${esc(next.label)}${ic("chevr", 12)}</button>` : nl ? `<button class="btn btn-primary" data-go="lesson-${nl.id}" ${done() ? "" : 'title="You can move on, but the lesson is complete once practice passes"'}>Next lesson${ic("chevr", 12)}</button>` : `<button class="btn btn-primary" data-go="progress">See your readiness${ic("chevr", 12)}</button>`}</div>`;
+    const nl = LESSONS[L.index + 1]?.track === L.track ? LESSONS[L.index + 1] : null;
+    ws.foot.innerHTML = `<span class="step-meta tnum">Step ${i + 1} of ${STEPS.length}</span><div class="grp">${prev ? `<button class="btn btn-subtle" data-n="${prev.id}">${ic("chevl", 12)}Back</button>` : `<button class="btn btn-subtle" data-go="lessons">All lessons</button>`}${next ? `<button class="btn btn-primary" data-n="${next.id}">Next: ${esc(stepLabel(next, L))}${ic("chevr", 12)}</button>` : nl ? `<button class="btn btn-primary" data-go="lesson-${nl.id}" ${done() ? "" : 'title="You can move on, but the lesson is complete once practice passes"'}>Next lesson${ic("chevr", 12)}</button>` : `<button class="btn btn-primary" data-go="progress">See your readiness${ic("chevr", 12)}</button>`}</div>`;
   }
   ws.foot.onclick = (e) => { const n = e.target.closest("[data-n]"); if (n) setStep(n.dataset.n); const g = e.target.closest("[data-go]"); if (g) { if (g.dataset.go.startsWith("lesson-")) store.steps[g.dataset.go.slice(7)] = store.steps[g.dataset.go.slice(7)] || "understand"; go(g.dataset.go); } };
 
@@ -3796,7 +5874,7 @@ function viewLesson(id) {
     } else if (step === "experiment") {
       const t = (store.tries[id] = store.tries[id] || {});
       B.innerHTML = `${eyebrow("Experiment")}<h2>Change it and break it</h2><p>Edit the example and press <strong>Run</strong>. Errors are part of the lesson: each one is explained in plain language in Output.</p><div class="tries">${L.tries.map((x, i) => `<button class="try ${t[i] ? "done" : ""}" data-t="${i}"><span class="box">${ic("check", 10)}</span><span>${esc(x)}</span></button>`).join("")}</div><div class="callout">${ic("reset")}<span>Lost your way? <strong>Reset</strong> restores the original example.</span></div>`;
-      if (VIZ[id] && ["m4-map", "m4-filter"].includes(id)) B.appendChild(VIZ[id]());
+      if (VIZ[id] && ["m4-map", "m4-filter", "d8-bigo", "d9-sliding", "d11-stack", "d12-binary"].includes(id)) B.appendChild(VIZ[id]());
       B.onclick = (e) => { const b = e.target.closest(".try"); if (!b) return; t[b.dataset.t] = !t[b.dataset.t]; b.classList.toggle("done", !!t[b.dataset.t]); save(); };
     } else if (step === "predict") {
       const ans = store.predictions[qid];
@@ -3817,7 +5895,7 @@ function viewLesson(id) {
       const tested = pr ? Object.fromEntries(pr.r.tests.map((t) => [t.name, t.pass])) : {};
       B.innerHTML = `${eyebrow("Practice")}<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><h2>${esc(L.name)}</h2>${done() ? tag("Passed", "t-green", true) : store.attempts[pid] ? tag(`${store.attempts[pid]} ${store.attempts[pid] === 1 ? "try" : "tries"}`, "t-amber", true) : ""}</div>${L.practice.task}<span class="eyebrow faint" style="margin-top:4px">Tests</span><div class="testlist">${L.practice.tests.map((t) => `<div class="trow"><span class="tdot ${t.name in tested ? (tested[t.name] ? "pass" : "fail") : ""}"></span><span>${esc(t.name)}</span></div>`).join("")}</div>`;
       if (pr) B.appendChild(el(`<div class="reveal"><div class="callout ${pr.pass ? "ok" : "bad"}">${ic(pr.pass ? "check" : "x")}<span>${pr.pass ? `<strong>All tests pass.</strong> ${pr.first ? "This lesson is now complete." : "Still solid."}` : pr.r.errors.length ? "<strong>Your code threw an error</strong>, so the tests couldn't run. Check Console for a plain-language explanation." : pr.r.timeout ? "<strong>Your code didn't finish.</strong> Look for a loop that never ends." : `<strong>${pr.r.tests.filter((t) => t.pass).length} of ${L.practice.tests.length} tests pass.</strong> Read the red ones, adjust, and check again.`}</span></div></div>`));
-      const actions = el(`<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-primary" data-a2="check">${ic("check", 12)}Check solution</button><button class="btn btn-ghost" data-a2="hint">${ic("bulb", 12)}${hintOpen ? "Hide hint" : "Hint"}</button>${store.attempts[pid] && !done() || done() ? `<button class="btn btn-ghost" data-a2="sol">${ic("eye", 12)}Show solution</button>` : ""}${pr && pr.pass && LESSONS[L.index + 1] ? `<button class="btn btn-secondary" data-a2="react">React connection${ic("chevr", 12)}</button>` : ""}</div>`);
+      const actions = el(`<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-primary" data-a2="check">${ic("check", 12)}Check solution</button><button class="btn btn-ghost" data-a2="hint">${ic("bulb", 12)}${hintOpen ? "Hide hint" : "Hint"}</button>${store.attempts[pid] && !done() || done() ? `<button class="btn btn-ghost" data-a2="sol">${ic("eye", 12)}Show solution</button>` : ""}${pr && pr.pass ? `<button class="btn btn-secondary" data-a2="react">${esc(stepLabel(STEPS[5], L))}${ic("chevr", 12)}</button>` : ""}</div>`);
       B.appendChild(actions);
       if (hintOpen) B.appendChild(el(`<div class="callout reveal">${ic("bulb")}<span>${esc(L.practice.hint)}</span></div>`));
       B.onclick = (e) => {
@@ -3828,7 +5906,9 @@ function viewLesson(id) {
         if (a2 === "react") setStep("react");
       };
     } else if (step === "react") {
-      B.innerHTML = `${eyebrow("React connection")}<h2>Where you'll use this in React</h2>${L.react}<div class="codeblock">${highlight(L.jsx, "jsx")}</div><p class="soft" style="font-size:13px">This is JSX, the HTML-like syntax React uses. Everything inside <code>{ }</code> is plain JavaScript, the same JavaScript you just practised.</p>${done() ? "" : `<div class="callout">${ic("target")}<span>Pass the <strong>Practice</strong> tests to complete this lesson.</span></div>`}`;
+      const isJsx = /<\/|\/>/.test(L.jsx);
+      const note = isJsx ? "This is JSX, the HTML-like syntax React uses. Everything inside <code>{ }</code> is plain JavaScript, the same JavaScript you just practised." : "Plain JavaScript: the same pattern you just practised, the way it appears in a real project.";
+      B.innerHTML = `${eyebrow(stepLabel(STEPS[5], L))}<h2>${L.track === "dsa" ? "Where you'll use this in real code" : "Where you'll use this in React"}</h2>${L.react}<div class="codeblock">${highlight(L.jsx, "jsx")}</div><p class="soft" style="font-size:13px">${note}</p>${done() ? "" : `<div class="callout">${ic("target")}<span>Pass the <strong>Practice</strong> tests to complete this lesson.</span></div>`}`;
     }
     foot();
   }

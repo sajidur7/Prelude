@@ -1,13 +1,16 @@
 # Prelude
 
-Learn only the JavaScript you need before React.
+Learn the JavaScript you need for React, then the data structures and algorithms you'll actually use.
 
-Prelude is an interactive course in a single page:
+Prelude is an interactive course in a single page, with two tracks:
 
-- **27 lessons in 7 modules**, from variables to immutable state updates. Each lesson has six steps: Understand, See, Experiment, Predict, Practice, React connection.
+- **React foundations: 27 lessons in 7 modules**, from variables to immutable state updates.
+- **DSA with JavaScript: 20 lessons in 6 modules**, at an intermediate level: loops and Big O, two pointers, sliding window, prefix sums, Sets and Maps, stacks and queues, recursion, binary search, sorting, memoization, trees (DFS) and graphs (BFS).
+
+Each lesson has six steps: Understand, See, Experiment, Predict, Practice, and React connection (or Real-world use in the DSA track).
 - **A live editor** (CodeMirror) with a sandboxed runner. Code runs in a Web Worker, never in the page itself. Errors are explained in plain language.
-- **Practice Arena** with 64 challenges: beginner exercises, output prediction, 10 fix-the-bug tasks, real-world data tasks and React prep.
-- **Progress** with concept mastery, weak areas and a React readiness score.
+- **Practice Arena** with 109 challenges: beginner exercises, output prediction, 15 fix-the-bug tasks, real-world data tasks, React prep and DSA. Performance tests check that solutions are actually fast, not just correct.
+- **Progress** with concept mastery, weak areas, and separate React and DSA readiness scores.
 
 Progress is saved in your browser (localStorage).
 
