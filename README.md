@@ -4,7 +4,7 @@ Learn the JavaScript you need for React, then the data structures and algorithms
 
 Prelude is an interactive course in a single page, with two tracks:
 
-- **React foundations: 27 lessons in 7 modules**, from variables to immutable state updates.
+- **JS Foundation: 27 lessons in 7 modules**, from variables to immutable state updates.
 - **DSA with JavaScript: 20 lessons in 6 modules**, at an intermediate level: loops and Big O, two pointers, sliding window, prefix sums, Sets and Maps, stacks and queues, recursion, binary search, sorting, memoization, trees (DFS) and graphs (BFS).
 
 Each lesson has six steps: Understand, See, Experiment, Predict, Practice, and React connection (or Real-world use in the DSA track).
