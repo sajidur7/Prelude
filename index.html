@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Prelude: learn the JavaScript you need for React, then practical DSA with JavaScript. Live editor, instant output, predictions, bug fixes and readiness scores.">
+<meta name="description" content="Prelude: learn the JavaScript you need for React, practical DSA with JavaScript, and the Python you need for AI engineering. Live editor, instant output, predictions, bug fixes and readiness scores.">
 <meta name="theme-color" content="#161616">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232a2a2a'/%3E%3Cpath d='M12 8c-2.2 0-3.3 1.1-3.3 3.2v2.4c0 1.2-.7 2-2.2 2.4 1.5.4 2.2 1.2 2.2 2.4v2.4c0 2.1 1.1 3.2 3.3 3.2M20 8c2.2 0 3.3 1.1 3.3 3.2v2.4c0 1.2.7 2 2.2 2.4-1.5.4-2.2 1.2-2.2 2.4v2.4c0 2.1-1.1 3.2-3.3 3.2' stroke='%23fff' stroke-width='2.2' fill='none' stroke-linecap='round'/%3E%3Ccircle cx='16' cy='16' r='2' fill='%2316c89e'/%3E%3C/svg%3E">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
-<title>Prelude JavaScript</title>
+<title>Prelude: JavaScript, DSA & Python</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap">
@@ -4688,6 +4688,1909 @@ function isBalanced(text) {
   return stack.length === 0;
 }
 </script>
+<script type="text/plain" id="content-py">
+=== lesson p14-variables | Variables, types and print | 6
+--- name
+Set up the model config
+--- understand
+<p>Python is the language of AI engineering: every LLM SDK, RAG library and agent framework in the course is written for it. You already know JavaScript, so most ideas carry over. The syntax is lighter.</p>
+<ul>
+<li>No <code>const</code> or <code>let</code>. Write the name, <code>=</code>, and the value: <code>model = "llama-3.3-70b"</code>.</li>
+<li>Names use <strong>snake_case</strong>: <code>max_tokens</code>, not <code>maxTokens</code>.</li>
+<li>No semicolons. One statement per line.</li>
+<li><code>True</code>, <code>False</code> and <code>None</code> start with a capital letter. <code>None</code> is Python's <code>null</code>.</li>
+<li>Whole numbers are <code>int</code>, decimals are <code>float</code>, text is <code>str</code>. <code>type(x)</code> tells you which.</li>
+</ul>
+<p><code>print()</code> is Python's <code>console.log()</code>. Commas print values with a space between them.</p>
+--- code
+model = "llama-3.3-70b-versatile"
+temperature = 0.7
+max_tokens = 500
+stream = False
+api_key = None
+
+print("Model:", model)
+print(type(temperature), type(max_tokens))
+max_tokens = max_tokens * 2
+print("Max tokens:", max_tokens, "Streaming:", stream)
+--- notes
+1 | A str (string). Python accepts "double" or 'single' quotes; pick one style and stay consistent.
+2 | A float: a number with a decimal point. Temperature controls how random the model's answers are.
+3 | An int: a whole number. snake_case is the Python naming style.
+4 | Booleans are True and False with a capital first letter. lowercase true is an error.
+5 | None means "no value yet", like null in JavaScript.
+8 | type() reports the type. This prints <class 'float'> <class 'int'>.
+9 | Any variable can be reassigned. Python has no const, so name things clearly instead.
+--- try
+Change temperature to 1 and run. What does type() print now?
+Change stream = False to stream = false. Read the error.
+Print api_key. What shows for None?
+--- predict
+tokens = 100
+tokens = tokens + 50
+print(type(tokens), tokens)
+--- options
+<class 'int'> 150 *
+<class 'float'> 150
+int 150
+An error
+--- why
+100 + 50 is still a whole number, so it stays an int. print shows the type as <class 'int'>, then the value.
+--- task
+<p>You're configuring the model for a chatbot.</p>
+<ul>
+<li>Create <code>model</code> set to <code>"llama-3.3-70b-versatile"</code>.</li>
+<li>Create <code>temperature</code> set to <code>0.2</code> (a float).</li>
+<li>Create <code>max_tokens</code> set to <code>300</code>, then increase it by <code>200</code>.</li>
+<li>Create <code>stream</code> set to <code>True</code>.</li>
+<li>Print <code>max_tokens</code> on its own.</li>
+</ul>
+--- starter
+# Write your config below
+
+--- tests
+model is set :: model == "llama-3.3-70b-versatile"
+temperature is the float 0.2 :: temperature == 0.2 and type(temperature) is float
+max_tokens ends at 500 :: max_tokens == 500
+stream is True :: stream is True
+Prints 500 :: "500" in __logs
+--- hint
+Increase it with max_tokens = max_tokens + 200, then print(max_tokens). Booleans need a capital T.
+--- solution
+model = "llama-3.3-70b-versatile"
+temperature = 0.2
+max_tokens = 300
+max_tokens = max_tokens + 200
+stream = True
+print(max_tokens)
+--- react
+<p>Episode 2 of the course starts exactly like this: a few variables for the model name and settings, then one API call that uses them. Keeping settings in clearly named variables makes it easy to tweak temperature or switch models later.</p>
+--- jsx
+MODEL = "llama-3.3-70b-versatile"
+TEMPERATURE = 0.2
+
+response = client.chat.completions.create(
+    model=MODEL,
+    temperature=TEMPERATURE,
+    messages=messages,
+)
+
+=== lesson p14-strings | Strings and f-strings | 8
+--- name
+Build a system prompt
+--- understand
+<p>Prompts are strings, so you'll build text constantly. Python's <strong>f-string</strong> is its template literal: put <code>f</code> before the quotes and drop values in with <code>{ }</code>, with no <code>$</code>.</p>
+<ul>
+<li><code>f"Hello, {name}!"</code> is like JavaScript's <code>`Hello, ${name}!`</code>.</li>
+<li>Triple quotes <code>"""..."""</code> make a <strong>multi-line string</strong>. Perfect for long prompts.</li>
+<li>Useful methods: <code>.strip()</code> trims spaces, <code>.lower()</code> and <code>.upper()</code> change case, <code>.replace(a, b)</code> swaps text.</li>
+<li><code>len(text)</code> counts characters. It's a function, not <code>.length</code>.</li>
+</ul>
+<p><code>+</code> joins two strings, but <code>"Score: " + 5</code> fails: Python won't mix text and numbers. Use an f-string instead.</p>
+--- code
+user_name = "  Shimul "
+topic = "design systems"
+
+clean = user_name.strip()
+print(f"Hi {clean}, let's talk about {topic}.")
+
+prompt = f"""You are a helpful mentor.
+The learner is {clean}.
+Explain {topic.upper()} simply."""
+print(prompt)
+print(len(clean), "characters")
+--- notes
+1 | Text from a form often has extra spaces around it.
+4 | .strip() returns a new string with the spaces removed. The original doesn't change.
+5 | The f before the quotes turns on { } placeholders.
+7 | Triple quotes let one string span several lines, newlines included.
+9 | You can call methods inside { }. This inserts DESIGN SYSTEMS.
+11 | len() works on strings, lists and dicts. Python has no .length.
+--- try
+Remove the f before the quotes on line 5 and run. What prints?
+Try print("Characters: " + len(clean)). Read the error, then fix it with an f-string.
+Replace .upper() with .title() and see the difference.
+--- predict
+word = "  Agent "
+print(f"[{word.strip().lower()}]")
+--- options
+[  agent ]
+[agent] *
+[Agent]
+[  Agent ]
+--- why
+strip() removes the spaces on both sides, giving "Agent". lower() then makes it "agent". The square brackets are plain text inside the f-string.
+--- task
+<p>Write the system prompt for a support bot.</p>
+<ul>
+<li><code>product</code> and <code>tone</code> are given.</li>
+<li>Create <code>system_prompt</code> with an f-string so it equals exactly <code>You are a friendly support assistant for Stashbar.</code></li>
+<li>Create <code>length</code> holding the number of characters in <code>system_prompt</code>.</li>
+<li>Print <code>system_prompt</code>.</li>
+</ul>
+--- starter
+product = "Stashbar"
+tone = "FRIENDLY "
+
+# tone has extra space and capitals: clean it up inside the f-string
+
+--- tests
+system_prompt is exact :: system_prompt == "You are a friendly support assistant for Stashbar."
+length matches :: length == len(system_prompt)
+Prints the prompt :: "You are a friendly support assistant for Stashbar." in __logs
+--- hint
+Inside the braces you can write {tone.strip().lower()}. Then length = len(system_prompt).
+--- solution
+product = "Stashbar"
+tone = "FRIENDLY "
+
+system_prompt = f"You are a {tone.strip().lower()} support assistant for {product}."
+length = len(system_prompt)
+print(system_prompt)
+--- react
+<p>Every LLM call needs a system prompt, and most are built with f-strings: you insert the user's name, retrieved documents (RAG), or the output of a previous step (prompt chaining). Long prompts live in triple-quoted strings.</p>
+--- jsx
+SYSTEM_PROMPT = f"""You are a UX interview coach.
+Ask one question at a time about {topic}.
+Keep answers under {max_words} words."""
+
+messages = [{"role": "system", "content": SYSTEM_PROMPT}]
+
+=== lesson p14-conditions | if, elif and else | 8
+--- name
+Route the request
+--- understand
+<p>Python has no curly braces. A <strong>colon</strong> opens a block, and <strong>indentation</strong> (4 spaces) shows what's inside it. Indentation isn't just style here: it's the syntax.</p>
+<ul>
+<li><code>if</code>, then <code>elif</code> (not <code>else if</code>), then <code>else</code>.</li>
+<li>Comparisons: <code>==</code>, <code>!=</code>, <code>&gt;</code>, <code>&lt;=</code>. There's no <code>===</code>.</li>
+<li>Logic uses words: <code>and</code>, <code>or</code>, <code>not</code> instead of <code>&amp;&amp;</code>, <code>||</code>, <code>!</code>.</li>
+<li><code>in</code> checks if text contains something: <code>"error" in message</code>.</li>
+</ul>
+<p>Empty strings, <code>0</code>, empty lists and <code>None</code> count as false, like in JavaScript.</p>
+--- code
+message = "Can you summarize this PDF?"
+words = len(message.split())
+
+if "summarize" in message.lower():
+    task = "summary"
+elif "translate" in message.lower():
+    task = "translation"
+else:
+    task = "chat"
+
+if words > 3 and task != "chat":
+    print("Routing to", task)
+else:
+    print("Short message, using chat")
+--- notes
+2 | split() breaks text on spaces, giving a list of words. len() counts them: 5.
+4 | The colon ends the condition. The indented lines below belong to this if.
+6 | elif is Python's else if. Only the first true branch runs.
+8 | else catches everything that didn't match above.
+11 | and needs both sides to be true. != means "not equal".
+--- try
+Change the message to "Please translate this". What prints?
+Remove the colon at the end of line 4. Read the error.
+Unindent line 5 so it starts at the left edge. What happens?
+--- predict
+score = 0.65
+if score >= 0.8:
+    print("high")
+elif score >= 0.5:
+    print("medium")
+else:
+    print("low")
+--- options
+high
+medium *
+low
+medium, then low
+--- why
+0.65 isn't >= 0.8, so the first branch is skipped. It is >= 0.5, so "medium" prints and the rest of the chain is skipped.
+--- task
+<p>Pick a model based on the request.</p>
+<ul>
+<li>If <code>prompt</code> contains <code>"code"</code> (any case), set <code>model</code> to <code>"coder"</code>.</li>
+<li>Otherwise, if the prompt has more than 20 words, set <code>model</code> to <code>"large"</code>.</li>
+<li>Otherwise set <code>model</code> to <code>"small"</code>.</li>
+<li>Print <code>model</code>.</li>
+</ul>
+--- starter
+prompt = "Write Python code that sorts a list"
+
+# Choose the model below
+
+--- tests
+Picks coder for this prompt :: model == "coder"
+Prints the choice :: "coder" in __logs
+Uses elif and else :: "elif" in __code and "else" in __code
+--- hint
+Check "code" in prompt.lower() first, then elif len(prompt.split()) > 20, then else.
+--- solution
+prompt = "Write Python code that sorts a list"
+
+if "code" in prompt.lower():
+    model = "coder"
+elif len(prompt.split()) > 20:
+    model = "large"
+else:
+    model = "small"
+print(model)
+--- react
+<p>Routing is everywhere in AI apps: pick a cheaper model for short questions, send code questions to a coding model, or decide whether an agent should call a tool. In LangGraph (week 4 of the course), a routing function like this decides which node runs next.</p>
+--- jsx
+def route(state):
+    if state["needs_search"]:
+        return "search_tool"
+    elif state["is_done"]:
+        return "end"
+    else:
+        return "llm"
+
+=== lesson p14-functions | Functions with def | 9
+--- name
+Write a prompt builder
+--- understand
+<p>A function is <code>def name(params):</code> followed by an indented body. <code>return</code> sends a value back. Without <code>return</code>, a function gives back <code>None</code>.</p>
+<ul>
+<li><strong>Default values</strong>: <code>def ask(question, temperature=0.7):</code> makes temperature optional.</li>
+<li><strong>Keyword arguments</strong>: call with names, <code>ask("Hi", temperature=0)</code>. Order doesn't matter, and it reads clearly. LLM SDKs use this style everywhere.</li>
+<li><strong>Type hints</strong>: <code>def ask(question: str) -&gt; str:</code> documents what goes in and out. Python doesn't enforce them, but editors and Pydantic use them.</li>
+</ul>
+--- code
+def build_prompt(topic: str, level: str = "beginner", max_words: int = 50) -> str:
+    return f"Explain {topic} to a {level} in under {max_words} words."
+
+print(build_prompt("embeddings"))
+print(build_prompt("RAG", level="designer"))
+print(build_prompt(max_words=20, topic="tokens"))
+
+def log_call(name):
+    print("Calling", name)
+
+result = log_call("groq")
+print(result)
+--- notes
+1 | Two parameters have defaults, so only topic is required. -> str says it returns a string.
+2 | The indented body. return hands the finished string back to whoever called it.
+4 | Only topic is passed, so level and max_words use their defaults.
+5 | A keyword argument overrides one default by name.
+6 | With keywords, the order doesn't matter.
+8 | This function prints but has no return statement.
+11 | So result is None. Printing inside a function is not the same as returning.
+--- try
+Call build_prompt() with no arguments. Read the error.
+Add level="expert" to line 4.
+Change line 9 to return "Calling " + name and run again. What does line 12 print now?
+--- predict
+def double(x):
+    x * 2
+
+print(double(4))
+--- options
+8
+None *
+x * 2
+An error
+--- why
+The function calculates x * 2 but never returns it, so the call gives back None. This is one of the most common Python bugs.
+--- task
+<p>Write the helper that builds a chat message.</p>
+<ul>
+<li>Define <code>make_message(content, role="user")</code>.</li>
+<li>It returns a string in the form <code>user: Hello</code> (role, colon, space, content).</li>
+<li>Store <code>make_message("Hello")</code> in <code>first</code>.</li>
+<li>Store <code>make_message("Hi! How can I help?", role="assistant")</code> in <code>second</code>.</li>
+</ul>
+--- starter
+# Define make_message below
+
+
+--- tests
+make_message exists :: callable(make_message)
+Default role is user :: make_message("Hello") == "user: Hello"
+Role can be changed :: make_message("x", role="system") == "system: x"
+first is correct :: first == "user: Hello"
+second is correct :: second == "assistant: Hi! How can I help?"
+--- hint
+def make_message(content, role="user"): then return f"{role}: {content}".
+--- solution
+def make_message(content, role="user"):
+    return f"{role}: {content}"
+
+first = make_message("Hello")
+second = make_message("Hi! How can I help?", role="assistant")
+print(first)
+print(second)
+--- react
+<p>The course wraps every step in a function: one to call the LLM, one to embed text, one per agent tool. Keyword arguments with defaults are how SDKs stay flexible: <code>create(model=..., messages=..., temperature=...)</code> is one function call with keyword arguments.</p>
+--- jsx
+def ask_llm(question: str, system: str = "You are helpful.", temperature: float = 0.7) -> str:
+    response = client.chat.completions.create(
+        model="llama-3.3-70b-versatile",
+        messages=[
+            {"role": "system", "content": system},
+            {"role": "user", "content": question},
+        ],
+        temperature=temperature,
+    )
+    return response.choices[0].message.content
+
+=== lesson p15-lists | Lists | 7
+--- name
+Trim the chat history
+--- understand
+<p>A <strong>list</strong> is Python's array: <code>["a", "b", "c"]</code>. Indexes start at 0.</p>
+<ul>
+<li><code>items.append(x)</code> adds to the end. It's <code>append</code>, not <code>push</code>.</li>
+<li><strong>Negative indexes</strong> count from the end: <code>items[-1]</code> is the last item.</li>
+<li><strong>Slicing</strong> copies part of a list: <code>items[1:3]</code> takes index 1 up to (not including) 3. <code>items[-3:]</code> takes the last three.</li>
+<li><code>len(items)</code> counts items. <code>x in items</code> checks membership.</li>
+</ul>
+--- code
+history = ["Hi", "Hello! How can I help?", "What is RAG?"]
+
+history.append("RAG means retrieval-augmented generation.")
+print(len(history), "messages")
+print("First:", history[0])
+print("Last:", history[-1])
+
+recent = history[-2:]
+print(recent)
+print("Hi" in history)
+--- notes
+1 | A list of strings. Square brackets, commas between items.
+3 | append adds one item to the end and changes the list in place.
+6 | -1 is the last item, -2 the one before it. No need for len(history) - 1.
+8 | A slice: from the second-last item to the end. It's a new list; history is unchanged.
+10 | in returns True or False.
+--- try
+Print history[1:3]. Which messages do you get?
+Try history.push("x"). Read the error.
+Print history[10]. What error do you get?
+--- predict
+steps = ["plan", "search", "answer", "review"]
+print(steps[1:3])
+--- options
+['search', 'answer'] *
+['plan', 'search', 'answer']
+['search', 'answer', 'review']
+search answer
+--- why
+A slice starts at index 1 ("search") and stops before index 3, so it includes indexes 1 and 2. Lists print with square brackets and quotes.
+--- task
+<p>LLMs have a context limit, so chatbots keep only recent history.</p>
+<ul>
+<li>Add the message <code>"Thanks!"</code> to the end of <code>history</code>.</li>
+<li>Create <code>recent</code> holding the <strong>last 3</strong> messages (use a slice).</li>
+<li>Create <code>count</code> holding how many messages <code>history</code> has.</li>
+</ul>
+--- starter
+history = ["Hi", "Hello!", "What's an embedding?", "A list of numbers that captures meaning."]
+
+# Your code below
+
+--- tests
+Thanks! was appended :: history[-1] == "Thanks!"
+recent is the last 3 :: recent == ["What's an embedding?", "A list of numbers that captures meaning.", "Thanks!"]
+count is 5 :: count == 5
+Used a slice :: "[-3:]" in __code
+--- hint
+history.append("Thanks!"), then recent = history[-3:] and count = len(history).
+--- solution
+history = ["Hi", "Hello!", "What's an embedding?", "A list of numbers that captures meaning."]
+
+history.append("Thanks!")
+recent = history[-3:]
+count = len(history)
+print(recent, count)
+--- react
+<p>Chat memory is a list that grows with every turn. Before each call you often trim it with a slice like <code>messages[-10:]</code> so you stay under the model's token limit. Search results from a vector database also come back as lists.</p>
+--- jsx
+messages.append({"role": "user", "content": question})
+response = client.chat.completions.create(model=MODEL, messages=messages[-10:])
+messages.append({"role": "assistant", "content": response.choices[0].message.content})
+
+=== lesson p15-loops | for loops, range and enumerate | 8
+--- name
+Estimate the tokens
+--- understand
+<p>Python's <code>for</code> loop goes straight through the items: <code>for word in words:</code>. No index bookkeeping, no <code>i++</code>.</p>
+<ul>
+<li><code>range(5)</code> gives 0, 1, 2, 3, 4. <code>range(1, 4)</code> gives 1, 2, 3.</li>
+<li><code>enumerate(items)</code> gives you the index and the item together: <code>for i, item in enumerate(items):</code>.</li>
+<li>A common pattern: start a total at 0 <strong>before</strong> the loop, add to it <strong>inside</strong> the loop, use it <strong>after</strong>. Indentation decides which lines are inside.</li>
+<li><code>break</code> stops the loop early. <code>while condition:</code> loops until the condition is false.</li>
+</ul>
+--- code
+chunks = ["Embeddings turn text", "into lists of numbers", "that capture meaning"]
+
+total_words = 0
+for chunk in chunks:
+    total_words = total_words + len(chunk.split())
+print("Words:", total_words)
+
+for i, chunk in enumerate(chunks):
+    print(i + 1, chunk)
+
+for n in range(3):
+    print("Retry", n)
+--- notes
+3 | The total starts before the loop, so it isn't reset each time.
+4 | chunk takes each string in turn. The colon opens the loop body.
+5 | Indented, so it runs once per chunk. += also works: total_words += ...
+6 | Not indented, so it runs once, after the loop finishes.
+8 | enumerate pairs each item with its index (0, 1, 2).
+11 | range(3) counts 0, 1, 2. Handy for retrying a failed API call a few times.
+--- try
+Indent line 6 so it's inside the loop. How many lines print now?
+Change range(3) to range(1, 4).
+Add if i == 1: break inside the enumerate loop.
+--- predict
+total = 0
+for n in [2, 4, 6]:
+    total += n
+    print(total)
+--- options
+12
+2, then 6, then 12 *
+2, then 4, then 6
+6
+--- why
+print is indented, so it runs inside the loop after each addition: 2, then 2 + 4 = 6, then 6 + 6 = 12.
+--- task
+<p>Estimate the size of a conversation before sending it.</p>
+<ul>
+<li>Loop over <code>messages</code> and add up the number of words in all of them into <code>total_words</code>.</li>
+<li>Then set <code>estimated_tokens</code> to <code>total_words * 4 // 3</code> (about 4 tokens per 3 words; <code>//</code> divides and rounds down).</li>
+<li>Print <code>estimated_tokens</code> once, after the loop.</li>
+</ul>
+--- starter
+messages = [
+    "You are a concise assistant",
+    "What is a vector database",
+    "A database that searches by meaning",
+]
+
+# Your loop below
+
+--- tests
+total_words is 16 :: total_words == 16
+estimated_tokens is 21 :: estimated_tokens == 21
+Prints exactly once :: __logs == ["21"]
+Uses a for loop :: "for " in __code
+--- hint
+Start total_words = 0 before the loop, add len(message.split()) inside it, and print after it (no indentation).
+--- solution
+messages = [
+    "You are a concise assistant",
+    "What is a vector database",
+    "A database that searches by meaning",
+]
+
+total_words = 0
+for message in messages:
+    total_words += len(message.split())
+estimated_tokens = total_words * 4 // 3
+print(estimated_tokens)
+--- react
+<p>You'll loop over everything: documents to embed, search results to format, streamed chunks to print. Tokens matter because they decide cost and whether a prompt fits the context window (episode 4 of the course).</p>
+--- jsx
+for doc in documents:
+    vector = embed(doc["text"])
+    client.upsert(collection_name="notes", points=[{"id": doc["id"], "vector": vector}])
+
+=== lesson p15-dicts | Dictionaries | 9
+--- name
+Shape an API message
+--- understand
+<p>A <strong>dict</strong> is Python's object: keys and values in curly braces. Keys are usually strings, <strong>in quotes</strong>: <code>{"role": "user", "content": "Hi"}</code>.</p>
+<ul>
+<li>Read with square brackets: <code>message["role"]</code>. <strong>Dot access doesn't work</strong> on dicts: <code>message.role</code> is an error.</li>
+<li>A missing key with <code>[ ]</code> raises <code>KeyError</code>. <code>.get("key", default)</code> returns the default instead.</li>
+<li>Add or change: <code>message["name"] = "Shimul"</code>.</li>
+<li><code>"role" in message</code> checks for a key. <code>.items()</code> loops over key and value pairs.</li>
+</ul>
+--- code
+message = {"role": "user", "content": "Explain tokens"}
+
+print(message["role"])
+message["content"] = "Explain tokens simply"
+message["name"] = "Shimul"
+
+print(message.get("temperature", 0.7))
+print("name" in message)
+
+for key, value in message.items():
+    print(key, "->", value)
+--- notes
+1 | Every message you send to an LLM has exactly this shape: a role and the content.
+3 | Square brackets with the key in quotes. This is the only way to read a dict value.
+4 | Assigning to an existing key replaces its value.
+5 | Assigning to a new key adds it.
+7 | No temperature key, so .get returns the default 0.7 instead of crashing.
+10 | .items() gives (key, value) pairs, unpacked into two loop variables.
+--- try
+Change line 3 to print(message.role). Read the error.
+Try print(message["temperature"]). Which error is it?
+Delete a key with del message["name"] and print the dict.
+--- predict
+config = {"model": "llama", "temperature": 0}
+print(config.get("max_tokens", 256), config["temperature"])
+--- options
+None 0
+256 0 *
+KeyError
+256 False
+--- why
+max_tokens isn't a key, so .get returns its default 256. temperature exists and holds 0.
+--- task
+<p>Build the request body for a chat call.</p>
+<ul>
+<li>Create <code>user_message</code>: a dict with <code>"role"</code> set to <code>"user"</code> and <code>"content"</code> set to <code>question</code>.</li>
+<li>Read <code>reply_text</code> from <code>response</code> (it's under the <code>"content"</code> key).</li>
+<li>Read <code>tokens</code> from <code>response</code> with <code>.get</code>, defaulting to <code>0</code> because the key may be missing.</li>
+</ul>
+--- starter
+question = "What is MCP?"
+response = {"role": "assistant", "content": "A standard way to connect tools to AI apps."}
+
+# Your code below
+
+--- tests
+user_message has the right shape :: user_message == {"role": "user", "content": "What is MCP?"}
+reply_text is read :: reply_text == "A standard way to connect tools to AI apps."
+tokens defaults to 0 :: tokens == 0
+Used .get :: ".get(" in __code
+--- hint
+user_message = {"role": "user", "content": question}. Then response["content"] and response.get("tokens", 0).
+--- solution
+question = "What is MCP?"
+response = {"role": "assistant", "content": "A standard way to connect tools to AI apps."}
+
+user_message = {"role": "user", "content": question}
+reply_text = response["content"]
+tokens = response.get("tokens", 0)
+print(user_message, reply_text, tokens)
+--- react
+<p>Dicts are the shape of almost everything in AI engineering: chat messages, JSON from APIs, Qdrant payloads, LangGraph state, tool arguments. Coming from JavaScript, the biggest habit to break is dot access: use <code>message["content"]</code>.</p>
+--- jsx
+state = {"question": question, "documents": [], "answer": None}
+
+def retrieve(state):
+    docs = search(state["question"])
+    return {"documents": docs}
+
+=== lesson p15-nested | Lists of dicts and comprehensions | 10
+--- name
+Filter the conversation
+--- understand
+<p>A conversation is a <strong>list of dicts</strong>. You'll loop over it, filter it and pull values out of it all the time.</p>
+<p>A <strong>list comprehension</strong> builds a new list in one line. It's Python's <code>map</code> and <code>filter</code> combined:</p>
+<ul>
+<li><code>[m["content"] for m in messages]</code> takes the content of every message (like <code>map</code>).</li>
+<li><code>[m for m in messages if m["role"] == "user"]</code> keeps only user messages (like <code>filter</code>).</li>
+<li>Read it as: "give me <em>this</em>, for each item, if <em>condition</em>".</li>
+</ul>
+--- code
+messages = [
+    {"role": "system", "content": "You are concise."},
+    {"role": "user", "content": "What is RAG?"},
+    {"role": "assistant", "content": "Search, then answer."},
+    {"role": "user", "content": "Why use it?"},
+]
+
+print(messages[1]["content"])
+
+user_texts = [m["content"] for m in messages if m["role"] == "user"]
+print(user_texts)
+
+roles = [m["role"] for m in messages]
+print(len(roles), roles.count("user"))
+--- notes
+1 | A list whose items are dicts. Trailing commas are fine and make editing easier.
+8 | First index into the list, then into the dict: [1] picks the message, ["content"] picks its text.
+10 | Comprehension: the content, for each message, only if its role is "user".
+13 | Without an if, it transforms every item: a list of the four roles.
+14 | .count(x) counts how many times x appears in a list.
+--- try
+Change the comprehension to collect assistant messages instead.
+Make a list of each message's length: [len(m["content"]) for m in messages].
+Print messages[-1]["role"].
+--- predict
+scores = [0.91, 0.42, 0.77, 0.30]
+print([s for s in scores if s > 0.5])
+--- options
+[0.91, 0.77] *
+[True, False, True, False]
+[0.42, 0.3]
+0.91 0.77
+--- why
+The comprehension keeps a score only when s > 0.5, so 0.91 and 0.77 remain, in their original order.
+--- task
+<p>These are search results from a vector database. Keep only the useful ones.</p>
+<ul>
+<li>Create <code>relevant</code>: the results whose <code>"score"</code> is <strong>0.7 or higher</strong>.</li>
+<li>Create <code>texts</code>: just the <code>"text"</code> of each relevant result.</li>
+<li>Create <code>context</code>: the texts joined with a newline, using <code>"\n".join(texts)</code>.</li>
+</ul>
+--- starter
+results = [
+    {"text": "Chunk about tokens", "score": 0.82},
+    {"text": "Chunk about pricing", "score": 0.41},
+    {"text": "Chunk about context windows", "score": 0.74},
+    {"text": "Chunk about logos", "score": 0.12},
+]
+
+# Your code below
+
+--- tests
+relevant keeps 2 results :: len(relevant) == 2 and all(r["score"] >= 0.7 for r in relevant)
+texts are in order :: texts == ["Chunk about tokens", "Chunk about context windows"]
+context is joined by newlines :: context == "Chunk about tokens\nChunk about context windows"
+Used a comprehension :: " for " in __code and "[" in __code
+--- hint
+relevant = [r for r in results if r["score"] >= 0.7], then texts = [r["text"] for r in relevant].
+--- solution
+results = [
+    {"text": "Chunk about tokens", "score": 0.82},
+    {"text": "Chunk about pricing", "score": 0.41},
+    {"text": "Chunk about context windows", "score": 0.74},
+    {"text": "Chunk about logos", "score": 0.12},
+]
+
+relevant = [r for r in results if r["score"] >= 0.7]
+texts = [r["text"] for r in relevant]
+context = "\n".join(texts)
+print(context)
+--- react
+<p>This is the heart of RAG: search returns scored results, you keep the good ones, and you join their text into a context block for the prompt. Comprehensions make each step one readable line.</p>
+--- jsx
+hits = qdrant.query_points(collection_name="docs", query=vector, limit=5).points
+context = "\n\n".join(hit.payload["text"] for hit in hits if hit.score > 0.7)
+prompt = f"Answer using only this context:\n{context}\n\nQuestion: {question}"
+
+=== lesson p16-json | JSON: text in, data out | 8
+--- name
+Parse the model's JSON
+--- understand
+<p>APIs and LLMs send <strong>JSON as text</strong>. The built-in <code>json</code> module converts between that text and Python data.</p>
+<ul>
+<li><code>import json</code> at the top of the file.</li>
+<li><code>json.loads(text)</code>: JSON text → Python dict or list. ("load string")</li>
+<li><code>json.dumps(data)</code>: Python data → JSON text. Add <code>indent=2</code> for readable output.</li>
+<li>JSON's <code>true</code>, <code>false</code> and <code>null</code> become Python's <code>True</code>, <code>False</code> and <code>None</code>.</li>
+</ul>
+<p>When you ask an LLM to "reply in JSON", you get a <strong>string</strong> back. Until you <code>loads</code> it, you can't read its fields.</p>
+--- code
+import json
+
+raw = '{"sentiment": "positive", "score": 0.92, "flagged": false}'
+print(type(raw))
+
+data = json.loads(raw)
+print(type(data), data["sentiment"], data["flagged"])
+
+data["reviewed"] = True
+print(json.dumps(data))
+--- notes
+1 | json comes with Python. Imports go at the top of the file.
+3 | Single quotes outside, so the double quotes JSON needs fit inside. This is just text.
+4 | Prints <class 'str'>: you can't do raw["score"] yet.
+6 | loads parses the text into a real dict.
+7 | JSON false became Python False.
+10 | dumps turns it back into JSON text, with true written in lowercase again.
+--- try
+Try print(raw["score"]) before line 6. Read the error.
+Add indent=2 to json.dumps.
+Remove the closing } from raw and run. What error appears?
+--- predict
+import json
+data = json.loads('{"done": true, "items": []}')
+print(data["done"], len(data["items"]))
+--- options
+true 0
+True 0 *
+True []
+An error
+--- why
+loads converts JSON true to Python True, and the empty JSON array becomes an empty list, whose length is 0.
+--- task
+<p>The model was asked to return JSON. Turn its reply into usable data.</p>
+<ul>
+<li>Parse <code>reply</code> into <code>result</code>.</li>
+<li>Create <code>title</code> from <code>result["title"]</code> and <code>tag_count</code> from the number of tags.</li>
+<li>Add a key <code>"approved"</code> set to <code>True</code> to <code>result</code>.</li>
+<li>Create <code>output</code>: <code>result</code> converted back to a JSON string.</li>
+</ul>
+--- starter
+import json
+
+reply = '{"title": "Onboarding checklist", "tags": ["ux", "saas", "b2b"]}'
+
+# Your code below
+
+--- tests
+result is a dict :: isinstance(result, dict)
+title is read :: title == "Onboarding checklist"
+tag_count is 3 :: tag_count == 3
+output is JSON text :: isinstance(output, str) and json.loads(output)["approved"] is True
+--- hint
+result = json.loads(reply), tag_count = len(result["tags"]), then output = json.dumps(result).
+--- solution
+import json
+
+reply = '{"title": "Onboarding checklist", "tags": ["ux", "saas", "b2b"]}'
+
+result = json.loads(reply)
+title = result["title"]
+tag_count = len(result["tags"])
+result["approved"] = True
+output = json.dumps(result)
+print(output)
+--- react
+<p>Structured output (episode 5) is how you get data instead of prose from an LLM: you ask for JSON, then parse it. Tool calls in agents also arrive as JSON strings you <code>loads</code> before calling your function.</p>
+--- jsx
+response = client.chat.completions.create(
+    model=MODEL,
+    messages=messages,
+    response_format={"type": "json_object"},
+)
+data = json.loads(response.choices[0].message.content)
+
+=== lesson p16-errors | Handling errors with try and except | 9
+--- name
+Parse safely
+--- understand
+<p>Real AI apps fail all the time: the network drops, the model returns broken JSON, a key is missing. <code>try</code> / <code>except</code> catches the error so your app can recover.</p>
+<ul>
+<li>Code in <code>try:</code> runs normally. If it raises an error, Python jumps to the matching <code>except</code>.</li>
+<li>Catch <strong>specific</strong> errors: <code>except KeyError:</code>, <code>except json.JSONDecodeError:</code>. A bare <code>except:</code> hides bugs.</li>
+<li><code>except ValueError as e:</code> gives you the error object, so you can print its message.</li>
+<li><code>raise ValueError("message")</code> throws your own error.</li>
+</ul>
+--- code
+import json
+
+def parse_reply(text):
+    try:
+        return json.loads(text)
+    except json.JSONDecodeError as e:
+        print("Bad JSON:", e.msg)
+        return {"error": "invalid_json"}
+
+print(parse_reply('{"ok": true}'))
+print(parse_reply("Sure! Here is your JSON: {ok}"))
+
+try:
+    temperature = float("hot")
+except ValueError:
+    temperature = 0.7
+print("Temperature:", temperature)
+--- notes
+4 | Everything indented under try is protected.
+5 | If loads succeeds, the function returns here and except is skipped.
+6 | Only a JSON parsing error is caught here. e holds details about it.
+8 | Return a safe fallback instead of crashing the whole app.
+11 | LLMs often add chatty text around JSON. This is exactly the failure you'll see.
+14 | float("hot") raises ValueError, so the except branch sets a default.
+--- try
+Change "hot" to "0.2". Which branch runs now?
+Change except ValueError to except KeyError. What happens?
+Add raise ValueError("temperature too high") inside the try.
+--- predict
+try:
+    data = {"a": 1}
+    print(data["b"])
+except KeyError:
+    print("missing")
+--- options
+None
+missing *
+KeyError: 'b'
+1
+--- why
+data["b"] raises KeyError because "b" isn't a key. The except KeyError branch catches it and prints "missing".
+--- task
+<p>Write <code>safe_score(text)</code> for model replies that should contain a number.</p>
+<ul>
+<li>Try to convert <code>text</code> with <code>float(text)</code> and return it.</li>
+<li>If that raises <code>ValueError</code>, return <code>0.0</code>.</li>
+<li>If the number is above 1, <code>raise ValueError("score must be 0 to 1")</code>. Do this check <strong>after</strong> the conversion, outside the try.</li>
+</ul>
+--- starter
+def safe_score(text):
+    # Your code here
+    pass
+
+print(safe_score("0.85"))
+print(safe_score("about half"))
+--- tests
+Converts valid numbers :: safe_score("0.85") == 0.85
+Falls back to 0.0 :: safe_score("about half") == 0.0
+Rejects scores above 1 :: __raises(ValueError, safe_score, "5")
+Uses try and except :: "try:" in __code and "except ValueError" in __code
+--- hint
+Inside try: score = float(text). In except ValueError: return 0.0. After the try block: if score > 1: raise ValueError(...), then return score.
+--- solution
+def safe_score(text):
+    try:
+        score = float(text)
+    except ValueError:
+        return 0.0
+    if score > 1:
+        raise ValueError("score must be 0 to 1")
+    return score
+
+print(safe_score("0.85"))
+print(safe_score("about half"))
+--- react
+<p>Every API call in production sits inside a <code>try</code>. Episode 5 of the course validates JSON from the model; agents catch tool errors and feed the message back to the LLM so it can try again.</p>
+--- jsx
+for attempt in range(3):
+    try:
+        response = client.chat.completions.create(model=MODEL, messages=messages)
+        break
+    except groq.RateLimitError:
+        time.sleep(2 ** attempt)
+
+=== lesson p16-classes | Classes and objects | 10
+--- name
+Build chat memory
+--- understand
+<p>A <strong>class</strong> bundles data and the functions that work on it. You'll mostly <em>use</em> classes from libraries (<code>Groq()</code>, <code>QdrantClient()</code>), and sometimes write small ones.</p>
+<ul>
+<li><code>class ChatMemory:</code> defines it. Calling <code>ChatMemory()</code> creates an <strong>object</strong> (an instance).</li>
+<li><code>__init__</code> runs when the object is created. It sets up the object's data.</li>
+<li><code>self</code> is the object itself, like <code>this</code> in JavaScript. Every method takes it as the first parameter, but you don't pass it when calling.</li>
+<li>Objects use <strong>dot access</strong>: <code>memory.messages</code>, <code>memory.add(...)</code>. Dicts use brackets; objects use dots.</li>
+</ul>
+--- code
+class ChatMemory:
+    def __init__(self, system_prompt):
+        self.messages = [{"role": "system", "content": system_prompt}]
+
+    def add(self, role, content):
+        self.messages.append({"role": role, "content": content})
+
+    def count(self):
+        return len(self.messages)
+
+memory = ChatMemory("You are a UX coach.")
+memory.add("user", "How do I run a usability test?")
+print(memory.count())
+print(memory.messages[-1]["content"])
+--- notes
+1 | The class name uses CapitalizedWords, unlike variables.
+2 | __init__ (two underscores each side) runs once, when ChatMemory(...) is called.
+3 | self.messages stores data on this particular object.
+5 | A method: a function that belongs to the class. self comes first.
+11 | Creating an object. "You are a UX coach." goes to system_prompt; self is passed automatically.
+12 | Calling a method with dot access. You pass only role and content.
+14 | Object attribute with a dot, then a list index, then a dict key.
+--- try
+Create a second ChatMemory and add a message to it. Does the first one change?
+Add a method last(self) that returns self.messages[-1]["content"].
+Remove self from def count(self). Read the error when it's called.
+--- predict
+class Counter:
+    def __init__(self):
+        self.value = 0
+    def bump(self):
+        self.value += 1
+
+c = Counter()
+c.bump()
+c.bump()
+print(c.value)
+--- options
+0
+1
+2 *
+An error
+--- why
+__init__ sets value to 0. Each bump() adds 1 to that same object's value, so after two calls it's 2.
+--- task
+<p>Finish the <code>Conversation</code> class.</p>
+<ul>
+<li><code>__init__</code> takes <code>model</code> and stores it as <code>self.model</code>, and starts <code>self.messages</code> as an empty list.</li>
+<li><code>ask(self, question)</code> appends <code>{"role": "user", "content": question}</code> to <code>self.messages</code>.</li>
+<li><code>user_questions(self)</code> returns a list of the content of every user message.</li>
+<li>Create <code>chat = Conversation("llama-3.3-70b")</code> and ask it two questions.</li>
+</ul>
+--- starter
+class Conversation:
+    def __init__(self, model):
+        pass
+
+    # Add ask and user_questions here
+
+
+# Create chat and ask two questions
+
+--- tests
+Stores the model :: chat.model == "llama-3.3-70b"
+Two questions were asked :: len(chat.messages) == 2 and all(m["role"] == "user" for m in chat.messages)
+user_questions returns the texts :: chat.user_questions() == [m["content"] for m in chat.messages]
+New objects start empty :: Conversation("x").messages == []
+--- hint
+In __init__: self.model = model and self.messages = []. user_questions can return [m["content"] for m in self.messages if m["role"] == "user"].
+--- solution
+class Conversation:
+    def __init__(self, model):
+        self.model = model
+        self.messages = []
+
+    def ask(self, question):
+        self.messages.append({"role": "user", "content": question})
+
+    def user_questions(self):
+        return [m["content"] for m in self.messages if m["role"] == "user"]
+
+
+chat = Conversation("llama-3.3-70b")
+chat.ask("What is RAG?")
+chat.ask("What is an agent?")
+print(chat.user_questions())
+--- react
+<p>SDK responses are objects, which is why you write <code>response.choices[0].message.content</code> with dots. LangGraph, Pydantic models and MCP servers are all built from classes, so reading <code>self</code> and <code>__init__</code> comfortably matters even if you rarely write big classes.</p>
+--- jsx
+from groq import Groq
+
+client = Groq()                     # create an object
+response = client.chat.completions.create(model=MODEL, messages=messages)
+print(response.choices[0].message.content)   # dots: it's an object, not a dict
+
+=== lesson p16-pydantic | Pydantic models | 10
+--- name
+Validate structured output
+--- understand
+<p><strong>Pydantic</strong> turns a class with type hints into a validator. It's how the course (episode 5) guarantees that the model's JSON has the right fields and types.</p>
+<ul>
+<li><code>from pydantic import BaseModel</code>, then <code>class Review(BaseModel):</code> with one line per field: <code>score: float</code>.</li>
+<li><code>Review.model_validate_json(text)</code> parses JSON text <strong>and</strong> checks it. Wrong or missing fields raise <code>ValidationError</code>.</li>
+<li>Pydantic converts when it safely can: <code>"0.8"</code> becomes the float <code>0.8</code>.</li>
+<li>Read fields with dots: <code>review.score</code>. <code>review.model_dump()</code> turns it back into a dict.</li>
+</ul>
+<p>The first run in a lesson that uses Pydantic downloads it, so allow a few extra seconds.</p>
+--- code
+from pydantic import BaseModel, ValidationError
+
+class Review(BaseModel):
+    summary: str
+    score: float
+    tags: list[str] = []
+
+good = Review.model_validate_json('{"summary": "Clear flow", "score": "0.8"}')
+print(good.summary, good.score, good.tags)
+print(good.model_dump())
+
+try:
+    Review.model_validate_json('{"summary": "Missing score"}')
+except ValidationError as e:
+    print("Invalid:", e.error_count(), "error")
+--- notes
+1 | Pydantic is a package, installed with uv add pydantic in a real project. It's available here.
+3 | Inheriting from BaseModel gives the class its validation powers.
+4 | Each field is name: type. These two are required.
+6 | A default value makes the field optional. list[str] means a list of strings.
+8 | Parses and validates in one step. Note "0.8" is text in the JSON.
+9 | score is now the float 0.8, and tags got its default.
+13 | score is missing, so validation fails instead of letting bad data through.
+--- try
+Change "0.8" to "high" and run. Read the validation message.
+Add a field approved: bool = False and print it.
+Print good.model_dump_json().
+--- predict
+from pydantic import BaseModel
+
+class Task(BaseModel):
+    title: str
+    done: bool = False
+
+t = Task(title="Wireframe")
+print(t.title, t.done)
+--- options
+Wireframe False *
+Wireframe None
+title done
+An error: done is missing
+--- why
+done has a default of False, so it isn't required. Creating Task with only a title is valid.
+--- task
+<p>Validate the model's sentiment output.</p>
+<ul>
+<li>Define <code>Sentiment</code> with fields <code>label</code> (str), <code>confidence</code> (float) and <code>reasons</code> (list of str, default empty list).</li>
+<li>Create <code>result</code> by validating <code>reply</code> with <code>Sentiment.model_validate_json</code>.</li>
+<li>Set <code>is_confident</code> to <code>True</code> if <code>result.confidence</code> is 0.75 or more, otherwise <code>False</code>.</li>
+</ul>
+--- starter
+from pydantic import BaseModel
+
+reply = '{"label": "positive", "confidence": 0.86, "reasons": ["fast", "clear"]}'
+
+# Define Sentiment, then validate reply
+
+--- tests
+Sentiment is a Pydantic model :: issubclass(Sentiment, __import__("pydantic").BaseModel)
+result is a Sentiment :: isinstance(result, Sentiment) and result.label == "positive"
+reasons default to empty :: Sentiment(label="x", confidence=0.1).reasons == []
+is_confident is True :: is_confident is True
+--- hint
+class Sentiment(BaseModel): then label: str, confidence: float, reasons: list[str] = []. is_confident = result.confidence >= 0.75.
+--- solution
+from pydantic import BaseModel
+
+reply = '{"label": "positive", "confidence": 0.86, "reasons": ["fast", "clear"]}'
+
+class Sentiment(BaseModel):
+    label: str
+    confidence: float
+    reasons: list[str] = []
+
+result = Sentiment.model_validate_json(reply)
+is_confident = result.confidence >= 0.75
+print(result.label, is_confident)
+--- react
+<p>In the course you'll pair Pydantic with the LLM: describe the model in the prompt (or pass it to the SDK), then validate the reply. FastAPI request bodies, agent tool arguments and LangGraph state can all be Pydantic models too.</p>
+--- jsx
+class Ticket(BaseModel):
+    category: str
+    priority: int
+    summary: str
+
+raw = ask_llm(f"Classify this ticket as JSON with category, priority, summary: {text}")
+ticket = Ticket.model_validate_json(raw)
+
+=== lesson p17-imports | Imports, packages and API keys | 8
+--- name
+Load the API key
+--- understand
+<p>Real projects split code into files and install packages. Three import styles:</p>
+<ul>
+<li><code>import json</code>: use it as <code>json.loads(...)</code>.</li>
+<li><code>from groq import Groq</code>: bring in one name, use it directly.</li>
+<li><code>import numpy as np</code>: a shorter alias.</li>
+</ul>
+<p>Packages are installed with <strong>uv</strong> (the course's tool): <code>uv add groq python-dotenv</code>. In this playground, <code>groq</code> and <code>dotenv</code> are practice versions that work offline.</p>
+<p><strong>API keys never go in code.</strong> They live in a <code>.env</code> file (listed in <code>.gitignore</code> so it never reaches GitHub). <code>load_dotenv()</code> reads that file into environment variables, and <code>os.getenv("NAME")</code> reads one. The playground pretends your <code>.env</code> already holds a key.</p>
+--- code
+import os
+from dotenv import load_dotenv
+
+print("Before:", os.getenv("GROQ_API_KEY"))
+
+load_dotenv()
+api_key = os.getenv("GROQ_API_KEY")
+print("After:", api_key[:4] + "...")
+
+model = os.getenv("MODEL_NAME", "llama-3.3-70b-versatile")
+print(model)
+--- notes
+1 | os is built in. It talks to the operating system, including environment variables.
+2 | From the dotenv package, import only the load_dotenv function.
+4 | Nothing loaded yet, so this prints None.
+6 | Reads .env and sets its values as environment variables.
+8 | Print only the start of a key, never the whole thing. Logs get shared.
+10 | A second argument is the default when the variable isn't set.
+--- try
+Move load_dotenv() above line 4. What does "Before" print now?
+Try import groq and print(groq.Groq).
+Try import numpy. What does the error say?
+--- predict
+import os
+print(os.getenv("NOT_SET", "fallback"))
+--- options
+None
+fallback *
+NOT_SET
+An error
+--- why
+NOT_SET isn't an environment variable, so os.getenv returns the default you passed as the second argument.
+--- task
+<p>Write the setup code every AI script starts with.</p>
+<ul>
+<li>Import <code>os</code>, and <code>load_dotenv</code> from <code>dotenv</code>.</li>
+<li>Call <code>load_dotenv()</code>, then read <code>GROQ_API_KEY</code> into <code>api_key</code>.</li>
+<li>If <code>api_key</code> is <code>None</code>, <code>raise ValueError("Missing GROQ_API_KEY")</code>.</li>
+<li>Read <code>MODEL_NAME</code> into <code>model</code>, defaulting to <code>"llama-3.3-70b-versatile"</code>.</li>
+</ul>
+--- starter
+# Imports first, then load the key
+
+--- tests
+api_key is loaded :: api_key is not None and api_key.startswith("gsk_")
+model uses the default :: model == "llama-3.3-70b-versatile"
+Guards a missing key :: "raise ValueError" in __code
+Doesn't hardcode the key :: "gsk_" not in __code
+--- hint
+import os, from dotenv import load_dotenv, load_dotenv(), api_key = os.getenv("GROQ_API_KEY"), then if api_key is None: raise ValueError(...).
+--- solution
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+api_key = os.getenv("GROQ_API_KEY")
+if api_key is None:
+    raise ValueError("Missing GROQ_API_KEY")
+
+model = os.getenv("MODEL_NAME", "llama-3.3-70b-versatile")
+print("Ready with", model)
+--- react
+<p>Episode 2 does exactly this before its first LLM call, then pushes to GitHub without leaking the key. Your <code>.env</code> file holds <code>GROQ_API_KEY=gsk_...</code>, and <code>.gitignore</code> contains <code>.env</code>.</p>
+--- jsx
+# .env           (never commit this file)
+GROQ_API_KEY=gsk_your_real_key
+
+# .gitignore
+.env
+.venv/
+
+=== lesson p17-llm-call | Your first LLM call | 10
+--- name
+Write an ask() function
+--- understand
+<p>Everything so far comes together in one call. The pattern from episode 2:</p>
+<ul>
+<li>Create a client: <code>client = Groq()</code>. It reads <code>GROQ_API_KEY</code> for you.</li>
+<li>Send a <strong>list of message dicts</strong> to <code>client.chat.completions.create(...)</code> with keyword arguments: <code>model</code>, <code>messages</code>, optionally <code>temperature</code> and <code>max_tokens</code>.</li>
+<li>The response is an <strong>object</strong>. The text is at <code>response.choices[0].message.content</code>, and token counts at <code>response.usage</code>.</li>
+</ul>
+<p>Here the client is a practice version: same shape as the real SDK, but it replies <code>Practice reply to: ...</code> instead of calling a real model.</p>
+--- code
+from dotenv import load_dotenv
+from groq import Groq
+
+load_dotenv()
+client = Groq()
+
+messages = [
+    {"role": "system", "content": "You are a concise UX mentor."},
+    {"role": "user", "content": "What is a design token?"},
+]
+
+response = client.chat.completions.create(
+    model="llama-3.3-70b-versatile",
+    messages=messages,
+    temperature=0.3,
+)
+
+print(response.choices[0].message.content)
+print("Tokens used:", response.usage.total_tokens)
+--- notes
+4 | Load the key before creating the client, or Groq() raises an error.
+5 | One client object, reused for every call.
+7 | The conversation: a list of dicts with role and content. The system message sets behaviour.
+12 | Keyword arguments, split over lines for readability. The closing ) is on its own line.
+15 | Low temperature means more predictable answers.
+18 | choices is a list (you can ask for several answers). [0] is the first, then dots into the object.
+19 | usage reports prompt, completion and total tokens: what you pay for.
+--- try
+Remove load_dotenv() and run. Read the error.
+Change the role "user" to "human". What does the practice API say?
+Print response.usage to see all three token counts.
+--- predict
+from dotenv import load_dotenv
+from groq import Groq
+load_dotenv()
+r = Groq().chat.completions.create(model="m", messages=[{"role": "user", "content": "Hi"}])
+print(type(r.choices))
+--- options
+<class 'list'> *
+<class 'dict'>
+<class 'str'>
+<class 'Choice'>
+--- why
+choices is a list of Choice objects, which is why you always write choices[0] before .message.content.
+--- task
+<p>Wrap the call in a reusable function.</p>
+<ul>
+<li>Write <code>ask(question, system="You are helpful.")</code> that builds a two-message list (system, then user), calls the API with model <code>"llama-3.3-70b-versatile"</code>, and <strong>returns</strong> the reply text.</li>
+<li>Store <code>ask("What is RAG?")</code> in <code>answer</code> and print it.</li>
+</ul>
+<p>The setup lines are written for you.</p>
+--- starter
+from dotenv import load_dotenv
+from groq import Groq
+
+load_dotenv()
+client = Groq()
+
+# Define ask() here
+
+
+--- tests
+ask returns the reply text :: ask("Ping") == "Practice reply to: Ping"
+Sends system then user :: (ask("X", system="Be brief.") or True) and [m["role"] for m in __import__("groq").last_request["messages"]] == ["system", "user"]
+Uses the system argument :: (ask("X", system="Be brief.") or True) and __import__("groq").last_request["messages"][0]["content"] == "Be brief."
+answer is set :: answer == "Practice reply to: What is RAG?"
+--- hint
+Inside ask: messages = [{"role": "system", "content": system}, {"role": "user", "content": question}], then response = client.chat.completions.create(model=..., messages=messages) and return response.choices[0].message.content.
+--- solution
+from dotenv import load_dotenv
+from groq import Groq
+
+load_dotenv()
+client = Groq()
+
+def ask(question, system="You are helpful."):
+    messages = [
+        {"role": "system", "content": system},
+        {"role": "user", "content": question},
+    ]
+    response = client.chat.completions.create(
+        model="llama-3.3-70b-versatile",
+        messages=messages,
+    )
+    return response.choices[0].message.content
+
+answer = ask("What is RAG?")
+print(answer)
+--- react
+<p>This <code>ask()</code> function is the building block for the whole course. Prompt chaining calls it several times, passing one answer into the next prompt. RAG adds retrieved context to the user message. Agents call it in a loop.</p>
+--- jsx
+outline = ask(f"Write a 3-point outline about {topic}")
+draft = ask(f"Expand this outline into a short post:\n{outline}")
+final = ask(f"Edit for clarity, keep it under 150 words:\n{draft}")
+
+=== lesson p17-streaming | Streaming responses | 8
+--- name
+Collect the stream
+--- understand
+<p>With <code>stream=True</code>, the API sends the answer in small <strong>chunks</strong> as it's generated. That's how ChatGPT types its reply out live (episode 10).</p>
+<ul>
+<li>The call returns something you <strong>loop over</strong>: <code>for chunk in stream:</code>.</li>
+<li>Each chunk's new text is at <code>chunk.choices[0].delta.content</code> (<code>delta</code>, not <code>message</code>).</li>
+<li>The last chunk's content is <code>None</code>, so write <code>... or ""</code> to turn it into an empty string.</li>
+<li><code>print(piece, end="")</code> prints without a newline, so pieces appear on one line. In this playground each print still shows as its own row.</li>
+</ul>
+--- code
+from dotenv import load_dotenv
+from groq import Groq
+
+load_dotenv()
+client = Groq()
+
+stream = client.chat.completions.create(
+    model="llama-3.3-70b-versatile",
+    messages=[{"role": "user", "content": "Explain streaming"}],
+    stream=True,
+)
+
+full_text = ""
+for chunk in stream:
+    piece = chunk.choices[0].delta.content or ""
+    full_text += piece
+    print(repr(piece))
+
+print("Final:", full_text)
+--- notes
+10 | stream=True changes what create returns: chunks you loop over, not one response.
+13 | Start with an empty string and build the full answer as chunks arrive.
+14 | Each loop iteration receives the next chunk.
+15 | The final chunk has content None. or "" swaps None for an empty string.
+16 | += appends text. You usually save the full answer for chat history.
+17 | repr shows each piece with quotes, so you can see the spaces.
+--- try
+Remove or "" from line 15. Read the error.
+Change print(repr(piece)) to print(piece, end="").
+Count the chunks with a counter variable.
+--- predict
+pieces = ["Hel", "lo", None]
+text = ""
+for p in pieces:
+    text += p or ""
+print(text)
+--- options
+Hello *
+HelloNone
+Hel lo
+An error
+--- why
+"Hel" and "lo" are added. None or "" evaluates to "", so the last step adds nothing and no error occurs.
+--- task
+<p>Write <code>stream_answer(question)</code>.</p>
+<ul>
+<li>Call the API with <code>stream=True</code> and a single user message.</li>
+<li>Loop over the chunks, joining their text into one string. Handle the <code>None</code> at the end.</li>
+<li>Return the full text and the number of chunks that had text, as a tuple: <code>return text, count</code>.</li>
+</ul>
+--- starter
+from dotenv import load_dotenv
+from groq import Groq
+
+load_dotenv()
+client = Groq()
+
+def stream_answer(question):
+    # Your code here
+    pass
+
+text, count = stream_answer("Hi there")
+print(text, count)
+--- tests
+Returns the full text :: stream_answer("Hi there")[0] == "Practice reply to: Hi there"
+Counts chunks with text :: stream_answer("Hi there")[1] == 5
+Uses streaming :: __import__("groq").last_request["stream"] is True
+--- hint
+Keep text = "" and count = 0. In the loop: piece = chunk.choices[0].delta.content, and if piece: add it and count += 1.
+--- solution
+from dotenv import load_dotenv
+from groq import Groq
+
+load_dotenv()
+client = Groq()
+
+def stream_answer(question):
+    stream = client.chat.completions.create(
+        model="llama-3.3-70b-versatile",
+        messages=[{"role": "user", "content": question}],
+        stream=True,
+    )
+    text = ""
+    count = 0
+    for chunk in stream:
+        piece = chunk.choices[0].delta.content
+        if piece:
+            text += piece
+            count += 1
+    return text, count
+
+text, count = stream_answer("Hi there")
+print(text, count)
+--- react
+<p>Streaming is what makes an AI product feel fast: the first words appear in a fraction of a second. As a designer you'll care about this UX; as a builder, it's a <code>for</code> loop. In a web app, each piece is sent to the browser as it arrives.</p>
+--- jsx
+for chunk in stream:
+    piece = chunk.choices[0].delta.content or ""
+    print(piece, end="", flush=True)
+print()
+
+=== lesson p17-chunking | Chunking text for RAG | 9
+--- name
+Write a chunker
+--- understand
+<p>Before RAG can search your documents, long text is cut into <strong>chunks</strong>. Each chunk gets embedded and stored. Chunks usually <strong>overlap</strong> a little so sentences aren't cut off from their context.</p>
+<ul>
+<li><code>text.split()</code> turns text into a list of words.</li>
+<li><code>range(start, stop, step)</code> counts in jumps: <code>range(0, 10, 4)</code> gives 0, 4, 8.</li>
+<li>Slicing with a variable: <code>words[i:i + size]</code> takes <code>size</code> words starting at <code>i</code>. Slices never go out of range; they just stop at the end.</li>
+<li><code>" ".join(words)</code> turns a word list back into text.</li>
+</ul>
+--- code
+text = "Prelude teaches JavaScript and Python with live code predictions and practice"
+words = text.split()
+print(len(words), "words")
+
+size = 4
+overlap = 1
+step = size - overlap
+
+chunks = []
+for i in range(0, len(words), step):
+    chunk = " ".join(words[i:i + size])
+    chunks.append(chunk)
+
+for c in chunks:
+    print(c)
+--- notes
+2 | A list of 11 words.
+5 | Each chunk holds up to 4 words.
+7 | Move 3 words each time, so 1 word repeats between neighbouring chunks.
+10 | i goes 0, 3, 6, 9. The step jumps over most of the previous chunk.
+11 | Slice size words from i, then join them back into a sentence.
+--- try
+Set overlap = 0. How do the chunks change?
+Set size = 6 and overlap = 2.
+Print the number of chunks with len(chunks).
+--- predict
+print(list(range(0, 10, 4)))
+--- options
+[0, 4, 8] *
+[0, 4, 8, 12]
+[4, 8]
+[0, 1, 2, 3]
+--- why
+range starts at 0 and jumps by 4, stopping before 10. 12 would be past the stop value, so it's not included.
+--- task
+<p>Write <code>chunk_words(text, size, overlap)</code> that returns a list of chunk strings.</p>
+<ul>
+<li>Split the text into words. Step forward by <code>size - overlap</code> each time.</li>
+<li>Each chunk is up to <code>size</code> words joined with spaces.</li>
+<li><strong>Skip</strong> a chunk if it would only contain words already in the previous chunk (stop once a chunk reaches the end of the text).</li>
+</ul>
+--- starter
+def chunk_words(text, size, overlap):
+    # Your code here
+    pass
+
+print(chunk_words("a b c d e f g", 3, 1))
+--- tests
+Chunks with overlap :: chunk_words("a b c d e f g", 3, 1) == ["a b c", "c d e", "e f g"]
+No duplicate tail chunk :: chunk_words("a b c d e", 3, 1) == ["a b c", "c d e"]
+Short text gives one chunk :: chunk_words("one two", 5, 1) == ["one two"]
+No overlap works :: chunk_words("a b c d", 2, 0) == ["a b", "c d"]
+--- hint
+Loop i over range(0, len(words), step). Append " ".join(words[i:i + size]). If i + size >= len(words), break: that chunk already reached the end.
+--- solution
+def chunk_words(text, size, overlap):
+    words = text.split()
+    step = size - overlap
+    chunks = []
+    for i in range(0, len(words), step):
+        chunks.append(" ".join(words[i:i + size]))
+        if i + size >= len(words):
+            break
+    return chunks
+
+print(chunk_words("a b c d e f g", 3, 1))
+--- react
+<p>Week 3 of the course builds a RAG system, and episode "Chunking Strategies" compares ways to do this. Libraries like LangChain have ready-made splitters, but they all do some version of this loop: split, slide a window, overlap, join.</p>
+--- jsx
+chunks = chunk_words(document_text, size=200, overlap=40)
+for i, chunk in enumerate(chunks):
+    points.append({"id": i, "vector": embed(chunk), "payload": {"text": chunk, "source": filename}})
+
+=== lesson p17-final | Python readiness challenge | 15
+--- name
+Build a mini RAG answerer
+--- understand
+<p>This is the final check before the AI Engineer course. It combines lists of dicts, comprehensions, functions, f-strings, dict access and the LLM call.</p>
+<p>The flow is the RAG pipeline you'll build in week 3, simplified:</p>
+<ul>
+<li><strong>Retrieve</strong>: find the notes that share words with the question.</li>
+<li><strong>Augment</strong>: put those notes into the prompt as context.</li>
+<li><strong>Generate</strong>: call the LLM and return its answer with the sources used.</li>
+</ul>
+<p>Real RAG uses embeddings to compare meaning. Here, matching words stands in for that so you can focus on the Python.</p>
+--- code
+notes = [
+    {"id": 1, "text": "Tokens are pieces of words the model reads"},
+    {"id": 2, "text": "Embeddings are lists of numbers that capture meaning"},
+    {"id": 3, "text": "Temperature controls randomness in model output"},
+]
+
+question = "What are embeddings"
+q_words = set(question.lower().split())
+
+for note in notes:
+    shared = q_words & set(note["text"].lower().split())
+    print(note["id"], sorted(shared))
+--- notes
+8 | set() keeps unique words, which makes comparing two word groups easy.
+10 | & on two sets gives the words they share.
+11 | sorted() returns a sorted list, so the output is predictable.
+--- try
+Change the question to "How does temperature work". Which notes share words?
+Print len(shared) instead of the words.
+Add a fourth note about chunking.
+--- predict
+a = {"what", "are", "tokens"}
+b = {"tokens", "are", "pieces"}
+print(len(a & b))
+--- options
+1
+2 *
+3
+4
+--- why
+The words in both sets are "are" and "tokens", so the shared set has 2 items.
+--- task
+<p>Write <code>answer_with_sources(question, notes)</code>:</p>
+<ul>
+<li><strong>Retrieve</strong>: keep notes that share at least <strong>2</strong> words with the question (compare lowercased words).</li>
+<li><strong>Augment</strong>: build <code>context</code> by joining the matching notes' text with newlines, then a user message: <code>f"Context:\n{context}\n\nQuestion: {question}"</code>.</li>
+<li><strong>Generate</strong>: call the API (model <code>"llama-3.3-70b-versatile"</code>) with a system message <code>"Answer only from the context."</code> and that user message.</li>
+<li>Return a dict: <code>{"answer": reply_text, "sources": [ids of matching notes]}</code>.</li>
+</ul>
+--- starter
+from dotenv import load_dotenv
+from groq import Groq
+
+load_dotenv()
+client = Groq()
+
+notes = [
+    {"id": 1, "text": "Tokens are pieces of words the model reads"},
+    {"id": 2, "text": "Embeddings are lists of numbers that capture meaning"},
+    {"id": 3, "text": "Temperature controls randomness in model output"},
+    {"id": 4, "text": "Chunking splits long documents into pieces"},
+]
+
+def answer_with_sources(question, notes):
+    # Retrieve, augment, generate
+    pass
+
+print(answer_with_sources("What are embeddings and what do they capture", notes))
+--- tests
+Returns a dict :: isinstance(answer_with_sources("What are tokens", notes), dict)
+Finds the right sources :: answer_with_sources("What are embeddings and what do they capture", notes)["sources"] == [2]
+Matches several notes :: answer_with_sources("Pieces of words and long documents into pieces", notes)["sources"] == [1, 4]
+Sends system then user :: (answer_with_sources("What are tokens", notes) or True) and [m["role"] for m in __import__("groq").last_request["messages"]] == ["system", "user"]
+Puts context in the prompt :: (answer_with_sources("Temperature controls randomness", notes) or True) and "Temperature controls randomness in model output" in __import__("groq").last_request["messages"][1]["content"]
+Returns the model's answer :: answer_with_sources("What are tokens", notes)["answer"].startswith("Practice reply to: Context:")
+--- hint
+q_words = set(question.lower().split()). matches = [n for n in notes if len(q_words & set(n["text"].lower().split())) >= 2]. Then build the messages, call create, and return {"answer": ..., "sources": [n["id"] for n in matches]}.
+--- solution
+from dotenv import load_dotenv
+from groq import Groq
+
+load_dotenv()
+client = Groq()
+
+notes = [
+    {"id": 1, "text": "Tokens are pieces of words the model reads"},
+    {"id": 2, "text": "Embeddings are lists of numbers that capture meaning"},
+    {"id": 3, "text": "Temperature controls randomness in model output"},
+    {"id": 4, "text": "Chunking splits long documents into pieces"},
+]
+
+def answer_with_sources(question, notes):
+    q_words = set(question.lower().split())
+    matches = [n for n in notes if len(q_words & set(n["text"].lower().split())) >= 2]
+    context = "\n".join(n["text"] for n in matches)
+    messages = [
+        {"role": "system", "content": "Answer only from the context."},
+        {"role": "user", "content": f"Context:\n{context}\n\nQuestion: {question}"},
+    ]
+    response = client.chat.completions.create(
+        model="llama-3.3-70b-versatile",
+        messages=messages,
+    )
+    return {
+        "answer": response.choices[0].message.content,
+        "sources": [n["id"] for n in matches],
+    }
+
+print(answer_with_sources("What are embeddings and what do they capture", notes))
+--- react
+<p>You're ready for the course. In week 3 you'll replace word matching with embeddings and a Qdrant search, but the shape of this function stays the same: retrieve, build the prompt, call the model, return the answer with its sources.</p>
+--- jsx
+def rag_answer(question: str) -> dict:
+    vector = embed(question)
+    hits = qdrant.query_points(collection_name="notes", query=vector, limit=4).points
+    context = "\n\n".join(h.payload["text"] for h in hits)
+    answer = ask(f"Context:\n{context}\n\nQuestion: {question}", system="Answer only from the context.")
+    return {"answer": answer, "sources": [h.id for h in hits]}
+
+=== bug py-colon | Router crashes before it starts | p14-conditions
+--- task
+<p>This routing code won't even start. Fix it so it prints <code>search</code>.</p>
+--- starter
+query = "find the latest pricing"
+
+if "find" in query
+    action = "search"
+else:
+    action = "answer"
+print(action)
+--- tests
+Prints search :: __logs == ["search"]
+--- hint
+Read the error's line number. Lines that open a block (if, else, for, def) end with a colon.
+--- solution
+query = "find the latest pricing"
+
+if "find" in query:
+    action = "search"
+else:
+    action = "answer"
+print(action)
+
+=== bug py-concat | Token report crashes | p14-strings
+--- task
+<p>The usage report throws a TypeError. Make it print <code>Used 42 tokens</code>.</p>
+--- starter
+tokens = 42
+print("Used " + tokens + " tokens")
+--- tests
+Prints the report :: __logs == ["Used 42 tokens"]
+tokens is still a number :: tokens == 42
+--- hint
++ can't join text and a number. Use an f-string: f"Used {tokens} tokens".
+--- solution
+tokens = 42
+print(f"Used {tokens} tokens")
+
+=== bug py-return | The prompt is None | p14-functions
+--- task
+<p>The prompt builder prints <code>None</code> instead of the prompt. Fix the function.</p>
+--- starter
+def build_prompt(topic):
+    prompt = f"Explain {topic} in one sentence."
+
+result = build_prompt("vectors")
+print(result)
+--- tests
+Returns the prompt :: build_prompt("x") == "Explain x in one sentence."
+Prints it :: __logs == ["Explain vectors in one sentence."]
+--- hint
+The function builds the string but never sends it back. What keyword returns a value?
+--- solution
+def build_prompt(topic):
+    prompt = f"Explain {topic} in one sentence."
+    return prompt
+
+result = build_prompt("vectors")
+print(result)
+
+=== bug py-dot-access | JavaScript habit in a dict | p15-dicts
+--- task
+<p>This code was written with a JavaScript habit. Fix it so it prints <code>assistant: Hello!</code>.</p>
+--- starter
+message = {"role": "assistant", "content": "Hello!"}
+print(f"{message.role}: {message.content}")
+--- tests
+Prints the message :: __logs == ["assistant: Hello!"]
+--- hint
+Dicts don't support dot access. Read values with message["role"]. Inside an f-string, use single quotes for the key: {message['role']}.
+--- solution
+message = {"role": "assistant", "content": "Hello!"}
+print(f"{message['role']}: {message['content']}")
+
+=== bug py-indent-total | Total prints three times | p15-loops
+--- task
+<p>This should print the total word count <strong>once</strong>: <code>9</code>. Instead it prints a running total on every pass.</p>
+--- starter
+chunks = ["one two three", "four five", "six seven eight nine"]
+total = 0
+for chunk in chunks:
+    total += len(chunk.split())
+    print(total)
+--- tests
+Prints once :: __logs == ["9"]
+--- hint
+Indentation decides what's inside the loop. Move the print so it runs after the loop ends.
+--- solution
+chunks = ["one two three", "four five", "six seven eight nine"]
+total = 0
+for chunk in chunks:
+    total += len(chunk.split())
+print(total)
+
+=== bug py-keyerror | Crash on a missing field | p16-errors
+--- task
+<p>Some API responses have no <code>"usage"</code> key, and this crashes with KeyError. Make <code>tokens</code> default to <code>0</code> when it's missing.</p>
+--- starter
+response = {"content": "Done"}
+tokens = response["usage"]
+print("Tokens:", tokens)
+--- tests
+tokens defaults to 0 :: tokens == 0
+Prints the line :: __logs == ["Tokens: 0"]
+--- hint
+Use .get with a default instead of square brackets.
+--- solution
+response = {"content": "Done"}
+tokens = response.get("usage", 0)
+print("Tokens:", tokens)
+</script>
+
+<script type="text/plain" id="py-runtime">
+# Prelude Python runtime: runs learner code in a fresh namespace, captures print(),
+# evaluates tests, and provides practice stand-ins for the groq and dotenv packages.
+import sys, os, json, types, traceback, time
+
+_GROQ_SRC = r'''
+"""Practice stand-in for the Groq SDK. Same shape as the real one, no network, no key costs."""
+import os, json as _json
+
+class _Obj:
+    def __init__(self, **kw):
+        self.__dict__.update(kw)
+    def __repr__(self):
+        inner = ", ".join(f"{k}={v!r}" for k, v in self.__dict__.items())
+        return f"{type(self).__name__}({inner})"
+
+class Message(_Obj): pass
+class Choice(_Obj): pass
+class Usage(_Obj): pass
+class ChatCompletion(_Obj): pass
+class Delta(_Obj): pass
+class ChunkChoice(_Obj): pass
+class ChatCompletionChunk(_Obj): pass
+
+class GroqError(Exception): pass
+class AuthenticationError(GroqError): pass
+class BadRequestError(GroqError): pass
+
+last_request = None
+
+def count_tokens(text):
+    """Rough token estimate: about 4 characters per token."""
+    return max(1, round(len(str(text)) / 4))
+
+def _reply_for(messages):
+    system = " ".join(m["content"] for m in messages if m["role"] == "system")
+    users = [m["content"] for m in messages if m["role"] == "user"]
+    question = users[-1] if users else ""
+    if "json" in system.lower():
+        return _json.dumps({"answer": f"Practice answer to: {question}", "confidence": 0.9})
+    return f"Practice reply to: {question}"
+
+def _check(model, messages, temperature):
+    if not model:
+        raise BadRequestError("model is required, e.g. model=\"llama-3.3-70b-versatile\"")
+    if not isinstance(messages, list) or not messages:
+        raise BadRequestError("messages must be a non-empty list of dicts")
+    for i, m in enumerate(messages):
+        if not isinstance(m, dict):
+            raise BadRequestError(f"messages[{i}] must be a dict like {{'role': 'user', 'content': '...'}}")
+        if m.get("role") not in ("system", "user", "assistant"):
+            raise BadRequestError(f"messages[{i}] has role {m.get('role')!r}; use 'system', 'user' or 'assistant'")
+        if not isinstance(m.get("content"), str):
+            raise BadRequestError(f"messages[{i}] needs a 'content' string")
+    if not (0 <= float(temperature) <= 2):
+        raise BadRequestError("temperature must be between 0 and 2")
+
+class _Completions:
+    def create(self, model=None, messages=None, temperature=1.0, max_tokens=None, stream=False, **kwargs):
+        global last_request
+        _check(model, messages, temperature)
+        last_request = {"model": model, "messages": messages, "temperature": temperature, "max_tokens": max_tokens, "stream": stream}
+        text = _reply_for(messages)
+        if max_tokens:
+            text = text[: max(1, int(max_tokens)) * 4]
+        if stream:
+            return _stream(text, model)
+        prompt_tokens = sum(count_tokens(m["content"]) for m in messages)
+        completion_tokens = count_tokens(text)
+        return ChatCompletion(
+            id="chatcmpl-practice", model=model,
+            choices=[Choice(index=0, message=Message(role="assistant", content=text), finish_reason="stop")],
+            usage=Usage(prompt_tokens=prompt_tokens, completion_tokens=completion_tokens, total_tokens=prompt_tokens + completion_tokens),
+        )
+
+def _stream(text, model):
+    words = text.split(" ")
+    for i, w in enumerate(words):
+        piece = w if i == len(words) - 1 else w + " "
+        yield ChatCompletionChunk(model=model, choices=[ChunkChoice(index=0, delta=Delta(content=piece), finish_reason=None)])
+    yield ChatCompletionChunk(model=model, choices=[ChunkChoice(index=0, delta=Delta(content=None), finish_reason="stop")])
+
+class _Chat:
+    def __init__(self):
+        self.completions = _Completions()
+
+class Groq:
+    def __init__(self, api_key=None, **kwargs):
+        key = api_key or os.environ.get("GROQ_API_KEY")
+        if not key:
+            raise AuthenticationError("No API key. Call load_dotenv() first, or pass api_key=...")
+        self.api_key = key
+        self.chat = _Chat()
+'''
+
+_DOTENV_SRC = r'''
+"""Practice stand-in for python-dotenv: pretends your .env file holds GROQ_API_KEY."""
+import os
+
+def load_dotenv(*args, **kwargs):
+    os.environ.setdefault("GROQ_API_KEY", "gsk_practice_key_123")
+    return True
+'''
+
+def _install(name, src):
+    mod = types.ModuleType(name)
+    mod.__file__ = f"<{name} practice module>"
+    exec(compile(src, f"<{name}>", "exec"), mod.__dict__)
+    sys.modules[name] = mod
+
+_install("groq", _GROQ_SRC)
+_install("dotenv", _DOTENV_SRC)
+
+def _no_input(*args, **kwargs):
+    raise RuntimeError("input() isn't available in the playground. Put the value in a variable instead.")
+
+def _strip_comments(code):
+    import io, tokenize
+    try:
+        toks = [t for t in tokenize.generate_tokens(io.StringIO(code).readline) if t.type != tokenize.COMMENT]
+        return tokenize.untokenize(toks)
+    except Exception:
+        return code
+
+def _raises(exc, fn, *args, **kwargs):
+    try:
+        fn(*args, **kwargs)
+    except exc:
+        return True
+    return False
+
+def __prelude_run(code, tests_json):
+    logs = []
+    state = {"testing": False}
+
+    def _print(*args, sep=" ", end="\n", file=None, flush=False):
+        if state["testing"]:
+            return
+        logs.append(sep.join(str(a) for a in args))
+
+    os.environ.pop("GROQ_API_KEY", None)
+    sys.modules["groq"].last_request = None
+    ns = {"__name__": "__main__", "__builtins__": __builtins__, "print": _print, "input": _no_input, "__logs": logs}
+    ns_tests = {"__raises": _raises, "__code": _strip_comments(code)}
+    error = None
+    t0 = time.perf_counter()
+    try:
+        exec(compile(code, "main.py", "exec"), ns)
+    except SyntaxError as e:
+        error = {"name": type(e).__name__, "message": str(e.msg), "line": e.lineno, "syntax": True}
+    except BaseException as e:
+        line = None
+        for fr in traceback.extract_tb(e.__traceback__):
+            if fr.filename == "main.py":
+                line = fr.lineno
+        error = {"name": type(e).__name__, "message": str(e), "line": line}
+    ms = round((time.perf_counter() - t0) * 1000)
+    results = []
+    if error is None:
+        state["testing"] = True
+        for t in json.loads(tests_json):
+            try:
+                results.append({"name": t["name"], "pass": bool(eval(t["expr"], ns, ns_tests))})
+            except BaseException as e:
+                results.append({"name": t["name"], "pass": False, "error": f"{type(e).__name__}: {e}"})
+        state["testing"] = False
+    return json.dumps({"logs": logs, "error": error, "tests": results, "ms": ms})
+</script>
+
+<script type="text/plain" id="py-worker-src">
+let pyodide = null;
+let runFn = null;
+self.onmessage = async (ev) => {
+  const m = ev.data;
+  if (m.kind === "init") {
+    try {
+      importScripts(m.indexURL + "pyodide.js");
+      pyodide = await loadPyodide({ indexURL: m.indexURL });
+      pyodide.runPython(m.runtime);
+      runFn = pyodide.globals.get("__prelude_run");
+      postMessage({ kind: "ready" });
+    } catch (e) {
+      postMessage({ kind: "fail", message: String((e && e.message) || e) });
+    }
+    return;
+  }
+  if (m.kind === "run") {
+    const needs = /^\s*(from|import)\s+pydantic\b/m.test(m.code) || (m.tests || []).some((t) => /pydantic/.test(t.expr));
+    if (needs) {
+      try { await pyodide.loadPackage("pydantic"); }
+      catch (e) {
+        postMessage({ kind: "done", id: m.id, logs: [], tests: [], ms: 0, error: { name: "ModuleNotFoundError", message: "Couldn't download pydantic. Check your connection and run again.", line: null } });
+        return;
+      }
+    }
+    postMessage({ kind: "start", id: m.id });
+    let out;
+    try { out = JSON.parse(runFn(m.code, JSON.stringify(m.tests || []))); }
+    catch (e) { out = { logs: [], tests: [], ms: 0, error: { name: "Error", message: String((e && e.message) || e), line: null } }; }
+    postMessage({ kind: "done", id: m.id, ...out });
+  }
+};
+</script>
+
 <script type="text/plain" id="worker-src">
 const AsyncFunction = Object.getPrototypeOf(async function () {}).constructor;
 const realTimeout = self.setTimeout.bind(self);
@@ -4853,6 +6756,7 @@ self.onmessage = async (ev) => {
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/javascript/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/python/python.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/xml/xml.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/jsx/jsx.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/closebrackets.min.js"></script>
@@ -4921,10 +6825,15 @@ const MODULES = [
   { track: "dsa", n: 11, name: "Stacks & Queues", dot: "#b1ebc5", tags: [["stack", "t-green"], ["queue", "t-blue"], ["LIFO · FIFO", ""]], why: "Whenever order matters, such as undo history, brackets or task queues, a stack or queue is the right shape. They also power DFS and BFS." },
   { track: "dsa", n: 12, name: "Recursion, Search & Sort", dot: "#febfc6", tags: [["recursion", "t-red"], ["binary search", "t-purple"], ["memo", "t-amber"]], why: "Recursion handles nested data, binary search finds things in O(log n), comparators control every sortable table, and memoization stops repeated work." },
   { track: "dsa", n: 13, name: "Trees & Graphs", dot: "#b7aee9", tags: [["DFS", "t-purple"], ["BFS", "t-blue"], ["top-k", "t-green"]], why: "Menus, folders and comments are trees. Networks and workflows are graphs. DFS and BFS are the two ways to walk them. The module ends with the DSA readiness challenge." },
+  { track: "py", n: 14, name: "Python Basics", dot: "#b1ebc5", tags: [["print", "t-green"], ["f-strings", "t-yellow"], ["def", "t-purple"]], why: "Python is the language of AI engineering. Coming from JavaScript, most ideas carry over: this module maps them to Python's lighter syntax, where indentation replaces curly braces." },
+  { track: "py", n: 15, name: "Lists & Dictionaries", dot: "#bfdbfe", tags: [["list", "t-blue"], ["dict", "t-orange"], ["comprehensions", ""]], why: "Every chat is a list of message dicts, and every API reply is a dict. Reading, looping and filtering them is most of the Python you'll write in AI apps." },
+  { track: "py", n: 16, name: "Reliable Python", dot: "#febfc6", tags: [["json", "t-red"], ["try · except", "t-amber"], ["Pydantic", "t-purple"]], why: "LLMs return text that might be broken JSON, and APIs fail. Parsing, error handling, classes and Pydantic validation keep an AI app from crashing on bad data." },
+  { track: "py", n: 17, name: "Python for AI Apps", dot: "#f9fbff", tags: [["LLM call", "t-green"], ["streaming", "t-blue"], ["RAG", "t-purple"]], why: "The exact patterns from the AI Engineer course: API keys, your first LLM call, streaming and chunking. It ends with a mini RAG readiness challenge." },
 ];
 const TRACKS = [
   { id: "react", name: "JavaScript for React", short: "JS Foundation", label: "React", final: "m7-final" },
   { id: "dsa", name: "DSA with JavaScript", short: "DSA with JS", label: "DSA", final: "d13-final" },
+  { id: "py", name: "Python for AI Engineering", short: "Python for AI", label: "Python", final: "p17-final" },
 ];
 const TRACK = Object.fromEntries(TRACKS.map((t) => [t.id, t]));
 const SNIPPETS = {
@@ -4941,8 +6850,14 @@ const SNIPPETS = {
   11: [".push()", ".pop()", "stack[stack.length - 1]", "items[head++]"],
   12: ["if (n <= 1) return ;", "Math.floor((low + high) / 2)", ".sort((a, b) => a - b)", "a.localeCompare(b)", "const memo = new Map();"],
   13: ["for (const child of node.children) {\n  \n}", "const queue = [start];", "const seen = new Set();", "Math.max()"],
+  14: ["print()", "f\"{ }\"", "if :\n    ", "elif :\n    ", "def name():\n    return "],
+  15: ["for item in items:\n    ", ".append()", "[-3:]", "{\"role\": \"user\", \"content\": }", ".get(\"key\", None)", "[x for x in items if ]"],
+  16: ["import json", "json.loads()", "try:\n    \nexcept ValueError:\n    ", "class Name:\n    def __init__(self):\n        ", "from pydantic import BaseModel"],
+  17: ["from groq import Groq", "load_dotenv()", "client.chat.completions.create(\n    model=\"llama-3.3-70b-versatile\",\n    messages=messages,\n)", "response.choices[0].message.content", "chunk.choices[0].delta.content or \"\""],
 };
-const stepLabel = (s, L) => (s.id === "react" && L.track === "dsa" ? "Real-world use" : s.label);
+const stepLabel = (s, L) => (s.id === "react" && L.track === "dsa" ? "Real-world use" : s.id === "react" && L.track === "py" ? "AI connection" : s.label);
+const langOf = (track) => (track === "py" ? "python" : "javascript");
+const extOf = (lang) => (lang === "python" ? ".py" : ".js");
 const STEPS = [
   { id: "understand", label: "Understand", file: "example" },
   { id: "see", label: "See", file: "example" },
@@ -4959,6 +6874,7 @@ const CATS = [
   { id: "realworld", label: "Real-world", tone: "t-green" },
   { id: "react", label: "React prep", tone: "t-purple" },
   { id: "dsa", label: "DSA", tone: "t-amber" },
+  { id: "python", label: "Python for AI", tone: "t-green" },
 ];
 const DSA_CHECKLIST = [
   ["Loops and early exit", "d8-loops"],
@@ -4974,6 +6890,20 @@ const DSA_CHECKLIST = [
   ["Memoization", "d12-memo"],
   ["DFS on a tree", "d13-trees"],
   ["BFS shortest path", "d13-graphs"],
+];
+const PY_CHECKLIST = [
+  ["f-strings for prompts", "p14-strings"],
+  ["if, elif and indentation", "p14-conditions"],
+  ["Functions with def and defaults", "p14-functions"],
+  ["Lists and slicing", "p15-lists"],
+  ["Dicts and .get()", "p15-dicts"],
+  ["List comprehensions", "p15-nested"],
+  ["Parsing JSON", "p16-json"],
+  ["try and except", "p16-errors"],
+  ["Pydantic models", "p16-pydantic"],
+  ["API keys with .env", "p17-imports"],
+  ["Your first LLM call", "p17-llm-call"],
+  ["Streaming", "p17-streaming"],
 ];
 const CHECKLIST = [
   ["Variables with let and const", "m1-variables"],
@@ -5027,7 +6957,7 @@ function parseContent(src) {
   });
   return { lessons, bugs };
 }
-const { lessons: LESSONS, bugs: BUGS } = parseContent($("#content").textContent + "\n" + ($("#content-dsa")?.textContent || ""));
+const { lessons: LESSONS, bugs: BUGS } = parseContent($("#content").textContent + "\n" + ($("#content-dsa")?.textContent || "") + "\n" + ($("#content-py")?.textContent || ""));
 const LESSON = Object.fromEntries(LESSONS.map((l) => [l.id, l]));
 LESSONS.forEach((l, i) => { l.index = i; l.track = MODULES[l.module - 1].track; });
 TRACKS.forEach((t) => LESSONS.filter((l) => l.track === t.id).forEach((l, i) => { l.tIndex = i; }));
@@ -5037,7 +6967,7 @@ const modLessons = (n) => LESSONS.filter((l) => l.module === n);
 
 const CHALLENGES = [];
 LESSONS.forEach((l) => {
-  CHALLENGES.push({ id: "p-" + l.id, type: "practice", cat: l.track === "dsa" ? "dsa" : l.module <= 3 ? "beginner" : l.module <= 6 ? "realworld" : "react", title: l.practice && l.name ? l.name : l.title, lesson: l.id, module: l.module, task: l.practice.task, starter: l.practice.starter, tests: l.practice.tests, hint: l.practice.hint, solution: l.practice.solution });
+  CHALLENGES.push({ id: "p-" + l.id, type: "practice", cat: l.track === "dsa" ? "dsa" : l.track === "py" ? "python" : l.module <= 3 ? "beginner" : l.module <= 6 ? "realworld" : "react", title: l.practice && l.name ? l.name : l.title, lesson: l.id, module: l.module, task: l.practice.task, starter: l.practice.starter, tests: l.practice.tests, hint: l.practice.hint, solution: l.practice.solution });
 });
 LESSONS.forEach((l) => {
   CHALLENGES.push({ id: "q-" + l.id, type: "predict", cat: "predict", title: `Predict: ${l.title.split(":")[0]}`, lesson: l.id, module: l.module, predict: l.predict });
@@ -5165,7 +7095,7 @@ function renderSidebar() {
   const activeMod = currentRoute.startsWith("lesson-") ? LESSON[currentRoute.slice(7)]?.module : null;
   const st = streak();
   sidebar.innerHTML = `
-    <div class="sb-brand"><span class="logo">${LOGO}</span><div style="min-width:0"><b>Prelude</b><span>JavaScript, React & DSA</span></div></div>
+    <div class="sb-brand"><span class="logo">${LOGO}</span><div style="min-width:0"><b>Prelude</b><span>JavaScript, DSA & Python</span></div></div>
     <div class="sb-scroll"><nav aria-label="Primary">
       <div class="sb-section"><ul>
         ${nav("home", "home", "Dashboard")}
@@ -5181,6 +7111,7 @@ function renderSidebar() {
         <li><button class="nav-item" data-go="practice" data-cat="debug">${ic("bug")}<span class="lbl">Fix the bug</span><span class="count-badge">${BUGS.length}</span></button></li>
         <li><button class="nav-item" data-go="lesson-m7-final" data-step="practice">${ic("bolt")}<span class="lbl">React readiness</span></button></li>
         <li><button class="nav-item" data-go="lesson-d13-final" data-step="practice">${ic("bolt")}<span class="lbl">DSA challenge</span></button></li>
+        <li><button class="nav-item" data-go="lesson-p17-final" data-step="practice">${ic("bolt")}<span class="lbl">Python readiness</span></button></li>
       </ul></div>
     </nav></div>
     <div class="sb-section" style="border-top:1px solid var(--border)"><ul>
@@ -5298,7 +7229,7 @@ function viewHome() {
   const view = frame({ title: "Dashboard", pill: pillHtml(st ? `${st}-day streak` : "Ready to start", st ? "" : "idle"), tabs: [...TRACKS.map((t) => ({ id: t.id, label: t.short, n: `${stats(t.id).lessonsDone}/${trackLessons(t.id).length}` })), { id: "activity", label: "Activity", n: store.recent.length || undefined }], active: homeTab, onTab: (t) => { homeTab = t; viewHome(); } });
   const nl = nextLesson(track);
   const caption = s.lessonsDone === tl.length ? `${T.name} complete. Review weak spots or retake the final challenge.` : `${T.name} · Next up: ${esc(nl.title)}`;
-  const tb = el(`<div class="toolbar"><div class="welcome"><h2>${store.recent.length || all.lessonsDone ? "Welcome back" : "Welcome"}, ${esc(store.name)}</h2><span class="caption">${caption}</span></div><div class="grp"><button class="btn btn-secondary" data-go="practice">${ic("target", 12)}Practice Arena</button><button class="btn btn-primary" data-go="lesson-${nl.id}">${ic("play", 12)}${s.lessonsDone ? "Continue" : track === "dsa" ? "Start DSA track" : "Start lesson 1"}</button></div></div>`);
+  const tb = el(`<div class="toolbar"><div class="welcome"><h2>${store.recent.length || all.lessonsDone ? "Welcome back" : "Welcome"}, ${esc(store.name)}</h2><span class="caption">${caption}</span></div><div class="grp"><button class="btn btn-secondary" data-go="practice">${ic("target", 12)}Practice Arena</button><button class="btn btn-primary" data-go="lesson-${nl.id}">${ic("play", 12)}${s.lessonsDone ? "Continue" : track === "dsa" ? "Start DSA track" : track === "py" ? "Start Python track" : "Start lesson 1"}</button></div></div>`);
   tb.onclick = (e) => { const b = e.target.closest("[data-go]"); if (b) go(b.dataset.go); };
   view.appendChild(tb);
   view.appendChild(el(`<div class="stat-grid" style="border-top:1px solid var(--border)"><div><b>${s.lessonsDone}/${tl.length}</b>Lessons complete</div><div><b>${s.readiness}%</b>${T.label} readiness</div><div><b>${s.passedCount}</b>Challenges passed</div><div><b>${s.predAnswered ? Math.round((s.predCorrect / s.predAnswered) * 100) + "%" : "–"}</b>Prediction accuracy</div></div>`));
@@ -5343,7 +7274,7 @@ function moduleSheet(n) {
     <div style="display:flex;gap:12px;align-items:flex-start;padding:20px;box-shadow:inset 0 -1px 0 var(--line-strong)"><span class="mono-tile">${String(n).padStart(2, "0")}</span><div style="display:flex;flex-direction:column;gap:12px;min-width:0"><h2>${esc(m.name)}</h2><div class="tags" style="flex-wrap:wrap">${m.tags.map(([t, c]) => tag(t, c, true)).join("")}</div></div></div>
     <section class="section"><span class="eyebrow">Module progress</span><div style="display:flex;flex-direction:column;gap:6px"><span class="big">${p.pct}%</span><span class="caption soft">${p.done} of ${p.total} lessons complete · ${ls.reduce((t, l) => t + l.minutes, 0)} min total</span></div>${seg(p.pct, 63, "s", true)}</section>
     <section class="section"><span class="eyebrow">Lessons</span><div class="lesson-list">${ls.map((l) => `<button class="lesson-item" data-go="lesson-${l.id}"><span class="status-ic ${lessonDone(l.id) ? "done" : l.id === nextIn.id ? "cur" : ""}">${lessonDone(l.id) ? ic("check", 10) : ""}</span><span class="li-t"><b>${esc(l.title)}</b><span>${l.minutes} min · Practice: ${esc(l.name)}</span></span>${ic("chevr", 14, 'class="chev"')}</button>`).join("")}</div></section>
-    <section class="section" style="box-shadow:none"><span class="eyebrow">Why it matters${m.track === "react" ? " in React" : ""}</span><p class="soft">${esc(m.why)}</p></section></div>`);
+    <section class="section" style="box-shadow:none"><span class="eyebrow">Why it matters${m.track === "react" ? " in React" : m.track === "py" ? " for AI" : ""}</span><p class="soft">${esc(m.why)}</p></section></div>`);
   body.onclick = (e) => { const b = e.target.closest("[data-go]"); if (b) { closeSheet(); go(b.dataset.go); } };
   const foot = el(`<div style="display:contents"><button class="btn-link" data-a="practice">Practice this module</button><div style="display:flex;gap:8px"><button class="btn btn-subtle" data-a="close">Close</button><button class="btn btn-primary" data-a="start">${p.done ? (p.done === p.total ? "Review module" : "Continue module") : "Start module"}</button></div></div>`);
   foot.onclick = (e) => { const a = e.target.closest("[data-a]")?.dataset.a; if (a === "close") closeSheet(); if (a === "start") { closeSheet(); go("lesson-" + nextIn.id); } if (a === "practice") { closeSheet(); practiceCat = "all"; practiceModule = n; go("practice"); } };
@@ -5412,9 +7343,9 @@ function openChallenge(c) { if (c.type === "practice") { store.steps[c.lesson] =
 
 /* ---------- Progress ---------- */
 function viewProgress() {
-  const r = stats("react"), d = stats("dsa"), s = stats();
+  const r = stats("react"), d = stats("dsa"), p = stats("py"), s = stats();
   const level = (x, goal) => (x >= 85 ? [`Ready for ${goal}`, "t-green"] : x >= 50 ? ["Getting close", "t-amber"] : x > 0 ? ["Building foundations", ""] : ["Not started", ""]);
-  const view = frame({ title: "Progress", pill: pillHtml(`React ${r.readiness}% · DSA ${d.readiness}%`, r.readiness + d.readiness ? "" : "idle"), tabs: [{ id: "overview", label: "Overview" }, { id: "history", label: "Learning history" }], active: progressTab, onTab: (t) => { progressTab = t; viewProgress(); } });
+  const view = frame({ title: "Progress", pill: pillHtml(`React ${r.readiness}% · DSA ${d.readiness}% · Python ${p.readiness}%`, r.readiness + d.readiness + p.readiness ? "" : "idle"), tabs: [{ id: "overview", label: "Overview" }, { id: "history", label: "Learning history" }], active: progressTab, onTab: (t) => { progressTab = t; viewProgress(); } });
   if (progressTab === "history") return progressHistory(view);
   const weak = weakAreas();
   const meter = (T, x, goal, note) => { const [lb, tn] = level(x.readiness, goal); return `<section class="section"><div class="sh"><span class="eyebrow">${T.label} readiness</span>${tag(lb, tn, true)}</div><div style="display:flex;flex-direction:column;gap:6px"><span class="big">${x.readiness}%</span><span class="caption soft">${x.lessonsDone} of ${trackLessons(T.id).length} lessons · ${note}</span></div>${seg(x.readiness, 63, "auto", true)}</section>`; };
@@ -5423,12 +7354,14 @@ function viewProgress() {
   const box = el(`<div class="scroll"><div class="two-col"><div>
     ${meter(TRACK.react, r, "React", "Module 7 counts double")}
     ${meter(TRACK.dsa, d, "DSA", "Module 13 counts double")}
+    ${meter(TRACK.py, p, "the AI course", "Module 17 counts double")}
     <section class="section"><span class="eyebrow">Concept mastery</span>${mastery}</section>
   </div><div>
     <section class="section"><span class="eyebrow">Challenge performance</span><div class="mini-stats"><div><span class="caption soft">Success rate</span><b>${s.attempted ? s.successRate + "%" : "–"}</b><span class="caption subtle">${s.passedCount} of ${s.attempted} attempted</span></div><div><span class="caption soft">Predictions</span><b>${s.predCorrect}/${s.predAnswered}</b><span class="caption subtle">correct of answered</span></div><div><span class="caption soft">Bugs fixed</span><b>${s.bugsFixed}/${BUGS.length}</b><span class="caption subtle">debugging tasks</span></div></div></section>
     <section class="section"><div class="sh"><span class="eyebrow">Weak areas</span><span class="caption subtle">${weak.length ? "Based on missed predictions and repeated tries" : ""}</span></div><div style="display:flex;flex-direction:column;gap:8px">${weak.length ? weak.map((w) => `<article class="score-card"><div style="display:flex;flex-direction:column;gap:8px"><h3>${esc(w.m.name)}</h3><p class="soft" style="font-size:13px">${esc(w.reasons.slice(0, 2).join(". "))}.</p></div><div class="meta"><span class="cell soft" style="gap:4px">${ic("bulb", 12)}Review: ${esc(w.target.title)}</span><button class="btn btn-subtle" data-go="lesson-${w.target.id}">Review lesson</button></div></article>`).join("") : `<div class="callout">${ic("bulb")}<span>No weak spots yet. They appear here when a prediction misses or a challenge takes a few tries.</span></div>`}</div></section>
     ${checklist("React readiness checklist", CHECKLIST, "m7-final")}
-    ${checklist("DSA patterns checklist", DSA_CHECKLIST, "d13-final").replace('class="section"', 'class="section" style="box-shadow:none"')}
+    ${checklist("DSA patterns checklist", DSA_CHECKLIST, "d13-final")}
+    ${checklist("Python for AI checklist", PY_CHECKLIST, "p17-final").replace('class="section"', 'class="section" style="box-shadow:none"')}
   </div></div></div>`);
   box.onclick = (e) => { const b = e.target.closest("[data-go]"); if (b) { if (b.dataset.step) { store.steps[b.dataset.go.slice(7)] = b.dataset.step; save(); } go(b.dataset.go); } };
   view.appendChild(box);
@@ -5477,6 +7410,112 @@ function execute(src, tests = []) {
     w.postMessage({ code, src, tests });
   });
 }
+/* ---------- Python runner (Pyodide in a persistent Web Worker) ---------- */
+const PYODIDE_URL = "https://cdn.jsdelivr.net/pyodide/v0.26.4/full/";
+const PY_WORKER_URL = URL.createObjectURL(new Blob([$("#py-worker-src").textContent], { type: "text/javascript" }));
+const PY = { w: null, ready: null, loaded: false, seq: 0, pending: new Map() };
+function pyKill() { PY.w?.terminate(); PY.w = null; PY.ready = null; PY.loaded = false; PY.pending.clear(); }
+function pyBoot() {
+  if (PY.ready) return PY.ready;
+  let w;
+  try { w = new Worker(PY_WORKER_URL); } catch (e) { return Promise.reject(e); }
+  PY.w = w;
+  const ready = new Promise((resolve, reject) => {
+    w.onmessage = (ev) => {
+      const m = ev.data;
+      if (m.kind === "ready") { PY.loaded = true; resolve(w); }
+      else if (m.kind === "fail") reject(new Error(m.message));
+      else { const h = PY.pending.get(m.id); if (h) h(m); }
+    };
+    w.onerror = (e) => { e.preventDefault(); reject(new Error("The Python worker failed to start.")); };
+  });
+  PY.ready = ready;
+  ready.catch(() => { if (PY.ready === ready) pyKill(); });
+  w.postMessage({ kind: "init", indexURL: PYODIDE_URL, runtime: $("#py-runtime").textContent });
+  return ready;
+}
+async function executePy(src, tests = []) {
+  const res = { logs: [], renders: [], errors: [], tests: [], ms: 0, note: false, timeout: false };
+  if (!PY.loaded) toast("Loading Python. The first run takes a few seconds.", 4000);
+  let w;
+  try { w = await Promise.race([pyBoot(), new Promise((_, rej) => setTimeout(() => rej(new Error("timeout")), 45000))]); }
+  catch (e) { pyKill(); res.errors.push({ name: "Python didn't load", message: "The Python runtime (about 10 MB, cached after the first time) couldn't be downloaded. Check your internet connection and press Run again.", loader: true }); return res; }
+  const id = ++PY.seq;
+  return new Promise((resolve) => {
+    let timer = null;
+    const stop = () => { PY.pending.delete(id); pyKill(); res.timeout = true; resolve(res); pyBoot().catch(() => {}); };
+    timer = setTimeout(stop, 60000);
+    PY.pending.set(id, (m) => {
+      if (m.kind === "start") { clearTimeout(timer); timer = setTimeout(stop, 4000); return; }
+      clearTimeout(timer); PY.pending.delete(id);
+      res.logs = (m.logs || []).map((text) => ({ type: "log", text }));
+      if (m.error) res.errors.push(m.error);
+      res.tests = m.tests || []; res.ms = m.ms || 0;
+      resolve(res);
+    });
+    w.postMessage({ kind: "run", id, code: src, tests });
+  });
+}
+function friendlyPy(err) {
+  const m = err.message || "", n = err.name || "";
+  if (err.loader) return "";
+  if (n === "IndentationError" || n === "TabError") {
+    if (/expected an indented block/.test(m)) return "Python uses indentation instead of { }. The line after a colon (if, for, def, class) must be indented by 4 spaces.";
+    if (/unexpected indent/.test(m)) return "This line is indented, but nothing above it opened a block. Remove the extra spaces at the start.";
+    if (/unindent does not match/.test(m)) return "The indentation doesn't line up with the lines above. Use 4 spaces per level, consistently.";
+    return "Indentation is part of Python's syntax. Check the spaces at the start of this line.";
+  }
+  if (n === "SyntaxError") {
+    if (/expected ':'/.test(m)) return "A line that opens a block (if, elif, else, for, while, def, class, try, except) must end with a colon.";
+    if (/unterminated (triple-quoted )?string/.test(m)) return "A string was opened but never closed. Check that every quote has a matching partner.";
+    if (/was never closed/.test(m)) return "A bracket was opened but never closed. Check that every ( [ { has a partner.";
+    if (/forgot a comma/.test(m)) return "Two values sit next to each other with nothing between them. A comma is probably missing.";
+    if (/Maybe you meant '=='/.test(m)) return "To compare values, use ==. A single = assigns a value.";
+    if (/unmatched|does not match opening/.test(m)) return "There's a closing bracket without a matching opening one, or the brackets are mixed up.";
+    if (/invalid character|non-printable/.test(m)) return "There's a character Python can't read, often curly \u201csmart\u201d quotes pasted from a document.";
+    return "Python couldn't read this line. Check colons, brackets, quotes and commas near it.";
+  }
+  if (n === "NameError") {
+    const v = (m.match(/name '(\w+)' is not defined/) || [])[1] || "";
+    const js = { true: "Python writes booleans with a capital letter: True.", false: "Python writes booleans with a capital letter: False.", null: "Python uses None instead of null.", undefined: "Python uses None instead of undefined.", console: "Use print(\u2026) instead of console.log(\u2026).", const: "Python has no const. Write the name, =, and the value.", let: "Python has no let. Write the name, =, and the value.", function: "Define functions with def name():", length: "Use len(x) to count items." };
+    if (js[v]) return js[v];
+    return `You used ${v || "a name"}, but nothing with that name exists yet. Check the spelling (Python is case-sensitive), or create it above this line.`;
+  }
+  if (n === "TypeError") {
+    if (/can only concatenate str/.test(m)) return "+ can't join text and a number. Use an f-string, f\"Total: {value}\", or convert with str(value).";
+    if (/'NoneType' object is not subscriptable/.test(m)) return "You used [ ] on None. Usually a function forgot to return its value.";
+    if (/'NoneType' object is not iterable|cannot unpack non-iterable NoneType/.test(m)) return "You tried to loop over or unpack None. Usually a function forgot to return its value.";
+    if (/unsupported operand/.test(m)) return "These two values can't be combined with this operator. Check their types with type().";
+    if (/missing \d+ required positional argument/.test(m)) return "The function was called with too few arguments. Compare the call with the def line.";
+    if (/takes \d+ positional arguments? but \d+ (were|was) given/.test(m)) return "The function was called with too many arguments. Inside a class, every method needs self as its first parameter.";
+    if (/unexpected keyword argument/.test(m)) return "The function has no parameter with that name. Check the spelling of the keyword argument.";
+    if (/string indices must be integers/.test(m)) return "You used a key on a string. The value is text, not a dict. Did you forget json.loads()?";
+    if (/object is not callable/.test(m)) return "You put ( ) after something that isn't a function. Check the name, or whether it holds a value.";
+    if (/object is not subscriptable/.test(m)) return "You used [ ] on a value that doesn't support it. Objects use dots: response.choices, not response[\"choices\"].";
+  }
+  if (n === "AttributeError") {
+    const r = m.match(/'(\w+)' object has no attribute '(\w+)'/);
+    if (r) {
+      if (r[1] === "dict") return `Dicts don't support dot access. Use ["${r[2]}"] instead of .${r[2]}.`;
+      if (r[2] === "push") return "Python lists use .append(x), not .push(x).";
+      if (r[2] === "length") return "Use len(x) to count items. Python has no .length.";
+      if (r[1] === "NoneType") return `You used .${r[2]} on None. The value before the dot doesn't exist, often because a function didn't return anything.`;
+      return `A ${r[1]} has no .${r[2]}. Check the spelling, or print(type(x)) to see what the value really is.`;
+    }
+  }
+  if (n === "KeyError") return `The dict has no key ${m}. Check the spelling, or use .get(${m}, default) when the key may be missing.`;
+  if (n === "IndexError") return "That index doesn't exist. Lists start at 0, so the last item is at len(items) - 1, or simply [-1].";
+  if (n === "ValueError" && /invalid literal|could not convert string/.test(m)) return "That text isn't a number, so it can't be converted. Check the value, or catch ValueError.";
+  if (n === "ZeroDivisionError") return "Something was divided by zero. Check the value before dividing.";
+  if ((n === "ModuleNotFoundError" || n === "ImportError") && /pydantic/.test(m)) return "Pydantic downloads the first time a lesson uses it, and that download didn't finish. Check your internet connection and press Run again.";
+  if (n === "ModuleNotFoundError" || n === "ImportError") return "That package isn't available here. The playground has Python's standard library, pydantic, and practice versions of groq and dotenv.";
+  if (n === "JSONDecodeError") return "That text isn't valid JSON. LLMs often wrap JSON in extra words or code fences. Check the exact string.";
+  if (n === "ValidationError") return "The data doesn't match the Pydantic model. The message below names the field that failed and why.";
+  if (n === "RecursionError") return "A function keeps calling itself without stopping. Check the condition that should end it.";
+  if (n === "UnboundLocalError") return "A variable is changed inside the function before it has a value there. Create it inside the function first.";
+  if (n === "BadRequestError" || n === "AuthenticationError") return "The practice API rejected the call. The message below says exactly what to fix, just like the real API would.";
+  return "";
+}
 function friendly(err) {
   const m = err.message || "";
   if (err.syntax || err.name === "SyntaxError") {
@@ -5501,11 +7540,12 @@ function friendly(err) {
 }
 
 /* ---------- editor ---------- */
-function createEditor(host, value, onRun) {
+function createEditor(host, value, onRun, lang = "javascript") {
+  const py = lang === "python", indent = py ? "    " : "  ";
   if (window.CodeMirror) {
     const cm = CodeMirror(host, {
-      value, mode: "javascript", lineNumbers: true, tabSize: 2, indentUnit: 2, autoCloseBrackets: true, matchBrackets: true, styleActiveLine: true, lineWrapping: true, viewportMargin: 40,
-      extraKeys: { "Ctrl-Enter": () => onRun(), "Cmd-Enter": () => onRun(), Tab: (c) => (c.somethingSelected() ? c.indentSelection("add") : c.replaceSelection("  ")), "Shift-Tab": (c) => c.indentSelection("subtract") },
+      value, mode: py ? "python" : "javascript", lineNumbers: true, tabSize: py ? 4 : 2, indentUnit: py ? 4 : 2, autoCloseBrackets: true, matchBrackets: true, styleActiveLine: true, lineWrapping: true, viewportMargin: 40,
+      extraKeys: { "Ctrl-Enter": () => onRun(), "Cmd-Enter": () => onRun(), Tab: (c) => (c.somethingSelected() ? c.indentSelection("add") : c.replaceSelection(indent)), "Shift-Tab": (c) => c.indentSelection("subtract") },
     });
     let marks = [];
     return {
@@ -5522,7 +7562,7 @@ function createEditor(host, value, onRun) {
   }
   const ta = el(`<textarea class="fallback-ta" spellcheck="false" aria-label="Code editor"></textarea>`);
   ta.value = value; host.appendChild(ta);
-  ta.addEventListener("keydown", (e) => { if ((e.ctrlKey || e.metaKey) && e.key === "Enter") { e.preventDefault(); onRun(); } if (e.key === "Tab") { e.preventDefault(); ta.setRangeText("  ", ta.selectionStart, ta.selectionEnd, "end"); } });
+  ta.addEventListener("keydown", (e) => { if ((e.ctrlKey || e.metaKey) && e.key === "Enter") { e.preventDefault(); onRun(); } if (e.key === "Tab") { e.preventDefault(); ta.setRangeText(indent, ta.selectionStart, ta.selectionEnd, "end"); } });
   return { get: () => ta.value, set: (v) => (ta.value = v), selection: () => ta.value.slice(ta.selectionStart, ta.selectionEnd), insert: (t) => { ta.setRangeText(t, ta.selectionStart, ta.selectionEnd, "end"); ta.focus(); }, mark() {}, clear() {}, onChange: (fn) => ta.addEventListener("input", fn), refresh() {}, focus: () => ta.focus() };
 }
 
@@ -5533,14 +7573,24 @@ function mdLite(text) {
   const parts = esc(text).split(/```(?:\w+)?\n?([\s\S]*?)```/g);
   return parts.map((p, i) => (i % 2 ? `<div class="codeblock">${p.replace(/\n$/, "")}</div>` : p.split(/\n{2,}/).map((para) => para.trim() ? `<p>${para.replace(/`([^`]+)`/g, "<code>$1</code>").replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>").replace(/\n/g, "<br>")}</p>` : "").join(""))).join("");
 }
-async function explainCode(code, context) {
-  const body = el(`<div><section class="section"><span class="eyebrow">Code</span><div class="codeblock">${highlight(code)}</div></section><section class="section" style="box-shadow:none"><span class="eyebrow">Line by line</span><div class="mdtext" id="ex-out"><div class="thinking"><i></i>Reading your code…</div></div></section></div>`);
+async function explainCode(code, context, lang = "javascript") {
+  const py = lang === "python";
+  const body = el(`<div><section class="section"><span class="eyebrow">Code</span><div class="codeblock">${highlight(code, lang)}</div></section><section class="section" style="box-shadow:none"><span class="eyebrow">Line by line</span><div class="mdtext" id="ex-out"><div class="thinking"><i></i>Reading your code…</div></div></section></div>`);
   const ctrl = new AbortController();
   const foot = el(`<div style="display:contents"><span class="caption subtle">AI explanations can be wrong. Run the code to confirm.</span><button class="btn btn-subtle" id="ex-close">Done</button></div>`);
   foot.querySelector("#ex-close").onclick = () => { ctrl.abort(); closeSheet(); };
   openSheet({ icon: "sparkle", title: "Explain this code", body, foot });
   const out = $("#ex-out");
-  const prompt = `You are a patient JavaScript tutor. The learner is a professional UI/UX designer learning JavaScript to prepare for React, with little coding experience.
+  const prompt = py ? `You are a patient Python tutor. The learner is a professional UI/UX designer who knows some JavaScript and is learning Python to prepare for an AI engineering course (LLM APIs, RAG, agents).
+
+Explain the code below line by line in plain, beginner-friendly language. For each meaningful line or small group of lines, write the code in backticks, then one or two short sentences on what it does and why. Where it helps, compare with the JavaScript equivalent. Skip blank lines. Finish with one sentence starting "In AI apps:" that says where this pattern appears when building with LLMs. Keep the whole answer under 260 words. Use only plain paragraphs, backticks and **bold**. No headings, no lists.
+
+Lesson context: ${context}
+
+Code:
+\`\`\`python
+${code}
+\`\`\`` : `You are a patient JavaScript tutor. The learner is a professional UI/UX designer learning JavaScript to prepare for React, with little coding experience.
 
 Explain the code below line by line in plain, beginner-friendly language. For each meaningful line or small group of lines, write the code in backticks, then one or two short sentences on what it does and why. Skip blank lines and trivial closing braces. Finish with one sentence starting "In React:" that says where this pattern appears in React. Keep the whole answer under 260 words. Use only plain paragraphs, backticks and **bold**. No headings, no lists.
 
@@ -5561,7 +7611,9 @@ ${code}
 }
 
 /* ---------- workspace (learn | editor | output) ---------- */
-function buildWorkspace(view, { key, files, file, snippets, context, onRunGate, onCheck, tests }) {
+function buildWorkspace(view, { key, files, file, snippets, context, onRunGate, onCheck, tests, lang = "javascript" }) {
+  const py = lang === "python", ext = extOf(lang);
+  if (py) pyBoot().catch(() => {});
   const ws = el(`<div class="ws" data-m="learn">
     <section class="pane learn" aria-label="Lesson"><div class="learn-scroll"><div class="learn-body"></div></div><div class="learn-foot"></div></section>
     <section class="pane editor" aria-label="Code editor">
@@ -5576,7 +7628,7 @@ function buildWorkspace(view, { key, files, file, snippets, context, onRunGate, 
       <div class="ed-foot"><span class="eyebrow">Insert</span>${(snippets || []).map((s, i) => `<button class="chip" data-snip="${i}">${esc(s.replace(/\n[\s\S]*/, " …"))}</button>`).join("")}</div>
     </section>
     <section class="pane output" aria-label="Output">
-      <div class="out-head"><div class="out-tabs" role="tablist"><button class="tab" data-o="console" aria-selected="true">Console</button><button class="tab" data-o="preview" aria-selected="false">Preview</button><button class="tab" data-o="tests" aria-selected="false">Tests</button></div><button class="btn btn-ghost" data-a="clear">Clear</button></div>
+      <div class="out-head"><div class="out-tabs" role="tablist"><button class="tab" data-o="console" aria-selected="true">Console</button><button class="tab" data-o="preview" aria-selected="false" ${py ? "hidden" : ""}>Preview</button><button class="tab" data-o="tests" aria-selected="false">Tests</button></div><button class="btn btn-ghost" data-a="clear">Clear</button></div>
       <div class="out-body"></div>
       <div class="stat-grid out-foot"><div><b data-s="lines">0</b>lines</div><div><b data-s="ms">–</b>run time</div><div><b data-s="err">0</b>errors</div></div>
     </section>
@@ -5593,10 +7645,10 @@ function buildWorkspace(view, { key, files, file, snippets, context, onRunGate, 
   let last = null;
   let outTab = "console";
   const fileNames = Object.keys(files);
-  const ed = createEditor($(".ed-host", ws), drafts[cur] ?? files[cur], () => api.run());
+  const ed = createEditor($(".ed-host", ws), drafts[cur] ?? files[cur], () => api.run(), lang);
   let suppress = false;
   ed.onChange(() => { if (suppress) return; drafts[cur] = ed.get(); save(); drawFiles(); });
-  const drawFiles = () => { $(".files", ws).innerHTML = fileNames.map((f) => `<button class="file" role="tab" data-f="${f}" aria-selected="${f === cur}">${f}.js${drafts[f] !== undefined && drafts[f] !== files[f] ? '<span class="mod" title="Edited"></span>' : ""}</button>`).join(""); };
+  const drawFiles = () => { $(".files", ws).innerHTML = fileNames.map((f) => `<button class="file" role="tab" data-f="${f}" aria-selected="${f === cur}">${f}${ext}${drafts[f] !== undefined && drafts[f] !== files[f] ? '<span class="mod" title="Edited"></span>' : ""}</button>`).join(""); };
   drawFiles();
   $(".files", ws).onclick = (e) => { const b = e.target.closest(".file"); if (b) api.open(b.dataset.f); };
 
@@ -5609,13 +7661,13 @@ function buildWorkspace(view, { key, files, file, snippets, context, onRunGate, 
     $('[data-s="lines"]', ws).textContent = r ? r.logs.length : 0;
     $('[data-s="ms"]', ws).textContent = r ? (r.timeout ? "4s+" : r.ms + " ms") : "–";
     $('[data-s="err"]', ws).textContent = r ? r.errors.length + (r.timeout ? 1 : 0) : 0;
-    if (!r) { body.innerHTML = `<div class="out-empty"><b>Nothing run yet</b>Press Run or Ctrl + Enter. Output from console.log appears here, errors are explained in plain language, and render() shows a preview.</div>`; return; }
+    if (!r) { body.innerHTML = `<div class="out-empty"><b>Nothing run yet</b>${py ? "Press Run or Ctrl + Enter. Output from print() appears here and errors are explained in plain language. Python runs in your browser; the first run downloads it once." : "Press Run or Ctrl + Enter. Output from console.log appears here, errors are explained in plain language, and render() shows a preview."}</div>`; return; }
     if (outTab === "console") {
       let html = r.note ? `<div class="logrow"><span class="gut">i</span><span class="txt soft">Playground note: import and export were handled for you so both "files" run together.</span></div>` : "";
       html += r.logs.map((l, i) => `<div class="logrow ${l.type}"><span class="gut">${i + 1}</span><span class="txt">${esc(l.text)}</span></div>`).join("");
-      r.errors.forEach((er) => { const f = friendly(er); html += `<div class="errbox"><div class="et">${ic("x", 12)}<b>${esc(er.name)}</b>${er.line ? `<span class="vsep"></span>Line ${er.line}` : ""}</div>${f ? `<p>${esc(f)}</p>` : ""}<span class="raw">${esc(er.message)}</span></div>`; });
+      r.errors.forEach((er) => { const f = py ? friendlyPy(er) : friendly(er); html += `<div class="errbox"><div class="et">${ic("x", 12)}<b>${esc(er.name)}</b>${er.line ? `<span class="vsep"></span>Line ${er.line}` : ""}</div>${f ? `<p>${esc(f)}</p>` : ""}<span class="raw">${esc(er.message)}</span></div>`; });
       if (r.timeout) html += `<div class="errbox"><div class="et">${ic("clock", 12)}<b>Stopped after 4 seconds</b></div><p>Your code was still running. This usually means a loop whose condition never becomes false. The runner stopped it so the page stays responsive.</p></div>`;
-      if (!r.logs.length && !r.errors.length && !r.timeout) html += `<div class="out-empty"><b>Ran without output</b>Your code ran in ${r.ms} ms but didn't print anything. Add console.log(…) to see values.</div>`;
+      if (!r.logs.length && !r.errors.length && !r.timeout) html += `<div class="out-empty"><b>Ran without output</b>Your code ran in ${r.ms} ms but didn't print anything. Add ${py ? "print(…)" : "console.log(…)"} to see values.</div>`;
       body.innerHTML = html;
     } else if (outTab === "preview") {
       body.innerHTML = r.renders.length ? `<div class="preview"><div class="pv-h"><i></i><i></i><i></i><span style="margin-left:6px">render() preview · ${r.renders.length} ${r.renders.length === 1 ? "item" : "items"}</span></div><ul>${r.renders.map((t, i) => `<li style="animation-delay:${i * 50}ms">${esc(t)}</li>`).join("")}</ul></div>` : `<div class="out-empty"><b>No preview</b>Call render(array) in your code to preview a list, the way a React component would render it.</div>`;
@@ -5632,11 +7684,11 @@ function buildWorkspace(view, { key, files, file, snippets, context, onRunGate, 
     if (snip) ed.insert(snippets[+snip.dataset.snip]);
     if (!a) return;
     if (a === "run") api.run();
-    if (a === "reset") { suppress = true; ed.set(files[cur]); suppress = false; delete drafts[cur]; save(); drawFiles(); ed.clear(); toast(`${cur}.js restored`); }
+    if (a === "reset") { suppress = true; ed.set(files[cur]); suppress = false; delete drafts[cur]; save(); drawFiles(); ed.clear(); toast(`${cur}${ext} restored`); }
     if (a === "clear") { last = null; drawOut(); }
     if (a === "tl") { store.panes.learn = !store.panes.learn; ws.classList.toggle("no-learn", !store.panes.learn); save(); setTimeout(() => ed.refresh(), 20); }
     if (a === "to") { store.panes.out = !store.panes.out; ws.classList.toggle("no-out", !store.panes.out); save(); setTimeout(() => ed.refresh(), 20); }
-    if (a === "explain" && sampleFn) { const sel = ed.selection(); explainCode(sel && sel.trim() ? sel : ed.get(), context); }
+    if (a === "explain" && sampleFn) { const sel = ed.selection(); explainCode(sel && sel.trim() ? sel : ed.get(), context, lang); }
   });
 
   let running = false;
@@ -5654,7 +7706,7 @@ function buildWorkspace(view, { key, files, file, snippets, context, onRunGate, 
       const btn = $('[data-a="run"]', ws); btn.disabled = true;
       ed.clear("line-err");
       const t = check ? tests || [] : [];
-      const r = await execute(ed.get(), t);
+      const r = py ? await executePy(ed.get(), t) : await execute(ed.get(), t);
       last = r; running = false; btn.disabled = false;
       outTab = check ? "tests" : r.errors.length || r.timeout ? "console" : r.renders.length && !r.logs.length ? "preview" : "console";
       drawOut();
@@ -5666,6 +7718,7 @@ function buildWorkspace(view, { key, files, file, snippets, context, onRunGate, 
       return r;
     },
     setMobile,
+    lang, ext,
     destroy() {},
   };
   setTimeout(() => ed.refresh(), 30);
@@ -5825,7 +7878,7 @@ function viewLesson(id) {
   const firstFile = STEPS.find((s) => s.id === step).file || "example";
   const qid = "q-" + id, pid = "p-" + id;
   const ws = buildWorkspace(view, {
-    key: id, files, file: firstFile, snippets: SNIPPETS[L.module], tests: L.practice.tests,
+    key: id, files, file: firstFile, snippets: SNIPPETS[L.module], tests: L.practice.tests, lang: langOf(L.track),
     context: `${M.name} → ${L.title}`,
     onRunGate: (f) => { if (f === "predict" && !store.predictions[qid] && !L.predict.code.trim().startsWith("//")) { toast("Make your prediction first, then run it to check."); if (step !== "predict") setStep("predict"); ws.setMobile("learn"); return false; } return true; },
     onCheck: (r) => {
@@ -5879,7 +7932,7 @@ function viewLesson(id) {
     } else if (step === "predict") {
       const ans = store.predictions[qid];
       const isQuiz = L.predict.code.trim().startsWith("//");
-      B.innerHTML = `${eyebrow("Predict the output")}<h2>${isQuiz ? "Pick the right line" : "What will this print?"}</h2><p>${isQuiz ? "Read predict.js in the editor, then choose an answer." : "Read predict.js in the editor. Decide before you run it: predicting is how you learn to read code without running it, which is exactly what you'll do with AI-generated code."}</p><div class="opts">${L.predict.options.map((o, i) => `<button class="opt ${ans ? (i === L.predict.answer ? "right" : i === ans.choice ? "wrong" : "") : ""}" data-o="${i}" ${ans ? "disabled" : ""}><span class="key">${"ABCD"[i]}</span>${esc(o)}</button>`).join("")}</div>`;
+      B.innerHTML = `${eyebrow("Predict the output")}<h2>${isQuiz ? "Pick the right line" : "What will this print?"}</h2><p>${isQuiz ? `Read predict${ws.ext} in the editor, then choose an answer.` : `Read predict${ws.ext} in the editor. Decide before you run it: predicting is how you learn to read code without running it, which is exactly what you'll do with AI-generated code.`}</p><div class="opts">${L.predict.options.map((o, i) => `<button class="opt ${ans ? (i === L.predict.answer ? "right" : i === ans.choice ? "wrong" : "") : ""}" data-o="${i}" ${ans ? "disabled" : ""}><span class="key">${"ABCD"[i]}</span>${esc(o)}</button>`).join("")}</div>`;
       if (ans) {
         const r = el(`<div class="reveal"><div class="callout ${ans.correct ? "ok" : "bad"}">${ic(ans.correct ? "check" : "x")}<span><strong>${ans.correct ? "Correct." : "Not quite."}</strong> ${esc(L.predict.why)}</span></div><div style="display:flex;gap:8px;flex-wrap:wrap">${isQuiz ? "" : `<button class="btn btn-secondary" data-a2="run">${ic("play", 12)}Run it to confirm</button>`}<button class="btn btn-ghost" data-a2="retry">Try again</button></div></div>`);
         B.appendChild(r);
@@ -5902,21 +7955,21 @@ function viewLesson(id) {
         const a2 = e.target.closest("[data-a2]")?.dataset.a2;
         if (a2 === "check") { if (ws.file !== "challenge") ws.open("challenge"); ws.run({ check: true }); }
         if (a2 === "hint") { hintOpen = !hintOpen; renderStep(); }
-        if (a2 === "sol") { solutionSheet(L.practice.solution, () => { if (ws.file !== "challenge") ws.open("challenge"); ws.setCode(L.practice.solution); closeSheet(); toast("Solution loaded into challenge.js. Read it, then check it."); }); }
+        if (a2 === "sol") { solutionSheet(L.practice.solution, ws.lang, () => { if (ws.file !== "challenge") ws.open("challenge"); ws.setCode(L.practice.solution); closeSheet(); toast(`Solution loaded into challenge${ws.ext}. Read it, then check it.`); }); }
         if (a2 === "react") setStep("react");
       };
     } else if (step === "react") {
-      const isJsx = /<\/|\/>/.test(L.jsx);
-      const note = isJsx ? "This is JSX, the HTML-like syntax React uses. Everything inside <code>{ }</code> is plain JavaScript, the same JavaScript you just practised." : "Plain JavaScript: the same pattern you just practised, the way it appears in a real project.";
-      B.innerHTML = `${eyebrow(stepLabel(STEPS[5], L))}<h2>${L.track === "dsa" ? "Where you'll use this in real code" : "Where you'll use this in React"}</h2>${L.react}<div class="codeblock">${highlight(L.jsx, "jsx")}</div><p class="soft" style="font-size:13px">${note}</p>${done() ? "" : `<div class="callout">${ic("target")}<span>Pass the <strong>Practice</strong> tests to complete this lesson.</span></div>`}`;
+      const isJsx = L.track !== "py" && /<\/|\/>/.test(L.jsx);
+      const note = L.track === "py" ? "Python as you'll write it in the AI Engineer course. Read it rather than run it here: the real version needs your API keys and services." : isJsx ? "This is JSX, the HTML-like syntax React uses. Everything inside <code>{ }</code> is plain JavaScript, the same JavaScript you just practised." : "Plain JavaScript: the same pattern you just practised, the way it appears in a real project.";
+      B.innerHTML = `${eyebrow(stepLabel(STEPS[5], L))}<h2>${L.track === "dsa" ? "Where you'll use this in real code" : L.track === "py" ? "Where you'll use this in AI apps" : "Where you'll use this in React"}</h2>${L.react}<div class="codeblock">${highlight(L.jsx, L.track === "py" ? "python" : "jsx")}</div><p class="soft" style="font-size:13px">${note}</p>${done() ? "" : `<div class="callout">${ic("target")}<span>Pass the <strong>Practice</strong> tests to complete this lesson.</span></div>`}`;
     }
     foot();
   }
   renderStep();
   ws.open(firstFile);
 }
-function solutionSheet(code, onUse) {
-  const body = el(`<div><section class="section" style="box-shadow:none"><span class="eyebrow">Reference solution</span><div class="codeblock">${highlight(code)}</div><p class="soft" style="font-size:13px">Compare it with your attempt line by line. Understanding why it works matters more than typing it.</p></section></div>`);
+function solutionSheet(code, lang, onUse) {
+  const body = el(`<div><section class="section" style="box-shadow:none"><span class="eyebrow">Reference solution</span><div class="codeblock">${highlight(code, lang)}</div><p class="soft" style="font-size:13px">Compare it with your attempt line by line. Understanding why it works matters more than typing it.</p></section></div>`);
   const foot = el(`<div style="display:contents"><span class="caption subtle">Loading replaces your current code.</span><div style="display:flex;gap:8px"><button class="btn btn-subtle" data-a="c">Close</button><button class="btn btn-primary" data-a="u">Load into editor</button></div></div>`);
   foot.onclick = (e) => { const a = e.target.closest("[data-a]")?.dataset.a; if (a === "c") closeSheet(); if (a === "u") onUse(); };
   openSheet({ icon: "eye", title: "Solution", body, foot });
@@ -5931,7 +7984,7 @@ function viewChallenge(cid) {
   const files = isPred ? { predict: c.predict.code + "\n" } : { challenge: c.starter };
   let result = null, hintOpen = false;
   const ws = buildWorkspace(view, {
-    key: "ch-" + cid, files, file: Object.keys(files)[0], snippets: SNIPPETS[c.module], tests: c.tests,
+    key: "ch-" + cid, files, file: Object.keys(files)[0], snippets: SNIPPETS[c.module], tests: c.tests, lang: langOf(L.track),
     context: `${cat.label} challenge: ${c.title} (${L.title})`,
     onRunGate: () => { if (isPred && !store.predictions[cid] && !c.predict.code.trim().startsWith("//")) { toast("Choose an answer first, then run it to check."); ws.setMobile("learn"); return false; } return true; },
     onCheck: (r) => {
@@ -5966,7 +8019,7 @@ function viewChallenge(cid) {
     if (a2 === "retry") { delete store.predictions[cid]; save(); draw(); }
     if (a2 === "check") ws.run({ check: true });
     if (a2 === "hint") { hintOpen = !hintOpen; draw(); }
-    if (a2 === "sol") solutionSheet(c.solution, () => { ws.setCode(c.solution); closeSheet(); toast("Solution loaded. Compare it with the bug, then check."); });
+    if (a2 === "sol") solutionSheet(c.solution, ws.lang, () => { ws.setCode(c.solution); closeSheet(); toast("Solution loaded. Compare it with the bug, then check."); });
   };
   ws.foot.onclick = (e) => { const g = e.target.closest("[data-go]"); if (g) go(g.dataset.go); };
   draw();
